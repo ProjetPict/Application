@@ -64,7 +64,7 @@ public class Server extends Thread{
 
 		if(creator.getGame() == null)
 		{
-			game = new Game(players.get(0), null, this);
+			game = new Game(creator, null, this);
 			games.add(game);
 			game.start();
 		}
