@@ -93,7 +93,7 @@ public class Server extends Thread{
 	public void removePlayer(Player player)
 	{
 		if(player.getGame() != null)
-			player.getGame().removePlayer(player);
+			player.getGame().playerLeave(player);
 		players.remove(player);
 		System.out.println(player.getLogin() + " s'est deconnecté.");
 	}
