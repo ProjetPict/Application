@@ -8,8 +8,8 @@ import java.net.Socket;
 
 public class Server extends Thread{
 
-	private ArrayList<Game> games;
-	private ArrayList<Player> players;
+	private static ArrayList<Game> games;
+	private static ArrayList<Player> players;
 	private ServerSocket serverSocket;
 	private Socket socket;
 
@@ -46,7 +46,7 @@ public class Server extends Thread{
 				e1.printStackTrace();
 			}
 
-			Connection connec = new Connection(this, socket);
+			Connection connec = new Connection(socket);
 			connec.start();
 
 			try {
@@ -58,13 +58,13 @@ public class Server extends Thread{
 		}
 	}
 
-	public Game createGame(Player creator){
+	public static Game createGame(Player creator){
 		
 		Game game = null;
 
 		if(creator.getGame() == null)
 		{
-			game = new Game(creator, null, this);
+			game = new Game(creator, null);
 			games.add(game);
 			game.start();
 		}
@@ -72,14 +72,14 @@ public class Server extends Thread{
 		return game;
 	}
 
-	public void createPlayer(String login, Socket socket)
+	public static void createPlayer(String login, Socket socket)
 	{
-		Player player = new Player(login, socket, false, this);
+		Player player = new Player(login, socket, false);
 		players.add(player);
 		player.start();
 	}
 
-	public void removePlayer(Player player)
+	public static void removePlayer(Player player)
 	{
 		if(player.getGame() != null)
 			player.getGame().removePlayer(player);
@@ -87,7 +87,7 @@ public class Server extends Thread{
 		System.out.println(player.getLogin() + " s'est deconnecté.");
 	}
 	
-	public void removeGame(Game game)
+	public static void removeGame(Game game)
 	{
 		System.out.println("Une partie a été stoppée");
 		games.remove(game);

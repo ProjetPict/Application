@@ -4,14 +4,12 @@ public class Game extends Thread{
 	
 	private ArrayList<Player> players;
 	private String password;
-	private Server server;
 	private int jMax;
 	private boolean running;
 	
-	public Game(Player creator, String password, Server server){
+	public Game(Player creator, String password){
 		players = new ArrayList<Player>();
 		players.add(creator);
-		this.server = server;
 		this.password = password; 	//vide si publique 
 		jMax = 10;					//valeur par défaut ?
 	}
@@ -66,7 +64,7 @@ public class Game extends Thread{
 		if(players.size() <= 0)
 		{
 			running = false;
-			server.removeGame(this);
+			Server.removeGame(this);
 		}
 	}
 

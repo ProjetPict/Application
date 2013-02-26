@@ -10,11 +10,9 @@ public class Connection extends Thread {
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
-	private Server server;
-	
-	public Connection(Server server, Socket socket)
+
+	public Connection(Socket socket)
 	{
-		this.server = server;
 		this.socket = socket;
 		try {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -35,7 +33,7 @@ public class Connection extends Thread {
             out.println("Entrez votre login : ");
             out.flush();
             String login = in.readLine();
-			server.createPlayer(login, socket);
+			Server.createPlayer(login, socket);
 			out.println("success");
             System.out.println(login +" vient de se connecter ");
             out.flush();

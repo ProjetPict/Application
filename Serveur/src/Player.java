@@ -12,14 +12,12 @@ public class Player extends Thread {
 	private Game game;
 	private Socket socket;
 	private boolean connected;
-	private Server server;
 
-	public Player(String login, Socket socket, boolean ghost, Server server){
+	public Player(String login, Socket socket, boolean ghost){
 		this.login = login;
 		this.socket = socket;
 		this.ghost = ghost;
 		game = null;
-		this.server = server;
 		connected = true;
 	}
 
@@ -76,14 +74,14 @@ public class Player extends Thread {
 		} catch (IOException e) {
 			System.out.println("Connexion à " + login + " perdue.");
 			connected = false;
-			server.removePlayer(this);
+			Server.removePlayer(this);
 		}
 	}
 	
 	public void processMessage(String message){
 		if(message.equals("creategame"))
 		{
-			game = server.createGame(this);
+			game = Server.createGame(this);
 		}
 		else if(message.equals("quit"))
 		{
@@ -98,7 +96,7 @@ public class Player extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			server.removePlayer(this);
+			Server.removePlayer(this);
 		}
 	}
 
