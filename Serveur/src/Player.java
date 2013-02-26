@@ -1,5 +1,5 @@
 
-public class Player {
+public class Player extends Thread{
 	private String login;
 	private String ip;
 	private boolean ghost;
