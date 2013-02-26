@@ -27,7 +27,7 @@ public class Game extends Thread{
 			try {
 				sleep(16);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// TODO Auto-generated catch block 
 				e.printStackTrace();
 			}
 		}
