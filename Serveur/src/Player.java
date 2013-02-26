@@ -1,39 +1,91 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-public class Player {
+
+public class Player extends Thread {
 	private String login;
 	private String ip;
 	private boolean ghost;
 	private Game game;
-	
-	public Player(String login, String ip, boolean ghost){
+	private Socket socket;
+	private boolean connected;
+	private Server server;
+
+	public Player(String login, Socket socket, boolean ghost, Server server){
 		this.login = login;
-		this.ip = ip;
+		this.socket = socket;
 		this.ghost = ghost;
 		game = null;
+		this.server = server;
+		connected = true;
 	}
-	
+
 	public void setGame(Game game){
 		this.game = game;
 	}
-	
+
 	public Game getGame(){
 		return game;
 	}
-	
+
 	public void setGhost(boolean ghost){
 		this.ghost = ghost;
 	}
-	
+
 	public boolean getGhost(){
 		return ghost;
 	}
-	
+
 	public String getLogin(){
 		return login;
 	}
-	
+
 	public String getIp(){
 		return ip;
+	}
+
+	public void testMessage()
+	{
+		try {
+			PrintWriter out = new PrintWriter(socket.getOutputStream());
+			out.println("Test de message");
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void run(){
+		
+		BufferedReader in;
+		String message;
+		try {
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+			while(connected)
+			{
+				message = in.readLine();
+				System.out.println(message);
+				processMessage(message);
+				
+			}
+
+		} catch (IOException e) {
+			System.out.println("Connexion à " + login + " perdue.");
+			connected = false;
+			server.removePlayer(this);
+		}
+	}
+	
+	public void processMessage(String message){
+		if(message == "creategame")
+		{
+			game = server.createGame(this);
+		}
 	}
 
 }

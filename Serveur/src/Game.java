@@ -33,5 +33,10 @@ public class Game extends Thread{
 	public String getPassword(){
 		return password;
 	}
+	
+	public void removePlayer(Player player)
+	{
+		players.remove(player);
+	}
 
 }
