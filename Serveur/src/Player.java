@@ -69,9 +69,8 @@ public class Player extends Thread {
 			while(connected)
 			{
 				message = in.readLine();
-				System.out.println(message);
+				System.out.println("Nouvelle commande de " + login +" : " + message);
 				processMessage(message);
-				
 			}
 
 		} catch (IOException e) {
@@ -82,9 +81,24 @@ public class Player extends Thread {
 	}
 	
 	public void processMessage(String message){
-		if(message == "creategame")
+		if(message.equals("creategame"))
 		{
 			game = server.createGame(this);
+		}
+		else if(message.equals("quit"))
+		{
+			connected = false;
+			
+			try {
+				PrintWriter out = new PrintWriter(socket.getOutputStream());
+				out.println("success");
+				out.flush();
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			server.removePlayer(this);
 		}
 	}
 

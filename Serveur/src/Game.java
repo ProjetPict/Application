@@ -4,10 +4,14 @@ public class Game extends Thread{
 	
 	private ArrayList<Player> players;
 	private String password;
+	private Server server;
 	private int jMax;
+	private boolean running;
 	
-	public Game(Player creator, String password){
+	public Game(Player creator, String password, Server server){
 		players = new ArrayList<Player>();
+		players.add(creator);
+		this.server = server;
 		this.password = password; 	//vide si publique 
 		jMax = 10;					//valeur par défaut ?
 	}
@@ -20,9 +24,11 @@ public class Game extends Thread{
 	}
 	
 	public void run() {
-	
-		while(true){
-			//System.out.println("Test partie");
+		running = true;
+		if(players.size() > 0)
+			System.out.println("Test partie de " + players.get(0).getLogin());
+		while(running){
+			
 			try {
 				sleep(16);
 			} catch (InterruptedException e) {
@@ -55,8 +61,13 @@ public class Game extends Thread{
 		return false; //joueurs max atteint
 	}
 	
-	public boolean playerLeave(Player p){
-		return players.remove(p); //true si p trouvé et supprimé
+	public void removePlayer(Player player){
+		players.remove(player);
+		if(players.size() <= 0)
+		{
+			running = false;
+			server.removeGame(this);
+		}
 	}
 
 }

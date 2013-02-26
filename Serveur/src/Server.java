@@ -2,43 +2,29 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 
 public class Server extends Thread{
 
 	private ArrayList<Game> games;
 	private ArrayList<Player> players;
-
 	private ServerSocket serverSocket;
 	private Socket socket;
 
 	public Server(){
 		games = new ArrayList<Game>();
 		players = new ArrayList<Player>();
+
 		try {
 			serverSocket = new ServerSocket(8448);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		//players.add(new Player("Test", "0", false));
-		//games.add(new Game(players.get(0), null));
 	}
 
 	public void run() {
-		//games.get(0).start();
-		//connection.start();
-		try {
-			System.out.println("L'adresse locale est : "+InetAddress.getLocalHost() );
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
 
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -59,7 +45,6 @@ public class Server extends Thread{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			System.out.println("Un client essaye de se connecter");
 
 			Connection connec = new Connection(this, socket);
 			connec.start();
@@ -74,12 +59,16 @@ public class Server extends Thread{
 	}
 
 	public Game createGame(Player creator){
+		
 		Game game = null;
+
 		if(creator.getGame() == null)
 		{
-			game = new Game(players.get(0), null);
+			game = new Game(players.get(0), null, this);
 			games.add(game);
+			game.start();
 		}
+		
 		return game;
 	}
 
@@ -89,12 +78,18 @@ public class Server extends Thread{
 		players.add(player);
 		player.start();
 	}
-	
+
 	public void removePlayer(Player player)
 	{
 		if(player.getGame() != null)
-			player.getGame().playerLeave(player);
+			player.getGame().removePlayer(player);
 		players.remove(player);
 		System.out.println(player.getLogin() + " s'est deconnecté.");
+	}
+	
+	public void removeGame(Game game)
+	{
+		System.out.println("Une partie a été stoppée");
+		games.remove(game);
 	}
 }
