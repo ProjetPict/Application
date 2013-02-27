@@ -32,7 +32,19 @@ public class Commander extends Thread {
 	
 	public void shutDown() {
 		myStopSignal = true;
-		System.out.println("Extinction du serveur en cours...");
+		System.out.println("> Extinction du serveur en cours...");
+		System.out.println("> Annonce de l'arrêt des parties en cours aux clients.");
+		notifyClients("Arrêt des serveurs dans 1min30.");
+		System.out.println("> Sauvegarde de la base de données.");
+		saveDatabase();
+	}
+	
+	public void notifyClients(String s) {
+		
+	}
+	
+	public void saveDatabase() {
+		
 	}
 	
 }
