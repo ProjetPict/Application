@@ -12,6 +12,8 @@ public class Player extends Thread {
 	private Game game;
 	private Socket socket;
 	private boolean connected;
+	private BufferedReader in;
+	private PrintWriter out;
 
 	public Player(String login, Socket socket, boolean ghost){
 		this.login = login;
@@ -19,6 +21,13 @@ public class Player extends Thread {
 		this.ghost = ghost;
 		game = null;
 		connected = true;
+
+		try {
+			out = new PrintWriter(socket.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setGame(Game game){
@@ -47,56 +56,90 @@ public class Player extends Thread {
 
 	public void testMessage()
 	{
-		try {
-			PrintWriter out = new PrintWriter(socket.getOutputStream());
-			out.println("Test de message");
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		out.println("Test de message");
+		out.flush();
 	}
 
 	public void run(){
-		
-		BufferedReader in;
+
 		String message;
+
 		try {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			while(connected)
+			while(connected && !socket.isClosed())
 			{
 				message = in.readLine();
-				System.out.println("Nouvelle commande de " + login +" : " + message);
+				System.out.println(login +" a envoyé la commande : " + message);
 				processMessage(message);
 			}
 
-		} catch (IOException e) {
+			in.close();
+			Server.removePlayer(this);
+
+		} catch (IOException e1) {
 			System.out.println("Connexion à " + login + " perdue.");
 			connected = false;
 			Server.removePlayer(this);
 		}
+
+
 	}
 	
-	public void processMessage(String message){
-		if(message.equals("creategame"))
+	public void sendResult(boolean result)
+	{
+		if(result)
 		{
-			game = Server.createGame(this);
+			out.println("success");
+			out.flush();
 		}
-		else if(message.equals("quit"))
+		else
 		{
-			connected = false;
-			
-			try {
-				PrintWriter out = new PrintWriter(socket.getOutputStream());
-				out.println("success");
-				out.flush();
-				socket.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			out.println("fail");
+			out.flush();
+		}
+	}
+
+	public void processMessage(String message){
+		if(message != null)
+		{
+			if(message.contains("="))
+			{
+				String[] result = message.split("=");
+
+				if(result.length >= 2){
+					if(result[0].equals("creategame"))
+					{
+						game = Server.createGame(this, result[1], 0);
+						sendResult(game!=null);
+					}
+					else if(result[0].equals("joingame"))
+					{
+						sendResult(Server.joinGame(this, result[1]));
+					}	
+				}
+
 			}
-			Server.removePlayer(this);
+			else 
+			{
+				if(message.equals("quit"))
+				{
+					connected = false;
+
+					try {
+
+						sendResult(true);
+						socket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				else
+				{
+					sendResult(false);
+				}
+			}
 		}
 	}
 

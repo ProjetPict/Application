@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.IOException;
@@ -8,15 +10,14 @@ import java.net.Socket;
 
 public class Server extends Thread{
 
-	private static ArrayList<Game> games;
 	private static ArrayList<Player> players;
+	private static Map<String, Game> games;
 	private ServerSocket serverSocket;
 	private Socket socket;
 
 	public Server(){
-		games = new ArrayList<Game>();
 		players = new ArrayList<Player>();
-
+		games = new Hashtable<String, Game>();
 		try {
 			serverSocket = new ServerSocket(8448);
 		} catch (IOException e) {
@@ -31,10 +32,7 @@ public class Server extends Thread{
 			public void run()
 			{
 				System.out.println(games.size() + " parties sont en cours.");
-				if(players.size() >=1)
-				{
-					players.get(0).testMessage();
-				}
+				System.out.println(players.size() + " joueurs connectés.");
 			}
 		}, 0, 10000);
 
@@ -58,17 +56,23 @@ public class Server extends Thread{
 		}
 	}
 
-	public static Game createGame(Player creator){
-		
+	public static Game createGame(Player creator, String name, int pMax){
+
 		Game game = null;
 
-		if(creator.getGame() == null)
+		if(creator.getGame() == null && name.length() > 3)
 		{
-			game = new Game(creator, null);
-			games.add(game);
-			game.start();
+			if(!games.containsKey(name))
+			{
+				if(pMax > 1 && pMax < 25)
+					game = new Game(creator, name, pMax);
+				else
+					game = new Game(creator, name, null);
+				games.put(name, game);
+				game.start();
+			}
 		}
-		
+
 		return game;
 	}
 
@@ -86,10 +90,27 @@ public class Server extends Thread{
 		players.remove(player);
 		System.out.println(player.getLogin() + " s'est deconnecté.");
 	}
-	
+
 	public static void removeGame(Game game)
 	{
-		System.out.println("Une partie a été stoppée");
-		games.remove(game);
+		System.out.println(game.getGameName() + " a été stoppée.");
+		games.remove(game.getGameName());
+	}
+
+	public static boolean joinGame(Player player, String name)
+	{
+		boolean result = false;
+
+		if(games.containsKey(name) && player.getGame() == null)
+		{
+			Game game = games.get(name);
+			result = game.addPlayer(player);
+			System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
+			if(result)
+				player.setGame(game);
+		}
+		
+		return result;
+
 	}
 }
