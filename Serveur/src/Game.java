@@ -3,22 +3,24 @@ import java.util.ArrayList;
 public class Game extends Thread{
 	
 	private ArrayList<Player> players;
+	private String name;
 	private String password;
-	private int jMax;
+	private int pMax;
 	private boolean running;
 	
-	public Game(Player creator, String password){
+	public Game(Player creator, String name, String password){
+		players = new ArrayList<Player>();
+		this.name = name;
+		players.add(creator);
+		this.password = password; 	//vide si publique 
+		pMax = 10;					//valeur par défaut ?
+	}
+	
+	public Game(Player creator, String password, int pMax){
 		players = new ArrayList<Player>();
 		players.add(creator);
 		this.password = password; 	//vide si publique 
-		jMax = 10;					//valeur par défaut ?
-	}
-	
-	public Game(Player creator, String password, int jMax){
-		players = new ArrayList<Player>();
-		playerJoin(creator);
-		this.password = password; 	//vide si publique 
-		this.jMax = jMax;
+		this.pMax = pMax;
 	}
 	
 	public void run() {
@@ -48,11 +50,11 @@ public class Game extends Thread{
 	}
 
 	public int getJMax(){
-		return jMax;
+		return pMax;
 	}
 	
-	public boolean playerJoin(Player p){
-		if(players.size() < jMax){
+	public boolean addPlayer(Player p){
+		if(players.size() < pMax && !players.contains(p)){
 			players.add(p);
 			return true; //joueur ajouté
 		}
@@ -61,11 +63,17 @@ public class Game extends Thread{
 	
 	public void removePlayer(Player player){
 		players.remove(player);
+		System.out.println(player.getLogin() + " a quitté la partie " + name);
 		if(players.size() <= 0)
 		{
 			running = false;
 			Server.removeGame(this);
 		}
+	}
+	
+	public String getGameName()
+	{
+		return name;
 	}
 
 }
