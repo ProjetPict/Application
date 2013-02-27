@@ -185,15 +185,28 @@ public class Player extends Thread {
 			if(message.contains("%"))
 			{
 				String[] result = message.split("%"); //Le caractère % est le délimiteur entre les différents champs de la String
-				if(result.length >= 2){
+				if(result.length == 2){
 					if(result[0].equals("creategame"))
 					{
-						game = Server.createGame(this, result[1], 0);
+						game = Server.createGame(this, result[1], null, 0);
 						sendResult(game!=null);
 					}
 					else if(result[0].equals("joingame"))
 					{
-						sendResult(Server.joinGame(this, result[1]));
+						sendResult(Server.joinGame(this, result[1], null));
+					}	
+				}
+				else if(result.length == 4)
+				{
+					System.out.println(result[3]);
+					if(result[0].equals("creategame") && result[2].equals("password"))
+					{
+						game = Server.createGame(this, result[1], result[3], 0);
+						sendResult(game!=null);
+					}
+					else if(result[0].equals("joingame") && result[2].equals("password"))
+					{
+						sendResult(Server.joinGame(this, result[1], result[3]));
 					}	
 				}
 			}

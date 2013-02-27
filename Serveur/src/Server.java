@@ -73,10 +73,11 @@ public class Server extends Thread{
 	 * Instancie une nouvelle partie
 	 * @param creator
 	 * @param name
+	 * @param password
 	 * @param pMax
 	 * @return La partie créée
 	 */
-	public static Game createGame(Player creator, String name, int pMax){
+	public static Game createGame(Player creator, String name, String password, int pMax){
 
 		Game game = null;
 
@@ -85,9 +86,9 @@ public class Server extends Thread{
 			if(!games.containsKey(name))
 			{
 				if(pMax > 1 && pMax < 25)
-					game = new Game(creator, name, null, pMax);
+					game = new Game(creator, name, password, pMax);
 				else
-					game = new Game(creator, name, null);
+					game = new Game(creator, name, password);
 				games.put(name, game);
 				game.start();
 			}
@@ -140,17 +141,21 @@ public class Server extends Thread{
 	 * @param name
 	 * @return True si l'opération est réussie, false sinon
 	 */
-	public static boolean joinGame(Player player, String name)
+	public static boolean joinGame(Player player, String name, String password)
 	{
 		boolean result = false;
 
 		if(games.containsKey(name) && player.getGame() == null)
 		{
 			Game game = games.get(name);
-			result = game.addPlayer(player);
-			System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
-			if(result)
-				player.setGame(game);
+			if(password.equals(game.getPassword()))
+			{
+				result = game.addPlayer(player);
+				System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
+				if(result)
+					player.setGame(game);
+			}
+
 		}
 
 		return result;

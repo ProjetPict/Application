@@ -14,6 +14,14 @@ public class DrawingData implements Serializable{
 	public int size;
 	public String color;
 
+	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param size
+	 * @param color
+	 */
 	public DrawingData(int x, int y, int size, String color)
 	{
 		this.x = x;
