@@ -3,13 +3,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-
+/**
+ * Gère les nouvelles connexions dans un Thread à part du Server.
+ * @author Jerome
+ *
+ */
 public class Connection extends Thread {
 
 	private Socket socket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 
+	/**
+	 * 
+	 * @param socket
+	 */
 	public Connection(Socket socket)
 	{
 		this.socket = socket;
@@ -23,15 +31,30 @@ public class Connection extends Thread {
 		}
 	}
 
+	
+	/**
+	 * 
+	 * @return L'input stream de la connexion.
+	 */
 	public ObjectInputStream getInput()
 	{
 		return in;
 	}
 
+	
+	/**
+	 * 
+	 * @return L'output stream de la connexion.
+	 */
 	public ObjectOutputStream getOutput(){
 		return out;
 	}
 
+	
+	/**
+	 * Surcharge de la fonction run() de Thread. Incomplète.
+	 * Elle servira à gérer l'authentification du joueur.
+	 */
 	public void run()
 	{
 
@@ -45,19 +68,17 @@ public class Connection extends Thread {
 			try {
 				login = in.readObject();
 				if(login instanceof String)
+				{
 					Server.createPlayer((String)login, socket, this);
-				else
-					System.out.println("FUCK");
-				out.writeObject("success");
-				System.out.println(login +" vient de se connecter ");
-				out.flush();
+					out.writeObject("success");
+					System.out.println(login +" vient de se connecter ");
+					out.flush();
+				}	
+
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-
-
 		}catch (IOException e) {
 			e.printStackTrace();
 		}

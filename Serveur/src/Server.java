@@ -7,7 +7,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * Cette classe gère les nouvelles connexions, ainsi que
+ * les joueurs et les parties
+ * @author Jerome
+ *
+ */
 public class Server extends Thread{
 
 	private static ArrayList<Player> players;
@@ -25,9 +30,16 @@ public class Server extends Thread{
 		}
 	}
 
+
+	/**
+	 * Surcharge de la fonction run() de Thread. On boucle à l'infini, et quand quelqu'un se connecte,
+	 * on créé et on démarre une nouvelle Connection
+	 */
 	public void run() {
 
 		Timer timer = new Timer();
+
+		//On affiche des infos toutes les 10 secondes
 		timer.schedule(new TimerTask() {
 			public void run()
 			{
@@ -56,6 +68,14 @@ public class Server extends Thread{
 		}
 	}
 
+
+	/**
+	 * Instancie une nouvelle partie
+	 * @param creator
+	 * @param name
+	 * @param pMax
+	 * @return La partie créée
+	 */
 	public static Game createGame(Player creator, String name, int pMax){
 
 		Game game = null;
@@ -65,17 +85,23 @@ public class Server extends Thread{
 			if(!games.containsKey(name))
 			{
 				if(pMax > 1 && pMax < 25)
-					game = new Game(creator, name, pMax);
+					game = new Game(creator, name, null, pMax);
 				else
 					game = new Game(creator, name, null);
 				games.put(name, game);
 				game.start();
 			}
 		}
-
 		return game;
 	}
 
+
+	/**
+	 * Instancie un nouveau joueur
+	 * @param login
+	 * @param socket
+	 * @param connec
+	 */
 	public static void createPlayer(String login, Socket socket, Connection connec)
 	{
 		Player player = new Player(login, socket, false, connec.getInput(), connec.getOutput());
@@ -83,6 +109,11 @@ public class Server extends Thread{
 		player.start();
 	}
 
+
+	/**
+	 * Supprime un joueur
+	 * @param player
+	 */
 	public static void removePlayer(Player player)
 	{
 		if(player.getGame() != null)
@@ -91,12 +122,24 @@ public class Server extends Thread{
 		System.out.println(player.getLogin() + " s'est deconnecté.");
 	}
 
+
+	/**
+	 * Supprime une partie
+	 * @param game
+	 */
 	public static void removeGame(Game game)
 	{
 		System.out.println(game.getGameName() + " a été stoppée.");
 		games.remove(game.getGameName());
 	}
 
+
+	/**
+	 * Ajoute un joueur à une partie
+	 * @param player
+	 * @param name
+	 * @return True si l'opération est réussie, false sinon
+	 */
 	public static boolean joinGame(Player player, String name)
 	{
 		boolean result = false;
@@ -111,6 +154,5 @@ public class Server extends Thread{
 		}
 
 		return result;
-
 	}
 }
