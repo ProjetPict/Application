@@ -19,6 +19,6 @@ public class DbConnection extends Thread {
 	
 	public boolean insertStatistique(ArrayList<String> param) {
 		return true;
-	}
+	} 
 	
 }

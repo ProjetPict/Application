@@ -7,7 +7,7 @@ public class Commander extends Thread {
 	public Commander() {
 		myHistory = new ArrayList<String>();
 		myStopSignal = false;
-	}   
+	}    
 	
 	@Override
 	public void run() {
