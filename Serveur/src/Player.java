@@ -1,7 +1,6 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
@@ -12,22 +11,18 @@ public class Player extends Thread {
 	private Game game;
 	private Socket socket;
 	private boolean connected;
-	private BufferedReader in;
-	private PrintWriter out;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
 
-	public Player(String login, Socket socket, boolean ghost){
+	public Player(String login, Socket socket, boolean ghost, ObjectInputStream in, ObjectOutputStream out){
 		this.login = login;
 		this.socket = socket;
 		this.ghost = ghost;
 		game = null;
 		connected = true;
 
-		try {
-			out = new PrintWriter(socket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.in = in;
+		this.out = out;
 	}
 
 	public void setGame(Game game){
@@ -56,22 +51,29 @@ public class Player extends Thread {
 
 	public void testMessage()
 	{
-		out.println("Test de message");
-		out.flush();
+		try {
+			out.writeObject("Test de message");
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void run(){
 
-		String message;
+		Object message;
 
 		try {
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			while(connected && !socket.isClosed())
 			{
-				message = in.readLine();
+
+				message = in.readObject();
+
 				System.out.println(login +" a envoyé la commande : " + message);
-				processMessage(message);
+				processTypeMessage(message);
 			}
 
 			in.close();
@@ -81,31 +83,58 @@ public class Player extends Thread {
 			System.out.println("Connexion à " + login + " perdue.");
 			connected = false;
 			Server.removePlayer(this);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 
 	}
-	
+
 	public void sendResult(boolean result)
 	{
-		if(result)
-		{
-			out.println("success");
-			out.flush();
+		try {
+			if(result)
+			{
+
+				out.writeObject("success");
+				out.flush();
+			}
+			else
+			{
+				out.writeObject("fail");
+				out.flush();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else
+
+	}
+
+	public void processTypeMessage(Object message)
+	{
+		if(message instanceof String)
 		{
-			out.println("fail");
-			out.flush();
+			processStringMessage((String) message);
+		}
+		else if(message instanceof DrawingData)
+		{
+			processDessinMessage((DrawingData) message);
 		}
 	}
 
-	public void processMessage(String message){
-		if(message != null)
+	public void processDessinMessage(DrawingData data)
+	{
+		System.out.println("Nouvelle coordonnée : " + data.x + " " + data.y);
+	}
+
+	public void processStringMessage(String message){
+		if(message != null && !message.equals(""))
 		{
-			if(message.contains("="))
+			if(message.contains("%"))
 			{
-				String[] result = message.split("=");
+				String[] result = message.split("%");
 
 				if(result.length >= 2){
 					if(result[0].equals("creategame"))

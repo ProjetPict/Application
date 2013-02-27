@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 public class Game extends Thread{
-	
+
 	private ArrayList<Player> players;
 	private String name;
 	private String password;
 	private int pMax;
 	private boolean running;
-	
+
 	public Game(Player creator, String name, String password){
 		players = new ArrayList<Player>();
 		this.name = name;
@@ -15,20 +15,20 @@ public class Game extends Thread{
 		this.password = password; 	//vide si publique 
 		pMax = 10;					//valeur par défaut ?
 	}
-	
+
 	public Game(Player creator, String password, int pMax){
 		players = new ArrayList<Player>();
 		players.add(creator);
 		this.password = password; 	//vide si publique 
 		this.pMax = pMax;
 	}
-	
+
 	public void run() {
 		running = true;
 		if(players.size() > 0)
 			System.out.println("Test partie de " + players.get(0).getLogin());
 		while(running){
-			
+
 			try {
 				sleep(16);
 			} catch (InterruptedException e) {
@@ -37,7 +37,7 @@ public class Game extends Thread{
 			}
 		}
 	}
-	
+
 	public boolean isPrivate(){
 		if(password != null)
 			return true;
@@ -52,7 +52,7 @@ public class Game extends Thread{
 	public int getJMax(){
 		return pMax;
 	}
-	
+
 	public boolean addPlayer(Player p){
 		if(players.size() < pMax && !players.contains(p)){
 			players.add(p);
@@ -60,7 +60,7 @@ public class Game extends Thread{
 		}
 		return false; //joueurs max atteint
 	}
-	
+
 	public void removePlayer(Player player){
 		players.remove(player);
 		System.out.println(player.getLogin() + " a quitté la partie " + name);
@@ -70,7 +70,7 @@ public class Game extends Thread{
 			Server.removeGame(this);
 		}
 	}
-	
+
 	public String getGameName()
 	{
 		return name;

@@ -76,9 +76,9 @@ public class Server extends Thread{
 		return game;
 	}
 
-	public static void createPlayer(String login, Socket socket)
+	public static void createPlayer(String login, Socket socket, Connection connec)
 	{
-		Player player = new Player(login, socket, false);
+		Player player = new Player(login, socket, false, connec.getInput(), connec.getOutput());
 		players.add(player);
 		player.start();
 	}
@@ -109,7 +109,7 @@ public class Server extends Thread{
 			if(result)
 				player.setGame(game);
 		}
-		
+
 		return result;
 
 	}
