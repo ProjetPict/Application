@@ -3,7 +3,11 @@ import java.util.ArrayList;
 
 import dbwConnection.DbwConnection;
 
-
+/**
+ * Cette classe permet la connexion du serveur avec la base de données ainsi que les requêtes basiques
+ * @author Matthieu
+ *
+ */
 public class DbConnection extends Thread {
 
 	private String db_link_url = "http://localhost/DrawVs/core/dbw.php";

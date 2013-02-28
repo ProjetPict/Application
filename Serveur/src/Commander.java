@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * Cette classe permet la gestion du serveur par des commandes
+ * @author Matthieu
+ *
+ */
 public class Commander extends Thread {
 	ArrayList<String> myHistory;
 	private boolean myStopSignal;
