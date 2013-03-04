@@ -1,12 +1,11 @@
-
-
 public class Main {
 //Test
 // TEST 2 COMMIT
-	public static void Main(String[] argc)
+	public static void main(String[] argc)
 	{
 		if(argc.length == 2){
-			Model model = new Model(argc[0],argc[1]);
+			Model model = new Model("localhost","christopher");
+			//System.out.print("host = "+argc[0]+" user = "+argc[1]);
 			model.start();
 		}
 		
