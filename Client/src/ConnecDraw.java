@@ -2,15 +2,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 
 public class ConnecDraw extends Thread{
 	private Socket drawSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private Scanner sc;
 	
+	private Thread tReceive, tSend;
 	private boolean connected =false;
 	private String login;
 	
@@ -90,6 +89,14 @@ public class ConnecDraw extends Thread{
 			
 		}
 		
+		
+		//on démarre la veille pour la reception de drawingData
+		tReceive = new Thread(new ReceiveDraw(in));
+		tReceive.start();
+		
+		//et pour leur envoi
+		tSend = new Thread(new SendDraw(out));
+		tSend.start();
 		
 	}
 }
