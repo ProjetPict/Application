@@ -27,7 +27,7 @@ public class Game extends Thread{
 		this.password = password; 	//vide si publique 
 		players = new ArrayList<Player>();
 		players.add(creator);
-		pMax = 10;					//valeur par défaut ?
+		pMax = Server.MAX_PLAYER;					//valeur par défaut ?
 	}
 
 	

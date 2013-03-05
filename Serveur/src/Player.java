@@ -16,10 +16,11 @@ public class Player extends Thread {
 	private Game game;
 	private Socket socket;
 	private boolean connected;
+	private boolean drawing;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 
-	
+
 	/**
 	 * @param login
 	 * @param socket
@@ -35,9 +36,10 @@ public class Player extends Thread {
 		this.out = out;
 		game = null;
 		connected = true;
+		drawing = false;
 	}
 
-	
+
 	/**
 	 * 
 	 * @param game
@@ -46,7 +48,7 @@ public class Player extends Thread {
 		this.game = game;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return L'instance de Game contenue dans Player
@@ -55,7 +57,7 @@ public class Player extends Thread {
 		return game;
 	}
 
-	
+
 	/**
 	 * 
 	 * @param ghost
@@ -64,7 +66,7 @@ public class Player extends Thread {
 		this.ghost = ghost;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return La valeur de ghost. (true si le joueur est un joueur fantôme, false sinon)
@@ -73,7 +75,7 @@ public class Player extends Thread {
 		return ghost;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return Le login du joueur
@@ -82,13 +84,39 @@ public class Player extends Thread {
 		return login;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return L'output stream du socket du joueur.
 	 */
 	public ObjectOutputStream getOutput(){
 		return out;
+	}
+
+	public boolean getDrawing(){
+		return drawing;
+	}
+
+	public void setDrawing(boolean drawing)
+	{
+		this.drawing = drawing;
+		String result = "";
+		if(drawing){
+			result = "startdraw";
+		}
+		else
+		{
+			result = "stopdraw";
+		}
+		
+		try {
+			out.writeObject(result);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 
@@ -169,9 +197,13 @@ public class Player extends Thread {
 	 */
 	public void processDessinMessage(DrawingData data)
 	{
-		System.out.println("Nouvelle coordonnée : " + data.x + " " + data.y);
-		game.sendData(data, this);
-		sendResult(data!=null);
+		if(drawing){
+			System.out.println("Nouvelle coordonnée : " + data.x + " " + data.y);
+			game.sendData(data, this);
+			sendResult(data!=null);
+		}
+		else
+			sendResult(false);
 	}
 
 
@@ -222,6 +254,10 @@ public class Player extends Thread {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+				}
+				else if(message.equals("startgame"))
+				{
+
 				}
 				else
 				{

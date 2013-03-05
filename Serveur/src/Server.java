@@ -14,7 +14,7 @@ import java.net.Socket;
  *
  */
 public class Server extends Thread{
-
+	final static int MAX_PLAYER = 10;
 	private static ArrayList<Player> players;
 	private static Map<String, Game> games;
 	private ServerSocket serverSocket;
