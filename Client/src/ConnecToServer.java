@@ -4,7 +4,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
-public class ConnecDraw extends Thread{
+public class ConnecToServer extends Thread{
 	private Socket drawSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
@@ -15,7 +15,7 @@ public class ConnecDraw extends Thread{
 	
 	
 	
-	public ConnecDraw(String host, String login)
+	public ConnecToServer(String host, String login)
 	{
 		this.login = login;
 		try{
@@ -91,11 +91,11 @@ public class ConnecDraw extends Thread{
 		
 		
 		//on démarre la veille pour la reception de drawingData
-		tReceive = new Thread(new ReceiveDraw(in));
+		tReceive = new Thread(new Reception(in));
 		tReceive.start();
 		
 		//et pour leur envoi
-		tSend = new Thread(new SendDraw(out));
+		tSend = new Thread(new Emission(out));
 		tSend.start();
 		
 	}
