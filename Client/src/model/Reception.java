@@ -3,6 +3,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import socketData.DrawingData;
+
 
 public class Reception implements Runnable{
 	
