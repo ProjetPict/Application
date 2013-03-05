@@ -1,3 +1,4 @@
+package Model;
 
 public class Model implements Runnable{
 	ConnecToServer Connec;
