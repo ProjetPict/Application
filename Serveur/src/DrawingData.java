@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 /**
- * Cette classe est un type de données utilisée pour le transfert d'informations sur le dessin
+ * Cette classe est un type de donnï¿½es utilisï¿½e pour le transfert d'informations sur le dessin
  * en cours.
  * @author Jerome
  *
@@ -28,5 +28,13 @@ public class DrawingData implements Serializable{
 		this.y = y;
 		this.size = size;
 		this.color = color;
+	}
+	
+	public String toString(){
+		String res = new String("Position x : " + String.valueOf(this.x)+"\n");
+		res.concat("Position y : " + String.valueOf(this.y) + "\n");
+		res.concat("Size : " + String.valueOf(this.size) + "\n");
+		res.concat("Color : " + this.color);
+		return res;
 	}
 }
