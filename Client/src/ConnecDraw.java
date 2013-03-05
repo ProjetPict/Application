@@ -53,6 +53,7 @@ public class ConnecDraw extends Thread{
 	public void run()
 	{
 		while(!connected){
+			
 			try{
 				//attente du signal d'envoi et envoi du login
 				try{
@@ -60,7 +61,6 @@ public class ConnecDraw extends Thread{
 				}catch(ClassNotFoundException e){
 					e.printStackTrace();
 				}
-				login = sc.nextLine();
 				out.writeObject(login);
 				out.flush();
 			}catch (IOException e) {
@@ -72,8 +72,12 @@ public class ConnecDraw extends Thread{
 				
 				try{
 					Object conf = in.readObject();
-					System.out.println(conf);
+					if(conf instanceof String)
+						System.out.println(conf);
+					else
+						throw new ClassNotFoundException(); 
 					//si la tentative de connexion a réussi
+					
 					if(conf.equals("success")){
 						connected=true;
 					}

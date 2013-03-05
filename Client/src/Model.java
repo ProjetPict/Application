@@ -1,13 +1,13 @@
 
-public class Model {
+public class Model implements Runnable{
 	ConnecDraw CDraw;
 	
 	public Model(String host, String login){
 		CDraw = new ConnecDraw(host,login);
 	}
 	
-	public void start(){
-		CDraw.start();
+	public void run(){
+		CDraw.run();
 	}
 	
 	
