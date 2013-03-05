@@ -1,3 +1,4 @@
+package socketData;
 import java.io.Serializable;
 
 /**

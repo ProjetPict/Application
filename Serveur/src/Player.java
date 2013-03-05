@@ -3,6 +3,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import socketData.DrawingData;
+
 /**
  * Cette classe est un thread qui permet de maintenir la connexion avec un joueur et d'intercepter
  * les données qu'il envoie depuis son socket.
@@ -93,10 +95,20 @@ public class Player extends Thread {
 		return out;
 	}
 
+
+	/**
+	 * 
+	 * @return True si le joueur dessine, false sinon
+	 */
 	public boolean getDrawing(){
 		return drawing;
 	}
 
+
+	/**
+	 * On change la valeur de drawing, et on envoie une commande au client pour prendre ce changement en compte
+	 * @param drawing
+	 */
 	public void setDrawing(boolean drawing)
 	{
 		this.drawing = drawing;
@@ -108,7 +120,7 @@ public class Player extends Thread {
 		{
 			result = "stopdraw";
 		}
-		
+
 		try {
 			out.writeObject(result);
 			out.flush();
@@ -116,7 +128,7 @@ public class Player extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 
@@ -257,6 +269,17 @@ public class Player extends Thread {
 				}
 				else if(message.equals("startgame"))
 				{
+
+				}
+				else if(message.equals("getlist"))
+				{
+					try {
+						out.writeObject(Server.getGames());
+						out.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 				}
 				else

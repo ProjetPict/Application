@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import socketData.DrawingData;
+
 /**
  * Gère une partie et ses joueurs.
  * @author Jerome
@@ -14,6 +16,7 @@ public class Game extends Thread{
 	private String password;
 	private int pMax;
 	private boolean running;
+	private boolean started; //True si la partie a demarré
 
 	
 	/**
@@ -28,6 +31,7 @@ public class Game extends Thread{
 		players = new ArrayList<Player>();
 		players.add(creator);
 		pMax = Server.MAX_PLAYER;					//valeur par défaut ?
+		started = false;
 	}
 
 	
@@ -77,6 +81,16 @@ public class Game extends Thread{
 		else
 			return false;
 	}
+	
+	
+	/**
+	 * 
+	 * @return True si la partie a demarré, false sinon
+	 */
+	public boolean isStarted()
+	{
+		return started;
+	}
 
 	
 	/**
@@ -85,6 +99,15 @@ public class Game extends Thread{
 	 */
 	public String getPassword(){
 		return password;
+	}
+	
+	/**
+	 * 
+	 * @return Le nombre de joueurs dans la partie
+	 */
+	public int getNbPlayers()
+	{
+		return players.size();
 	}
 
 	

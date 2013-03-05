@@ -1,11 +1,16 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import socketData.GameInfo;
+import socketData.GameList;
 
 /**
  * Cette classe gère les nouvelles connexions, ainsi que
@@ -132,6 +137,28 @@ public class Server extends Thread{
 	{
 		System.out.println(game.getGameName() + " a été stoppée.");
 		games.remove(game.getGameName());
+	}
+
+	/**
+	 * 
+	 * @return La liste des parties existantes
+	 */
+	public static GameList getGames()
+	{
+		GameList gl = new GameList();
+		Iterator<Entry<String, Game>> it = games.entrySet().iterator();
+		Entry<String, Game> e;
+		Game g;
+
+		while(it.hasNext())
+		{
+			e = it.next();
+			g = e.getValue();
+
+			gl.games.add(new GameInfo(e.getKey().toString(), g.getNbPlayers(), g.getJMax(), g.isPrivate(), g.isStarted()));
+		}
+
+		return gl;
 	}
 
 
