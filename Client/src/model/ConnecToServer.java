@@ -5,20 +5,15 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
-public class ConnecToServer extends Thread{
+public class ConnecToServer{
 	private Socket drawSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	
-	private Thread tReceive, tSend;
-	private boolean connected =false;
-	private String login;
+	private boolean connected = false;
 	
 	
-	
-	public ConnecToServer(String host, String login)
+	public ConnecToServer(String host)
 	{
-		this.login = login;
 		try{
 			drawSocket = new Socket(host ,8448);
 			out = new ObjectOutputStream(drawSocket.getOutputStream());
@@ -50,54 +45,70 @@ public class ConnecToServer extends Thread{
 	 * Surcharge de la fonction run() de Thread. Incompl�te.
 	 * Elle servira � g�rer l'authentification du joueur.
 	 */
-	public void run()
+	public String connect(String login, String password)
 	{
-		while(!connected){
-			
-			try{
-				//attente du signal d'envoi et envoi du login
-				try{
-					System.out.println(in.readObject());
-				}catch(ClassNotFoundException e){
-					e.printStackTrace();
-				}
-				out.writeObject(login);
-				out.flush();
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			//attente de la confirmation de connexion
-			try{
-				
-				try{
-					Object conf = in.readObject();
-					if(conf instanceof String)
-						System.out.println(conf);
-					else
-						throw new ClassNotFoundException(); 
-					//si la tentative de connexion a réussi
-					
-					if(conf.equals("success")){
-						connected=true;
-					}
-				}catch(ClassNotFoundException e){
-					e.printStackTrace();
-				}
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
-			
+		if(connected){
+			String res = disconnect();
+			if(res.equals("success"))
+				connected = false;
+			else
+				return res;
 		}
 		
+		try{
+			//attente du signal d'envoi et envoi du login
+			try{
+				System.out.println(in.readObject());
+			}catch(ClassNotFoundException e){
+				e.printStackTrace();
+			}
+			out.writeObject(login);
+			out.flush();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		//attente de la confirmation de connexion
+		try{
+			Object conf = in.readObject();
+			if(conf instanceof String)
+				System.out.println(conf);
+			else
+				throw new ClassNotFoundException(); 
 		
-		//on démarre la veille pour la reception de drawingData
-		tReceive = new Thread(new Reception(in));
-		tReceive.start();
+			if(conf.equals("success")){
+				connected = true;
+				return (String)conf;
+			}
+		}catch(ClassNotFoundException e){
+			e.printStackTrace();
+			return "fail";
+		}catch(IOException e) {
+			e.printStackTrace();
+			return "fail";
+		}
+		return "fail";
+	}
+	
+	public String disconnect(){
 		
-		//et pour leur envoi
-		tSend = new Thread(new Emission(out));
-		tSend.start();
+		if(!connected)
+			return "fail";
 		
+		String conf = "";
+		try{
+			out.writeObject("quit");
+			out.flush();
+			conf = (String)in.readObject();
+		}catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(conf.equals("success"))
+			connected = false;
+		
+		return (String)conf;
 	}
 }
