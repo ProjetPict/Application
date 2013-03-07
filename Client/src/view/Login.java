@@ -51,7 +51,8 @@ public class Login extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		  if(arg0.getSource() == btnConnec){
 			  String res = Main.getModel().connect(login.getText(),password.getText());
-			  
+			  javax.swing.JOptionPane.showMessageDialog(null,res); 
+			  //TODO : Main.getView().setPanel(Browser);
 		  } 
 	}
 }
