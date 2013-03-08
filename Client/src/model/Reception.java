@@ -5,7 +5,11 @@ import java.io.ObjectInputStream;
 
 import socketData.DrawingData;
 
-
+/**
+ * 
+ * @author christopher
+ *
+ */
 public class Reception implements Runnable{
 	
 	private ObjectInputStream in;

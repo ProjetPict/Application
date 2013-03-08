@@ -3,8 +3,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import socketData.GameList;
 
 
+/**
+ * Gère la connexion et l'envoi de requêtes (creategame, joingame, quit...) au serveur
+ * @author christopher
+ *
+ */
 public class ConnecToServer{
 	private Socket drawSocket;
 	private ObjectOutputStream out;
@@ -23,36 +29,11 @@ public class ConnecToServer{
 		}
 	}
 	
-	/**
-	 * 
-	 * @return L'input stream de la connexion.
-	 */
-	public ObjectInputStream getInput()
-	{
-		return in;
-	}
-
 	
-	/**
-	 * 
-	 * @return L'output stream de la connexion.
-	 */
-	public ObjectOutputStream getOutput(){
-		return out;
-	}
-	
-	/**
-	 * Surcharge de la fonction run() de Thread. Incompl�te.
-	 * Elle servira � g�rer l'authentification du joueur.
-	 */
 	public String connect(String login, String password)
 	{
 		if(connected){
-			String res = disconnect();
-			if(res.equals("success"))
-				connected = false;
-			else
-				return res;
+			return "already connected";
 		}
 		
 		try{
@@ -90,6 +71,7 @@ public class ConnecToServer{
 		return "fail";
 	}
 	
+	
 	public String disconnect(){
 		
 		if(!connected)
@@ -110,5 +92,81 @@ public class ConnecToServer{
 			connected = false;
 		
 		return (String)conf;
+	}
+	
+	/**
+	 * Renvoie la liste des parties en cours
+	 * @return
+	 */
+	public GameList getGameList(){
+		Object res = null;
+		try {
+			out.writeObject("getlist");
+		} catch (IOException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+			return null;
+		}
+		
+		try {
+			res = in.readObject();
+		} catch (IOException e) {
+			//En cas de problème de connexion
+			e.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException e) {
+			//Au cas où le serveur n'envoie pas une donnée du bon type
+			e.printStackTrace();
+			return null;
+		}
+		
+		return (GameList)res;
+		
+	}
+	
+	/**
+	 * Demande la création d'une partie au serveur
+	 * @param name
+	 * @return
+	 */
+	public String createGame(String name){
+		Object conf=null;
+		
+		try{
+			out.writeObject("creategame%"+name);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		try {
+			conf = in.readObject();
+		} catch (IOException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+		}
+		
+		return (String)conf;
+	}
+	
+	
+	/**
+	 * 
+	 * @return L'input stream de la connexion.
+	 */
+	public ObjectInputStream getInput()
+	{
+		return in;
+	}
+
+	
+	/**
+	 * 
+	 * @return L'output stream de la connexion.
+	 */
+	public ObjectOutputStream getOutput(){
+		return out;
 	}
 }

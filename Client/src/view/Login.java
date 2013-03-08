@@ -11,11 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Ecran de Login
+ * @author christopher
+ *
+ */
 public class Login extends JPanel implements ActionListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3026788736669539483L;
 
 	private JButton btnConnec;
@@ -51,8 +53,9 @@ public class Login extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		  if(arg0.getSource() == btnConnec){
 			  String res = Main.getModel().connect(login.getText(),password.getText());
-			  javax.swing.JOptionPane.showMessageDialog(null,res); 
-			  //TODO : Main.getView().setPanel(Browser);
+			  javax.swing.JOptionPane.showMessageDialog(null,res); //on affiche le résultat dans un pop-up
+			  if(res.equals("success"))
+				  Main.getView().setPanel("Browser"); //si la connexion réussit, on passe à la selection d'une partie
 		  } 
 	}
 }

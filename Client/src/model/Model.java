@@ -3,6 +3,13 @@ package model;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import socketData.GameList;
+
+/**
+ * Gère les connexions avec le serveur.
+ * @author christopher
+ *
+ */
 public class Model{
 	private ConnecToServer Connec;
 	private ObjectOutputStream out;
@@ -21,6 +28,14 @@ public class Model{
 	
 	public void disconnect(){
 		Connec.disconnect();
+	}
+	
+	public GameList getGameList(){
+		return Connec.getGameList();
+	}
+	
+	public String createGame(String name){
+		return Connec.createGame(name);
 	}
 	
 	public ObjectOutputStream getOutput(){
