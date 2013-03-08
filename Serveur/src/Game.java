@@ -18,7 +18,7 @@ public class Game extends Thread{
 	private boolean running;
 	private boolean started; //True si la partie a demarré
 
-	
+
 	/**
 	 * 
 	 * @param creator
@@ -34,7 +34,7 @@ public class Game extends Thread{
 		started = false;
 	}
 
-	
+
 	/**
 	 * 
 	 * @param creator
@@ -50,7 +50,7 @@ public class Game extends Thread{
 		this.name = name;
 	}
 
-	
+
 	/**
 	 * Surcharge de la méthode run() de Thread. Inutile pour l'instant mais elle devrait servir à faire
 	 * "tourner" la partie (changement de joueurs, de tour, etc...)
@@ -70,7 +70,7 @@ public class Game extends Thread{
 		}
 	}
 
-	
+
 	/**
 	 * 
 	 * @return True si la partie est privée, false sinon.
@@ -81,8 +81,8 @@ public class Game extends Thread{
 		else
 			return false;
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @return True si la partie a demarré, false sinon
@@ -92,7 +92,7 @@ public class Game extends Thread{
 		return started;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return Le mot de passe de la partie (peut être null).
@@ -100,7 +100,7 @@ public class Game extends Thread{
 	public String getPassword(){
 		return password;
 	}
-	
+
 	/**
 	 * 
 	 * @return Le nombre de joueurs dans la partie
@@ -110,7 +110,7 @@ public class Game extends Thread{
 		return players.size();
 	}
 
-	
+
 	/**
 	 * 
 	 * @return Retourne le nombre de joueurs maximum autorisés dans la partie.
@@ -119,7 +119,7 @@ public class Game extends Thread{
 		return pMax;
 	}
 
-	
+
 	/**
 	 * Ajoute un joueur dans la partie.
 	 * @param p
@@ -133,7 +133,7 @@ public class Game extends Thread{
 		return false;
 	}
 
-	
+
 	/**
 	 * Supprime un joueur de la partie
 	 * @param player
@@ -149,7 +149,7 @@ public class Game extends Thread{
 		}
 	}
 
-	
+
 	/**
 	 * 
 	 * @return Le nom de la partie
@@ -159,7 +159,7 @@ public class Game extends Thread{
 		return name;
 	}
 
-	
+
 	/**
 	 * Envoie data à tout les joueurs de la partie, à l'exception du joueur d'origine
 	 * @param data
@@ -180,5 +180,17 @@ public class Game extends Thread{
 
 			}
 		}
+	}
+
+
+	public boolean startGame() {
+
+		if(players.size() >= 2)
+		{
+			started = true;
+			return true;
+		}
+		else
+			return false;
 	}
 }

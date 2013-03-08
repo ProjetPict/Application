@@ -3,6 +3,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import socketData.AnswerCommand;
+import socketData.Command;
+import socketData.CreateJoinCommand;
 import socketData.DrawingData;
 
 /**
@@ -131,7 +134,9 @@ public class Player extends Thread {
 
 	}
 
-
+	
+	
+	
 	/**
 	 * Surcharge de la fonction run() de Thread. On boucle à l'infini tant
 	 * que la connexion n'est pas coupée, et on récupère les données que le
@@ -164,6 +169,7 @@ public class Player extends Thread {
 	}
 
 
+	
 	/**
 	 * Cette méthode envoie "success" ou "fail" au client.
 	 * @param result
@@ -187,6 +193,7 @@ public class Player extends Thread {
 	}
 
 
+	
 	/**
 	 * Cette méthode détermine le type du message passé en paramètre, et appelle la fonction
 	 * de traitement correspondante.
@@ -194,15 +201,104 @@ public class Player extends Thread {
 	 */
 	public void processTypeMessage(Object message)
 	{
-		if(message instanceof String){
-			processStringMessage((String) message);
-		}
-		else if(message instanceof DrawingData){
+		if(message instanceof DrawingData){
 			processDessinMessage((DrawingData) message);
+		}
+		else if(message instanceof CreateJoinCommand)
+		{
+			processCreateJoinMessage((CreateJoinCommand) message);
+		}
+		else if(message instanceof AnswerCommand)
+		{
+			processAnswerMessage((AnswerCommand) message);
+		}
+		else if(message instanceof Command)
+		{
+			processCommandMessage((Command) message);
 		}
 	}
 
 
+	
+	/**
+	 * Analyse une commande simple
+	 * @param message
+	 */
+	private void processCommandMessage(Command message) {
+
+		if(message.command.equals("quit"))
+		{
+			connected = false;
+			try {
+				sendResult(true);
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if(message.command.equals("startgame"))
+		{
+			if(game!=null)
+			{
+				sendResult(game.startGame());
+			}
+			else
+			{
+				sendResult(false);
+			}
+		}
+		else if(message.command.equals("getlist"))
+		{
+			try {
+				out.writeObject(Server.getGames());
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		else
+		{
+			sendResult(false);
+		}
+
+	}
+
+
+	
+	/**
+	 * Analyse un message de reponse
+	 * @param message
+	 */
+	private void processAnswerMessage(AnswerCommand message) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	
+	/**
+	 * Analyse une commande de type creategame ou joingame
+	 * @param message
+	 */
+	private void processCreateJoinMessage(CreateJoinCommand message) 
+	{
+		if(message.command.equals("creategame"))
+		{
+			game = Server.createGame(this, message.name, message.password, message.pMax);
+			sendResult(game != null);
+		}
+		else if(message.command.equals("joingame"))
+		{
+			sendResult(Server.joinGame(this, message.name, message.password));
+		}
+
+	}
+
+
+	
 	/**
 	 * Envoie les données à la Game
 	 * @param data
@@ -219,8 +315,9 @@ public class Player extends Thread {
 	}
 
 
+	
 	/**
-	 * Analyse la commande contenue dans le message et l'exécute.
+	 * Analyse la commande contenue dans le message et l'exécute. Obsolete.
 	 * @param message
 	 */
 	public void processStringMessage(String message){
@@ -269,7 +366,14 @@ public class Player extends Thread {
 				}
 				else if(message.equals("startgame"))
 				{
-
+					if(game!=null)
+					{
+						sendResult(game.startGame());
+					}
+					else
+					{
+						sendResult(false);
+					}
 				}
 				else if(message.equals("getlist"))
 				{

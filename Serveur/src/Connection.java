@@ -3,6 +3,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import socketData.Command;
+
 /**
  * Gère les nouvelles connexions dans un Thread à part du Server.
  * @author Jerome
@@ -67,9 +69,9 @@ public class Connection extends Thread {
 			Object login;
 			try {
 				login = in.readObject();
-				if(login instanceof String)
+				if(login instanceof Command)
 				{
-					Server.createPlayer((String)login, socket, this);
+					Server.createPlayer(((Command)login).command, socket, this);
 					out.writeObject("success");
 					System.out.println(login +" vient de se connecter ");
 					out.flush();
