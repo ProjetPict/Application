@@ -6,6 +6,7 @@ package view;
  *
  */
 public class View {
+
 	
 	private static Window window;
 	private Login login;

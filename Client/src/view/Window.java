@@ -8,11 +8,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * Fenêtre principale. La vue lui passe les ecrans à afficher.
- * @author christopher
- *
- */
+
 public class Window extends JFrame implements WindowListener{
 
 	/**
@@ -31,12 +27,16 @@ public class Window extends JFrame implements WindowListener{
 
 	public void setPanel(JPanel panel){
 		this.setContentPane(panel);
-		this.validate();
+		//this.validate();
+	}
+
+	private void onClose(){
+		Main.getModel().disconnect();
+		this.dispose();
 	}
 
 	public void windowClosing(WindowEvent e) {
-		Main.getModel().disconnect();
-		this.dispose();
+		onClose();
 	}
 
 
