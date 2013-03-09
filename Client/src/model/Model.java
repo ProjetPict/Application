@@ -34,8 +34,8 @@ public class Model{
 		return Connec.getGameList();
 	}
 	
-	public String createGame(String name){
-		return Connec.createGame(name);
+	public String createGame(String name, String password, int Pmax){
+		return Connec.createGame(name, password, Pmax);
 	}
 	
 	public ObjectOutputStream getOutput(){

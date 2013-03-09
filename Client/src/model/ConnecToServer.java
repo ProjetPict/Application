@@ -3,7 +3,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import socketData.GameList;
+
+import socketData.*;
 
 
 /**
@@ -32,18 +33,21 @@ public class ConnecToServer{
 	
 	public String connect(String login, String password)
 	{
+		Command com = new Command(login);
+		
 		if(connected){
 			return "already connected";
 		}
 		
 		try{
 			//attente du signal d'envoi et envoi du login
+			//TODO : à enlever, inutile.
 			try{
-				System.out.println(in.readObject());
+				Object o = in.readObject();
 			}catch(ClassNotFoundException e){
 				e.printStackTrace();
 			}
-			out.writeObject(login);
+			out.writeObject(com);
 			out.flush();
 		}catch (IOException e) {
 			e.printStackTrace();
@@ -52,9 +56,7 @@ public class ConnecToServer{
 		//attente de la confirmation de connexion
 		try{
 			Object conf = in.readObject();
-			if(conf instanceof String)
-				System.out.println(conf);
-			else
+			if(!(conf instanceof String))
 				throw new ClassNotFoundException(); 
 		
 			if(conf.equals("success")){
@@ -74,12 +76,13 @@ public class ConnecToServer{
 	
 	public String disconnect(){
 		
+		Command com = new Command("quit");
 		if(!connected)
 			return "fail";
 		
 		String conf = "";
 		try{
-			out.writeObject("quit");
+			out.writeObject(com);
 			out.flush();
 			conf = (String)in.readObject();
 		}catch (ClassNotFoundException e){
@@ -99,9 +102,10 @@ public class ConnecToServer{
 	 * @return
 	 */
 	public GameList getGameList(){
+		Command com = new Command("getlist");
 		Object res = null;
 		try {
-			out.writeObject("getlist");
+			out.writeObject(com);
 		} catch (IOException e) {
 			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
@@ -129,11 +133,12 @@ public class ConnecToServer{
 	 * @param name
 	 * @return
 	 */
-	public String createGame(String name){
+	public String createGame(String name, String password, int Pmax){
+		CreateJoinCommand com = new CreateJoinCommand(name, password, Pmax);
 		Object conf=null;
 		
 		try{
-			out.writeObject("creategame%"+name);
+			out.writeObject(com);
 		}catch(IOException e){
 			e.printStackTrace();
 		}

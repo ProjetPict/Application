@@ -33,6 +33,10 @@ public class Browser extends JPanel implements ActionListener{
 	
 	private JLabel lblGameName;
 	private JTextField txtGameName;
+	private JLabel lblGamePassword;
+	private JTextField txtGamePassword;
+	private JLabel lblGamePmax;
+	private JTextField txtGamePmax;
 	
 	private JScrollPane scrlPane;
 	private JList list;
@@ -50,6 +54,10 @@ public class Browser extends JPanel implements ActionListener{
 		btnCreate = new JButton("Envoyer");
 		lblGameName = new JLabel("Nom de la partie");
 		txtGameName = new JTextField();
+		lblGamePassword = new JLabel("Code d'accès à la partie");
+		txtGamePassword = new JTextField();
+		lblGamePmax = new JLabel("Nombre de joueurs autorisés");
+		txtGamePmax = new JTextField();
 		
 		
 		slctPane = new JPanel();
@@ -78,9 +86,13 @@ public class Browser extends JPanel implements ActionListener{
 		slctPane.add(btnPnlCreate, BorderLayout.SOUTH);
 		
 		crtPane.setLayout(new BorderLayout());
-		crtSubPane.setLayout(new GridLayout(1,2));
+		crtSubPane.setLayout(new GridLayout(3,2));
 		crtSubPane.add(lblGameName);
 		crtSubPane.add(txtGameName);
+		crtSubPane.add(lblGamePassword);
+		crtSubPane.add(txtGamePassword);
+		crtSubPane.add(lblGamePmax);
+		crtSubPane.add(txtGamePmax);
 		crtPane.add(crtSubPane);
 		crtPane.add(btnCreate, BorderLayout.SOUTH);
 
@@ -95,15 +107,17 @@ public class Browser extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == btnJoin){
-
+			//TODO : rejoindre la partie selectionnée
+			Main.getView().setPanel("GameScreen");
 		}
 		if(arg0.getSource() == btnPnlCreate){
 			crtPane.setVisible(true);
 		} 
 		if(arg0.getSource() == btnCreate){
-			String res = Main.getModel().createGame(txtGameName.getText());
+			String res = Main.getModel().createGame(txtGameName.getText(), txtGamePassword.getText(), Integer.valueOf(txtGamePmax.getText()));
 			javax.swing.JOptionPane.showMessageDialog(null,res);
-			fillList();
+			//TODO : rejoindre la partie créée à l'instant
+			Main.getView().setPanel("GameScreen");
 		}
 	}
 	

@@ -1,4 +1,5 @@
 package socketData;
+import java.awt.Color;
 import java.io.Serializable;
 
 /**
@@ -13,7 +14,7 @@ public class DrawingData implements Serializable{
 	public int x;
 	public int y;
 	public int size;
-	public String color;
+	public Color color;
 
 	
 	/**
@@ -23,7 +24,7 @@ public class DrawingData implements Serializable{
 	 * @param size
 	 * @param color
 	 */
-	public DrawingData(int x, int y, int size, String color)
+	public DrawingData(int x, int y, int size, Color color)
 	{
 		this.x = x;
 		this.y = y;
@@ -35,7 +36,7 @@ public class DrawingData implements Serializable{
 		String res = new String("Position x : " + String.valueOf(this.x)+"\n");
 		res.concat("Position y : " + String.valueOf(this.y) + "\n");
 		res.concat("Size : " + String.valueOf(this.size) + "\n");
-		res.concat("Color : " + this.color);
+		res.concat("Color : " + this.color.toString());
 		return res;
 	}
 }
