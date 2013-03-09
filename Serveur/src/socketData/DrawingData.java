@@ -18,7 +18,6 @@ public class DrawingData implements Serializable{
 
 	
 	/**
-	 * 
 	 * @param x
 	 * @param y
 	 * @param size
