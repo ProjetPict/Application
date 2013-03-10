@@ -175,13 +175,23 @@ public class Server extends Thread{
 		if(games.containsKey(name) && player.getGame() == null)
 		{
 			Game game = games.get(name);
-		
-			if(game.getPassword() == null || password.equals(game.getPassword()))
+
+			try{
+				if(game.getPassword() == null || password.equals(game.getPassword()))
+				{
+					result = game.addPlayer(player);
+					System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
+					if(result)
+						player.setGame(game);
+					else
+					    player.sendResult("gamefull");
+				}
+				else
+					player.sendResult("wrongpassword");
+			}catch(Exception e)
 			{
-				result = game.addPlayer(player);
-				System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
-				if(result)
-					player.setGame(game);
+				player.sendResult("wrongpassword");
+				return false;
 			}
 
 		}

@@ -134,9 +134,9 @@ public class Player extends Thread {
 
 	}
 
-	
-	
-	
+
+
+
 	/**
 	 * Surcharge de la fonction run() de Thread. On boucle à l'infini tant
 	 * que la connexion n'est pas coupée, et on récupère les données que le
@@ -169,7 +169,7 @@ public class Player extends Thread {
 	}
 
 
-	
+
 	/**
 	 * Cette méthode envoie "success" ou "fail" au client.
 	 * @param result
@@ -192,8 +192,21 @@ public class Player extends Thread {
 		}
 	}
 
+	public void sendResult(String result)
+	{
+		try {
 
-	
+			out.writeObject(result);
+			out.flush();
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
 	/**
 	 * Cette méthode détermine le type du message passé en paramètre, et appelle la fonction
 	 * de traitement correspondante.
@@ -219,7 +232,7 @@ public class Player extends Thread {
 	}
 
 
-	
+
 	/**
 	 * Analyse une commande simple
 	 * @param message
@@ -267,7 +280,7 @@ public class Player extends Thread {
 	}
 
 
-	
+
 	/**
 	 * Analyse un message de reponse
 	 * @param message
@@ -278,7 +291,7 @@ public class Player extends Thread {
 	}
 
 
-	
+
 	/**
 	 * Analyse une commande de type creategame ou joingame
 	 * @param message
@@ -298,7 +311,7 @@ public class Player extends Thread {
 	}
 
 
-	
+
 	/**
 	 * Envoie les données à la Game
 	 * @param data
@@ -315,7 +328,7 @@ public class Player extends Thread {
 	}
 
 
-	
+
 	/**
 	 * Analyse la commande contenue dans le message et l'exécute. Obsolete.
 	 * @param message
