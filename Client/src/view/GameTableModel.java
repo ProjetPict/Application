@@ -20,7 +20,7 @@ public class GameTableModel extends AbstractTableModel{
 	public GameTableModel(GameList gl)
 	{
 		this.gl = gl.games;
-		columns = new String[]{"Nom", "Joueurs", "Mot de passe", "Status"};
+		columns = new String[]{Main.texts.getString("name"), Main.texts.getString("players"), Main.texts.getString("password"), Main.texts.getString("status")};
 	}
 
 	@Override

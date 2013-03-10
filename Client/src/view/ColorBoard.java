@@ -24,11 +24,11 @@ public class ColorBoard extends JPanel{
 	private ButtonGroup btnGroup;
 	
 	public ColorBoard(){
-		btnBlack = new JRadioButton("Noir");
-		btnBlue = new JRadioButton("Bleu");
-		btnGreen = new JRadioButton("Vert");
-		btnYellow = new JRadioButton("Jaune");
-		btnRed = new JRadioButton("Rouge");
+		btnBlack = new JRadioButton(Main.texts.getString("black"));
+		btnBlue = new JRadioButton(Main.texts.getString("blue"));
+		btnGreen = new JRadioButton(Main.texts.getString("green"));
+		btnYellow = new JRadioButton(Main.texts.getString("yellow"));
+		btnRed = new JRadioButton(Main.texts.getString("red"));
 		
 		btnGroup = new ButtonGroup();
 		btnGroup.add(btnBlack);

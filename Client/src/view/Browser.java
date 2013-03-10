@@ -47,15 +47,15 @@ public class Browser extends JPanel implements ActionListener{
 
 
 	public Browser(){
-		btnJoin = new JButton("Connexion");
-		btnPnlCreate = new JButton("Creer une partie");
-		btnCreate = new JButton("Envoyer");
-		btnRefresh = new JButton("Actualiser");
-		lblGameName = new JLabel("Nom de la partie");
+		btnJoin = new JButton(Main.texts.getString("connection"));
+		btnPnlCreate = new JButton(Main.texts.getString("g_create"));
+		btnCreate = new JButton(Main.texts.getString("send"));
+		btnRefresh = new JButton(Main.texts.getString("refresh"));
+		lblGameName = new JLabel(Main.texts.getString("name"));
 		txtGameName = new JTextField();
-		lblGamePassword = new JLabel("Code d'accès à la partie");
+		lblGamePassword = new JLabel(Main.texts.getString("password"));
 		txtGamePassword = new JTextField();
-		lblGamePmax = new JLabel("Nombre de joueurs autorisés");
+		lblGamePmax = new JLabel(Main.texts.getString("max_p"));
 		txtGamePmax = new JTextField();
 
 
@@ -128,15 +128,15 @@ public class Browser extends JPanel implements ActionListener{
 		if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 2)) == true)
 		{
 			password = JOptionPane.showInputDialog(this,
-					"Entrez le mot de passe : ",
-					"Mot de passe",
+					Main.texts.getString("enter_pass"),
+					Main.texts.getString("password"),
 					JOptionPane.QUESTION_MESSAGE);
 		}
 		String result = Main.getModel().joinGame(name, password);
 		if(result.equals("wrongpassword"))
-			JOptionPane.showMessageDialog(this,"Mot de passe incorrect", "Erreur", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this,Main.texts.getString("wrong_pass"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
 		else if(result.equals("gamefull"))
-			JOptionPane.showMessageDialog(this,"La partie est pleine.", "Erreur", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this,Main.texts.getString("game_full"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
 		else
 			Main.getView().setPanel("GameScreen");
 	}
@@ -164,8 +164,7 @@ public class Browser extends JPanel implements ActionListener{
 		}
 		else
 		{
-			res = "Nom trop court";
-			JOptionPane.showMessageDialog(this,res);
+			JOptionPane.showMessageDialog(this,Main.texts.getString("name_short"));
 		}
 
 		//TODO : rejoindre la partie cree a l'instant

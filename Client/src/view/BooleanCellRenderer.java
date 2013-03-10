@@ -20,15 +20,15 @@ public class BooleanCellRenderer extends DefaultTableCellRenderer {
 		if(column == 2)
 		{
 			if(b)
-				setText("Oui");
+				setText(Main.texts.getString("yes"));
 			else
-				setText("Non");
+				setText(Main.texts.getString("no"));
 		}else
 		{
 			if(b)
-				setText("En cours");
+				setText(Main.texts.getString("ongoing"));
 			else
-				setText("En attente");
+				setText(Main.texts.getString("waiting"));
 		}
 			
 
