@@ -75,6 +75,24 @@ public class ConnecToServer{
 		return false;
 	}
 	
+	public String joinGame(String name, String password)
+	{
+		CreateJoinCommand com = new CreateJoinCommand(name, password, true);
+		
+		String result = "";
+		try{
+			out.writeObject(com);
+			out.flush();
+			result = (String)in.readObject();
+		}catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return (String) result;
+	}
+	
 	
 	public String disconnect(){
 		
@@ -141,6 +159,7 @@ public class ConnecToServer{
 		
 		try{
 			out.writeObject(com);
+			out.flush();
 		}catch(IOException e){
 			e.printStackTrace();
 		}

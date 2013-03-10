@@ -41,6 +41,11 @@ public class Model{
 		return Connec.createGame(name, password, Pmax);
 	}
 	
+	public String joinGame(String name, String password)
+	{
+		return Connec.joinGame(name, password);
+	}
+	
 	public ObjectOutputStream getOutput(){
 		return out;
 	}

@@ -6,17 +6,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-
 import socketData.*;
 
 /**
@@ -41,7 +37,6 @@ public class Browser extends JPanel implements ActionListener{
 	private JTextField txtGamePmax;
 
 	private JScrollPane scrlPane;
-	private JList list;
 	private JTable table;
 	private JPanel slctPane;
 	private JPanel slctSubPane;
@@ -49,7 +44,7 @@ public class Browser extends JPanel implements ActionListener{
 	private JPanel crtSubPane;
 
 	private GameList gl;
-	private DefaultListModel dlm;
+
 
 	public Browser(){
 		btnJoin = new JButton("Connexion");
@@ -74,14 +69,8 @@ public class Browser extends JPanel implements ActionListener{
 		table = new JTable();
 		table.setShowGrid(false);
 		table.setShowVerticalLines(true);
-		
-		
-		list = new JList();
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setLayoutOrientation(JList.VERTICAL);
-		list.setVisibleRowCount(15);
-		list.setCellRenderer(new DefaultListCellRenderer());
-		dlm = new DefaultListModel();
+		table.setDefaultRenderer(Boolean.class, new BooleanCellRenderer());
+
 
 		fillTable();
 
@@ -91,8 +80,8 @@ public class Browser extends JPanel implements ActionListener{
 		slctPane.setLayout(new BorderLayout());
 		slctSubPane.setLayout(new BorderLayout());
 		slctSubPane.add(scrlPane, BorderLayout.CENTER);
-		
-		slctSubPane.add(btnRefresh, BorderLayout.SOUTH);
+
+		slctSubPane.add(btnJoin, BorderLayout.SOUTH);
 		slctPane.add(slctSubPane,  BorderLayout.CENTER);
 		slctPane.add(btnPnlCreate, BorderLayout.SOUTH);
 
@@ -119,40 +108,73 @@ public class Browser extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == btnJoin){
-			//TODO : rejoindre la partie selectionnée
-			Main.getView().setPanel("GameScreen");
+			joinGame();
 		}
 		else if(arg0.getSource() == btnPnlCreate){
 			crtPane.setVisible(true);
 		} 
 		else if(arg0.getSource() == btnCreate){
-			String res = Main.getModel().createGame(txtGameName.getText(), txtGamePassword.getText(), Integer.valueOf(txtGamePmax.getText()));
-			javax.swing.JOptionPane.showMessageDialog(null,res);
-			//TODO : rejoindre la partie créée à l'instant
-			Main.getView().setPanel("GameScreen");
+			createGame();
 		}
 		else if(arg0.getSource() == btnRefresh){
 			fillTable();
 		} 
 	}
 
+	private void joinGame()
+	{
+		String name = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
+		String password = null;
+		if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 2)) == true)
+		{
+			password = JOptionPane.showInputDialog(this,
+					"Entrez le mot de passe : ",
+					"Mot de passe",
+					JOptionPane.QUESTION_MESSAGE);
+		}
+		String result = Main.getModel().joinGame(name, password);
+		if(result.equals("wrongpassword"))
+			JOptionPane.showMessageDialog(this,"Mot de passe incorrect", "Erreur", JOptionPane.ERROR_MESSAGE);
+		else if(result.equals("gamefull"))
+			JOptionPane.showMessageDialog(this,"La partie est pleine.", "Erreur", JOptionPane.ERROR_MESSAGE);
+		else
+			Main.getView().setPanel("GameScreen");
+	}
+
+	private void createGame()
+	{
+		String name = txtGameName.getText();
+		String password = txtGamePassword.getText();
+		String res = "";
+		int pmax;
+		try{
+			pmax = Integer.valueOf(txtGamePmax.getText());
+		}catch(Exception e)
+		{
+			pmax = 0;
+		}
+
+		if(name.length() >= 4)
+		{
+			if(password.equals(""))
+				password = null;
+			res = Main.getModel().createGame(name, password, pmax);
+			JOptionPane.showMessageDialog(this,res);
+			Main.getView().setPanel("GameScreen");
+		}
+		else
+		{
+			res = "Nom trop court";
+			JOptionPane.showMessageDialog(this,res);
+		}
+
+		//TODO : rejoindre la partie cree a l'instant
+	}
+
 	private void fillTable()
 	{
 		gl = Main.getModel().getGameList();
 		table.setModel(new GameTableModel(gl));
-	}
-
-	private void fillList(){
-		//On remplit la liste
-		gl = Main.getModel().getGameList();
-
-		while(!dlm.isEmpty())
-			dlm.remove(0);
-
-		for (GameInfo g : gl.games){
-			dlm.addElement(g.name);
-		}
-		list.setModel(dlm);
 	}
 
 }

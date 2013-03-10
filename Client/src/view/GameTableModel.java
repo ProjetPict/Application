@@ -49,18 +49,28 @@ public class GameTableModel extends AbstractTableModel{
 		case 1:
 			return gl.get(rowIndex).nbPlayers +"/"+gl.get(rowIndex).maxPlayers;
 		case 2:
-			if(gl.get(rowIndex).password)
-				return "Oui";
-			else
-				return "Non";
+			return gl.get(rowIndex).password;
 		case 3:
-			if(gl.get(rowIndex).started)
-				return "En cours";
-			else
-				return "En attente";
+			return gl.get(rowIndex).started;
 		default:
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		switch (columnIndex) {
+			case 0:
+			case 1:
+				return String.class;
+			case 2:
+			case 3:
+				return Boolean.class;
+	
+			default:
+				return Object.class;
+		}
+	}
+
 
 }
