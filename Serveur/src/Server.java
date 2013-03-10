@@ -175,7 +175,8 @@ public class Server extends Thread{
 		if(games.containsKey(name) && player.getGame() == null)
 		{
 			Game game = games.get(name);
-			if(password.equals(game.getPassword()))
+		
+			if(game.getPassword() == null || password.equals(game.getPassword()))
 			{
 				result = game.addPlayer(player);
 				System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
