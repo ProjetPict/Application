@@ -64,8 +64,6 @@ public class Connection extends Thread {
 
 			System.out.println("Quelqu'un s'est connecté");
 
-			out.writeObject("Entrez votre login : ");
-			out.flush();
 			Object login;
 			try {
 				login = in.readObject();
