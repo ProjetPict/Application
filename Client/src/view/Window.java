@@ -20,6 +20,7 @@ public class Window extends JFrame implements WindowListener{
 		//On initialise la JFrame
 		addWindowListener(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("DrawVS");
 		this.setLocation(new Point(100,100));
 		this.setResizable(false);
 		this.setSize(800, 600);

@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import socketData.GameList;
 
 /**
- * Gère les connexions avec le serveur.
+ * Gere les connexions avec le serveur.
  * @author christopher
  *
  */
@@ -17,13 +17,16 @@ public class Model{
 	
 	public Model(String host){
 		Connec = new ConnecToServer(host);
-		out = Connec.getOutput();
-		in = Connec.getInput();
-
 	}
 	
-	public String connect(String login, String password){
-		return Connec.connect(login, password);
+	public boolean connect(String login, String password){
+		boolean res = Connec.connect(login, password);
+		if(res)
+		{
+			out = Connec.getOutput();
+			in = Connec.getInput();
+		}
+		return res; 
 	}
 	
 	public void disconnect(){

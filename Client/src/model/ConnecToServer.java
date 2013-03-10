@@ -16,37 +16,39 @@ public class ConnecToServer{
 	private Socket drawSocket;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	private boolean connected = false;
+	private boolean connected;
+	private String host;
 	
 	
 	public ConnecToServer(String host)
 	{
+		connected = false;
+		this.host = host;
+		
+	}
+	
+	
+	public boolean connect(String login, String password)
+	{
+		
+		
+		Command com = new Command(login);
+		
+		if(connected){
+			return false;
+		}
+		
 		try{
 			drawSocket = new Socket(host ,8448);
 			out = new ObjectOutputStream(drawSocket.getOutputStream());
 			in = new ObjectInputStream(drawSocket.getInputStream());
 		}catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public String connect(String login, String password)
-	{
-		Command com = new Command(login);
-		
-		if(connected){
-			return "already connected";
+			return false;
 		}
 		
 		try{
 			//attente du signal d'envoi et envoi du login
-			//TODO : à enlever, inutile.
-			try{
-				Object o = in.readObject();
-			}catch(ClassNotFoundException e){
-				e.printStackTrace();
-			}
+			
 			out.writeObject(com);
 			out.flush();
 		}catch (IOException e) {
@@ -61,16 +63,16 @@ public class ConnecToServer{
 		
 			if(conf.equals("success")){
 				connected = true;
-				return (String)conf;
+				return true;
 			}
 		}catch(ClassNotFoundException e){
 			e.printStackTrace();
-			return "fail";
+			return false;
 		}catch(IOException e) {
 			e.printStackTrace();
-			return "fail";
+			return false;
 		}
-		return "fail";
+		return false;
 	}
 	
 	

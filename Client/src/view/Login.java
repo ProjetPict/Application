@@ -44,6 +44,8 @@ public class Login extends JPanel implements ActionListener{
 		pnlCenter.add(btnConnec);
 		
 		btnConnec.addActionListener(this);
+		login.addActionListener(this);
+		password.addActionListener(this);
 		
 		this.setLayout(new GridBagLayout());
 		this.add(pnlCenter);//, BorderLayout.CENTER);
@@ -51,11 +53,16 @@ public class Login extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		  if(arg0.getSource() == btnConnec){
-			  String res = Main.getModel().connect(login.getText(),password.getText());
-			  javax.swing.JOptionPane.showMessageDialog(null,res); //on affiche le r√©sultat dans un pop-up
-			  if(res.equals("success"))
+		  if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
+			  boolean res = Main.getModel().connect(login.getText(),password.getText());
+			 
+			  if(res){
+				  javax.swing.JOptionPane.showMessageDialog(this,"Connexion rÈussie"); //on affiche le r√©sultat dans un pop-up
 				  Main.getView().setPanel("Browser"); //si la connexion r√©ussit, on passe √† la selection d'une partie
+				  
+			  }
+			  else
+				  javax.swing.JOptionPane.showMessageDialog(this,"Connexion ÈchouÈe");
 		  } 
 	}
 }
