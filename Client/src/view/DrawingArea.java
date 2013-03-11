@@ -3,6 +3,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -28,6 +30,10 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	private boolean allowDraw = true;
 	private ColorBoard colorBoard;
 	
+	Graphics2D buffer;
+	   // image m�moire correspondante au buffer
+	   Image image; 
+	
 	public DrawingArea(){
 		setBackground(Color.WHITE);
 		addMouseListener(this);
@@ -47,6 +53,12 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 
+		 if(buffer==null){
+		        image = createImage(800,600);
+		        buffer = (Graphics2D) image.getGraphics();
+		        buffer.setColor( Color.white );
+		        buffer.fillRect( 0, 0, 800, 600 );
+		      }
 		for (Line l : bufPic.getLines() )
         {
            for(int i=0; i < (l.getData().size()-2); i++){
@@ -54,10 +66,15 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
         	   DrawingData p2 = l.getData().get(i+1);
 
         	   // TODO : régler l'épaisseur du trait
-        	   g.setColor(p1.color);
-        	   g.drawLine(p1.x, p1.y, p2.x, p2.y);
+        	   buffer.setColor(p1.color);
+        	   /*buffer.setStroke(new BasicStroke(p1.size,                     // Line width
+                       BasicStroke.CAP_ROUND,    // End-cap style
+                       BasicStroke.JOIN_ROUND));*/
+        	   buffer.drawLine(p1.x, p1.y, p2.x, p2.y);
            }
         }
+		
+		 g.drawImage(image, 0, 0, this);
 
 	}
 
