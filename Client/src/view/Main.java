@@ -2,6 +2,7 @@ package view;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import model.GameObserver;
 import model.Model;
 
 /**
@@ -15,6 +16,7 @@ public class Main {
 	private static View view;
 	private static String host = "localhost";
 	public static ResourceBundle texts;
+	public static GameObserver go;
 	
 	public static void main(String[] argc)
 	{
@@ -25,6 +27,9 @@ public class Main {
 		model = new Model(host);
 		view = new View();
 		view.setPanel("Login");
+		go = new GameObserver(model.getInput(),model.getOutput());
+		go.start();
+		view.go=go;
 	}
 	
 	

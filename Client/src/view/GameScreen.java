@@ -6,6 +6,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import socketData.DrawingData;
+import socketData.Line;
+
+import model.GameObserver;
+
 /**
  * Ecran de jeu
  * @author christopher
@@ -17,15 +22,17 @@ public class GameScreen extends JPanel{
 	private DrawingArea drawingarea;
 	private JList histoChat;
 	private JScrollPane scrlChat;
-	
+	public GameObserver go;
+
 	public GameScreen(){
 		drawingarea = new DrawingArea();
 		histoChat = new JList();
 		scrlChat = new JScrollPane(histoChat);
-		
+		drawingarea.go=this.go;
 		this.setLayout(new BorderLayout());
 		this.add(drawingarea, BorderLayout.CENTER);
 		this.add(scrlChat, BorderLayout.EAST);
+
 	}
-	
+
 }

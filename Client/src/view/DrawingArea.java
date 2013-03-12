@@ -13,6 +13,8 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
+import model.GameObserver;
+
 import socketData.*;
 
 /**
@@ -29,6 +31,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	private Picture bufPic;
 	private boolean allowDraw = true;
 	private ColorBoard colorBoard;
+	public GameObserver go;
 	
 	Graphics2D buffer;
 	   // image mémoire correspondante au buffer
@@ -52,6 +55,9 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
+		if(!allowDraw){
+			bufPic=go.p;
+		}
 
 		 if(buffer==null){
 		        image = createImage(800,600);
@@ -77,11 +83,13 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		 g.drawImage(image, 0, 0, this);
 
 	}
+	
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		if(allowDraw){
 			bufPic.addLine(new Line());
+			go.envoiNewLine();
 		}
 	}
 
@@ -90,6 +98,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		if(allowDraw){
 			// TODO : Calculer dynamiquement l'Ã©paisseur du trait en fonction de la taille de la zone en pixels
 			bufPic.addPoint(arg0.getX(), arg0.getY(), 3, colorBoard.getSelectedColor());
+			go.envoiDrawingData(new DrawingData(arg0.getX(), arg0.getY(), 3, colorBoard.getSelectedColor()));
 		}
 	}
 
