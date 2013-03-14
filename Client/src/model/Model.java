@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import socketData.GameList;
+import view.Main;
 
 /**
  * Gere les connexions avec le serveur.
@@ -14,9 +15,12 @@ public class Model{
 	private ConnecToServer Connec;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
+	private GameObserver go;
+	
 	
 	public Model(String host){
 		Connec = new ConnecToServer(host);
+		go = null;
 	}
 	
 	public boolean connect(String login, String password){
@@ -25,6 +29,8 @@ public class Model{
 		{
 			out = Connec.getOutput();
 			in = Connec.getInput();
+			go = new GameObserver(in, out);
+			go.start();
 		}
 		return res; 
 	}
@@ -52,6 +58,11 @@ public class Model{
 	
 	public ObjectInputStream getInput(){
 		return in;
+	}
+	
+	public GameObserver getGameObserver()
+	{
+		return go;
 	}
 	
 }

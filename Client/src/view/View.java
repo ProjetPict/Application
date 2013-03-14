@@ -16,7 +16,7 @@ public class View {
 	private Login login;
 	private Browser browser;
 	private GameScreen gmScreen;
-	public GameObserver go;
+	private GameObserver go;
 
 	public View(){
 		window = new Window();
@@ -33,9 +33,18 @@ public class View {
 		}
 		else if (panelType.equals("GameScreen")){
 			gmScreen = new GameScreen();
-			gmScreen.go=this.go;
 			window.setPanel(gmScreen);
 		}
 		window.setVisible(true);
+	}
+	
+	public GameObserver getGameObserver()
+	{
+		return go;
+	}
+	
+	public void setGameObserver(GameObserver go)
+	{
+		this.go = go;
 	}
 }

@@ -3,10 +3,11 @@ package model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import socketData.Command;
 import socketData.DrawingData;
 import socketData.Line;
 import socketData.Picture;
-import view.GameScreen;
 
 
 /**
@@ -18,29 +19,26 @@ import view.GameScreen;
 public class GameObserver extends Thread{
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	public Picture p;
+	private Picture pict;
 
 	public GameObserver( ObjectInputStream in, ObjectOutputStream out){
 		this.in=in;
 		this.out=out;
-
 	}
 	
 	
-	
-
 	public void run() {
 		while(true){
 			try {
 				Object obj=in.readObject();
-				if(obj instanceof String)
+				if(obj instanceof Command)
 				{
-					if( obj.equals("newline"))
-						p.addLine(new Line());
+					if( ((Command)obj).command.equals("newline"))
+						pict.addLine(new Line());
 				}
-				if(obj instanceof DrawingData)
+				else if(obj instanceof DrawingData)
 				{
-					p.addPoint( ((DrawingData) obj).x, ((DrawingData) obj).y,((DrawingData)obj).size,((DrawingData)obj).color);
+					pict.addPoint( ((DrawingData) obj).x, ((DrawingData) obj).y,((DrawingData)obj).size,((DrawingData)obj).color);
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -55,9 +53,9 @@ public class GameObserver extends Thread{
 
 	}
 
-	public Boolean envoiDrawingData(DrawingData p1){
+	public Boolean sendDrawingData(DrawingData d){
 		try {
-			out.writeObject(p1);
+			out.writeObject(d);
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -67,8 +65,8 @@ public class GameObserver extends Thread{
 		return true;		
 	}
 
-	public Boolean envoiNewLine(){
-		String cmd="newline";
+	public Boolean sendNewLine(){
+		Command cmd = new Command("newline");
 
 		try {
 			out.writeObject(cmd);
@@ -80,6 +78,11 @@ public class GameObserver extends Thread{
 		}
 		return true;
 
+	}
+	
+	public Picture getPicture()
+	{
+		return pict;
 	}
 
 }

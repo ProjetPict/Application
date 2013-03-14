@@ -27,7 +27,7 @@ public class Picture extends Observable{
 	}
 	
 	public void addPoint(int x, int y, int size, Color color){
-		int index = this.getLines().size() - 1 ;
+		int index = this.getLines().size() - 1;
 		this.getLines().get(index).addPoint(x , y, size, color);
 		setChanged();
 		notifyObservers();
