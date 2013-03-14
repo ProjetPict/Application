@@ -1,9 +1,9 @@
+import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import socketData.Command;
-import socketData.DrawingData;
 
 /**
  * Gère une partie et ses joueurs.
@@ -163,16 +163,16 @@ public class Game extends Thread{
 
 	/**
 	 * Envoie data à tout les joueurs de la partie, à l'exception du joueur d'origine
-	 * @param data
+	 * @param p
 	 * @param sender
 	 */
-	public void sendData(DrawingData data, Player sender)
+	public void sendData(Point p, Player sender)
 	{
 		for(int i = 0; i < players.size(); i++){
 			if(sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
 				try {
-					out.writeObject(data);
+					out.writeObject(p);
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

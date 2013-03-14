@@ -1,6 +1,7 @@
 package socketData;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -9,21 +10,21 @@ import java.util.ArrayList;
  *
  */
 public class Line {
-	private ArrayList<DrawingData> line;
+	private ArrayList<Point> line;
 	public Color color;
 	public int size;
 	
 	public Line(Color color, int size){
-		line  = new ArrayList<DrawingData>();
+		line  = new ArrayList<Point>();
 		this.color = color;
 		this.size = size;
 	}
 	
-	public ArrayList<DrawingData> getData(){
+	public ArrayList<Point> getData(){
 		return line;
 	}
 	
-	public void addPoint(int x, int y, int size, Color color){
-		line.add(new DrawingData(x,y,size,color));
+	public void addPoint(Point p){
+		line.add(p);
 	}
 }

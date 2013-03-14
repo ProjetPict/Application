@@ -1,6 +1,7 @@
 package socketData;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -26,9 +27,9 @@ public class Picture extends Observable{
 		notifyObservers();
 	}
 	
-	public void addPoint(int x, int y, int size, Color color){
+	public void addPoint(Point p){
 		int index = this.getLines().size() - 1;
-		this.getLines().get(index).addPoint(x , y, size, color);
+		this.getLines().get(index).addPoint(p);
 		setChanged();
 		notifyObservers();
 	}

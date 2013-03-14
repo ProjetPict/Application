@@ -1,7 +1,5 @@
 package view;
 
-import socketData.DrawingData;
-import socketData.Line;
 import model.GameObserver;
 
 /**

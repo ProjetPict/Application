@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -68,12 +69,13 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		      }
 		for (Line l : bufPic.getLines() )
         {
+		   buffer.setColor(l.color);
            for(int i=0; i < (l.getData().size()-2); i++){
-        	   DrawingData p1 = l.getData().get(i);
-        	   DrawingData p2 = l.getData().get(i+1);
+        	   Point p1 = l.getData().get(i);
+        	   Point p2 = l.getData().get(i+1);
 
         	   // TODO : régler l'épaisseur du trait
-        	   buffer.setColor(p1.color);
+        	   
         	   /*buffer.setStroke(new BasicStroke(p1.size,                     // Line width
                        BasicStroke.CAP_ROUND,    // End-cap style
                        BasicStroke.JOIN_ROUND));*/
@@ -95,8 +97,9 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	public void mouseDragged(MouseEvent arg0) {
 		if(allowDraw){
 			// TODO : Calculer dynamiquement l'épaisseur du trait en fonction de la taille de la zone en pixels
-			bufPic.addPoint(arg0.getX(), arg0.getY(), 3, colorBoard.getSelectedColor());
-			go.sendDrawingData(new DrawingData(arg0.getX(), arg0.getY(), 3, colorBoard.getSelectedColor()));
+			Point p = new Point(arg0.getX(), arg0.getY());
+			bufPic.addPoint(p);
+			go.sendDrawingData(p);
 		}
 	}
 

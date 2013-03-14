@@ -1,12 +1,12 @@
+import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
 import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.CreateJoinCommand;
-import socketData.DrawingData;
+
 
 /**
  * Cette classe est un thread qui permet de maintenir la connexion avec un joueur et d'intercepter
@@ -214,8 +214,8 @@ public class Player extends Thread {
 	 */
 	public void processTypeMessage(Object message)
 	{
-		if(message instanceof DrawingData){
-			processDessinMessage((DrawingData) message);
+		if(message instanceof Point){
+			processDrawingMessage((Point) message);
 		}
 		else if(message instanceof CreateJoinCommand)
 		{
@@ -320,11 +320,11 @@ public class Player extends Thread {
 	 * Envoie les données à la Game
 	 * @param data
 	 */
-	public void processDessinMessage(DrawingData data)
+	public void processDrawingMessage(Point p)
 	{
 		if(!drawing){
-			game.sendData(data, this);
-			sendResult(data!=null);
+			game.sendData(p, this);
+			sendResult(p!=null);
 		}
 		else
 			sendResult(false);

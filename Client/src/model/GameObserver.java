@@ -1,12 +1,12 @@
 package model;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import socketData.Command;
-import socketData.DrawingData;
 import socketData.Line;
 import socketData.Picture;
 
@@ -33,9 +33,9 @@ public class GameObserver extends Thread{
 		while(running){
 			try {
 				Object obj=in.readObject();
-				if(obj instanceof DrawingData)
+				if(obj instanceof Point)
 				{
-					pict.addPoint( ((DrawingData) obj).x, ((DrawingData) obj).y,((DrawingData)obj).size,((DrawingData)obj).color);
+					pict.addPoint((Point)obj);
 				}
 				else if(obj instanceof Command)
 				{
@@ -58,9 +58,9 @@ public class GameObserver extends Thread{
 
 	}
 
-	public Boolean sendDrawingData(DrawingData d){
+	public Boolean sendDrawingData(Point p){
 		try {
-			out.writeObject(d);
+			out.writeObject(p);
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

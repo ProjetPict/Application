@@ -6,11 +6,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import socketData.DrawingData;
-import socketData.Line;
-
-import model.GameObserver;
-
 /**
  * Ecran de jeu
  * @author christopher
