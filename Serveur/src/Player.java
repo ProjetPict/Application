@@ -125,7 +125,7 @@ public class Player extends Thread {
 		}
 
 		try {
-			out.writeObject(result);
+			out.writeObject(new Command(result));
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -179,12 +179,12 @@ public class Player extends Thread {
 		try {
 			if(result)
 			{
-				out.writeObject("success");
+				out.writeObject(new Command("success"));
 				out.flush();
 			}
 			else
 			{
-				out.writeObject("fail");
+				out.writeObject(new Command("fail"));
 				out.flush();
 			}
 		} catch (IOException e) {
@@ -196,7 +196,7 @@ public class Player extends Thread {
 	{
 		try {
 
-			out.writeObject(result);
+			out.writeObject(new Command(result));
 			out.flush();
 
 
@@ -272,6 +272,10 @@ public class Player extends Thread {
 			}
 
 		}
+		else if(message.command.equals("newline"))
+		{
+			game.sendCommand(message, this);
+		}
 		else
 		{
 			sendResult(false);
@@ -318,8 +322,7 @@ public class Player extends Thread {
 	 */
 	public void processDessinMessage(DrawingData data)
 	{
-		if(drawing){
-			System.out.println("Nouvelle coordonnée : " + data.x + " " + data.y);
+		if(!drawing){
 			game.sendData(data, this);
 			sendResult(data!=null);
 		}

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import socketData.Command;
 import socketData.DrawingData;
 
 /**
@@ -172,6 +173,23 @@ public class Game extends Thread{
 				ObjectOutputStream out = players.get(i).getOutput();
 				try {
 					out.writeObject(data);
+					out.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
+	
+	public void sendCommand(Command cmd, Player sender)
+	{
+		for(int i = 0; i < players.size(); i++){
+			if(sender != players.get(i)){
+				ObjectOutputStream out = players.get(i).getOutput();
+				try {
+					out.writeObject(cmd);
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

@@ -70,7 +70,7 @@ public class Connection extends Thread {
 				if(login instanceof Command)
 				{
 					Server.createPlayer(((Command)login).command, socket, this);
-					out.writeObject("success");
+					out.writeObject(new Command("success"));
 					System.out.println(login +" vient de se connecter ");
 					out.flush();
 				}	
