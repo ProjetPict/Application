@@ -12,43 +12,43 @@ import view.Main;
  *
  */
 public class Model{
-	private ConnecToServer Connec;
+	private ConnecToServer connec;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private GameObserver go;
 	
 	
 	public Model(String host){
-		Connec = new ConnecToServer(host);
+		connec = new ConnecToServer(host);
 		go = null;
 	}
 	
 	public boolean connect(String login, String password){
-		boolean res = Connec.connect(login, password);
+		boolean res = connec.connect(login, password);
 		if(res)
 		{
-			out = Connec.getOutput();
-			in = Connec.getInput();
+			out = connec.getOutput();
+			in = connec.getInput();
 			go = new GameObserver(in, out);
 		}
 		return res; 
 	}
 	
 	public void disconnect(){
-		Connec.disconnect();
+		connec.disconnect();
 	}
 	
 	public GameList getGameList(){
-		return Connec.getGameList();
+		return connec.getGameList();
 	}
 	
 	public String createGame(String name, String password, int Pmax){
-		return Connec.createGame(name, password, Pmax);
+		return connec.createGame(name, password, Pmax);
 	}
 	
 	public String joinGame(String name, String password)
 	{
-		return Connec.joinGame(name, password);
+		return connec.joinGame(name, password);
 	}
 	
 	public ObjectOutputStream getOutput(){

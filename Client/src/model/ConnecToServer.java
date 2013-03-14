@@ -2,6 +2,7 @@ package model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 import socketData.*;
@@ -58,10 +59,10 @@ public class ConnecToServer{
 		//attente de la confirmation de connexion
 		try{
 			Object conf = in.readObject();
-			if(!(conf instanceof String))
+			if(!(conf instanceof Command))
 				throw new ClassNotFoundException(); 
-		
-			if(conf.equals("success")){
+	
+			if(((Command)conf).command.equals("success")){
 				connected = true;
 				return true;
 			}
@@ -79,18 +80,18 @@ public class ConnecToServer{
 	{
 		CreateJoinCommand com = new CreateJoinCommand(name, password, true);
 		
-		String result = "";
+		Command result = null;
 		try{
 			out.writeObject(com);
 			out.flush();
-			result = (String)in.readObject();
+			result = (Command)in.readObject();
 		}catch (ClassNotFoundException e){
 			e.printStackTrace();
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return (String) result;
+		return result.command;
 	}
 	
 	
@@ -100,21 +101,18 @@ public class ConnecToServer{
 		if(!connected)
 			return "fail";
 		
-		String conf = "";
+		
 		try{
 			out.writeObject(com);
 			out.flush();
-			conf = (String)in.readObject();
-		}catch (ClassNotFoundException e){
-			e.printStackTrace();
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		if(conf.equals("success"))
-			connected = false;
 		
-		return (String)conf;
+		connected = false;
+		
+		return "success";
 	}
 	
 	/**
@@ -175,7 +173,7 @@ public class ConnecToServer{
 			e.printStackTrace();
 		}
 		
-		return (String)conf;
+		return ((Command)conf).command;
 	}
 	
 	

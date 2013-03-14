@@ -46,19 +46,19 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		
 		colorBoard = new ColorBoard();
 		this.add(colorBoard, BorderLayout.SOUTH);
-		go = Main.getGameObserver();
-		go.start();
 		bufPic = new Picture();
 		bufPic.addObserver(this);
+		go = Main.getGameObserver();
+		go.setPicture(bufPic);
+		go.start();
+		
 		//bufPic.addLine(new Line());;
 	}
 
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
-		if(!allowDraw){
-			bufPic=go.getPicture();
-		}
+		
 
 		 if(buffer==null){
 		        image = createImage(800,600);
@@ -102,7 +102,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-			repaint();
+		repaint();
 	}
 	
 	@Override
