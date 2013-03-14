@@ -6,6 +6,7 @@ import java.net.Socket;
 import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.CreateJoinCommand;
+import socketData.Line;
 
 
 /**
@@ -214,8 +215,14 @@ public class Player extends Thread {
 	 */
 	public void processTypeMessage(Object message)
 	{
-		if(message instanceof Point){
-			processDrawingMessage((Point) message);
+		if(message instanceof Point || message instanceof Line){
+			
+			if(!drawing){
+				game.sendData(message, this);
+				sendResult(message!=null);
+			}
+			else
+				sendResult(false);
 		}
 		else if(message instanceof CreateJoinCommand)
 		{
@@ -322,12 +329,7 @@ public class Player extends Thread {
 	 */
 	public void processDrawingMessage(Point p)
 	{
-		if(!drawing){
-			game.sendData(p, this);
-			sendResult(p!=null);
-		}
-		else
-			sendResult(false);
+		
 	}
 
 

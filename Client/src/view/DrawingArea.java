@@ -128,8 +128,9 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		if(allowDraw){
-			bufPic.addLine(new Line(colorBoard.getSelectedColor(), 3));
-			go.sendNewLine();
+			Line line = new Line(colorBoard.getSelectedColor(), 3);
+			bufPic.addLine(line);
+			go.sendNewLine(line);
 		}
 
 	}

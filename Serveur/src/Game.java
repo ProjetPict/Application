@@ -166,13 +166,13 @@ public class Game extends Thread{
 	 * @param p
 	 * @param sender
 	 */
-	public void sendData(Point p, Player sender)
+	public void sendData(Object data, Player sender)
 	{
 		for(int i = 0; i < players.size(); i++){
 			if(sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
 				try {
-					out.writeObject(p);
+					out.writeObject(data);
 					out.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

@@ -37,10 +37,10 @@ public class GameObserver extends Thread{
 				{
 					pict.addPoint((Point)obj);
 				}
-				else if(obj instanceof Command)
+				else if(obj instanceof Line)
 				{
-					if( ((Command)obj).command.equals("newline"))
-						pict.addLine(new Line(Color.black, 3));
+					
+					pict.addLine((Line) obj);
 				}
 				
 			} catch (IOException e) {
@@ -70,11 +70,9 @@ public class GameObserver extends Thread{
 		return true;		
 	}
 
-	public Boolean sendNewLine(){
-		Command cmd = new Command("newline");
-
+	public Boolean sendNewLine(Line line){
 		try {
-			out.writeObject(cmd);
+			out.writeObject(line);
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
