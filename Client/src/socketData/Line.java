@@ -10,9 +10,13 @@ import java.util.ArrayList;
  */
 public class Line {
 	private ArrayList<DrawingData> line;
+	public Color color;
+	public int size;
 	
-	public Line(){
+	public Line(Color color, int size){
 		line  = new ArrayList<DrawingData>();
+		this.color = color;
+		this.size = size;
 	}
 	
 	public ArrayList<DrawingData> getData(){

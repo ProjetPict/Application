@@ -30,7 +30,6 @@ public class Model{
 			out = Connec.getOutput();
 			in = Connec.getInput();
 			go = new GameObserver(in, out);
-			go.start();
 		}
 		return res; 
 	}

@@ -22,8 +22,12 @@ import socketData.*;
  */
 public class Browser extends JPanel implements ActionListener{
 
-	private static final long serialVersionUID = 5874691608463169886L;
-
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private JButton btnJoin;
 	private JButton btnPnlCreate;
 	private JButton btnCreate;

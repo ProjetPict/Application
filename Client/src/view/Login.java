@@ -18,8 +18,12 @@ import javax.swing.JTextField;
  */
 public class Login extends JPanel implements ActionListener{
 
-	private static final long serialVersionUID = -3026788736669539483L;
-
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private JButton btnConnec;
 	private JTextField login;
 	private JTextField password;

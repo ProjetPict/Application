@@ -126,6 +126,7 @@ public class ConnecToServer{
 		Object res = null;
 		try {
 			out.writeObject(com);
+			out.flush();
 		} catch (IOException e) {
 			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();

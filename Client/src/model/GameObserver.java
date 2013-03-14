@@ -33,8 +33,8 @@ public class GameObserver extends Thread{
 				Object obj=in.readObject();
 				if(obj instanceof Command)
 				{
-					if( ((Command)obj).command.equals("newline"))
-						pict.addLine(new Line());
+					//if( ((Command)obj).command.equals("newline"))
+						//pict.addLine(new Line());
 				}
 				else if(obj instanceof DrawingData)
 				{
