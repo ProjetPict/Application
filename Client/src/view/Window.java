@@ -23,7 +23,7 @@ public class Window extends JFrame implements WindowListener{
 		this.setTitle("DrawVS");
 		this.setLocation(new Point(100,100));
 		this.setResizable(false);
-		this.setSize(800, 600);
+		this.setSize(1024, 768);
 	}
 
 	public void setPanel(JPanel panel){
