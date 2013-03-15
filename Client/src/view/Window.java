@@ -1,15 +1,18 @@
 package view;
 
 
-import java.awt.Point;
+import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class Window extends JFrame implements WindowListener{
+public class Window extends JFrame implements WindowListener, ComponentListener{
 
 	/**
 	 * 
@@ -18,12 +21,20 @@ public class Window extends JFrame implements WindowListener{
 
 	public Window(){
 		//On initialise la JFrame
+		
 		addWindowListener(this);
+		addComponentListener(this);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("DrawVS");
-		this.setLocation(new Point(100,100));
-		this.setResizable(false);
-		this.setSize(1024, 768);
+		this.setMinimumSize(new Dimension(640,480));
+		//this.setLocation(new Point(100,100));
+		this.setResizable(true);
+		this.setSize((int)Main.gameWidth, (int)Main.gameHeight);
+		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+	    int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+	    int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+	    this.setLocation(x, y);
+	    this.setIconImage(new ImageIcon(getClass().getResource("../ressources/images/icon.png")).getImage());
 	}
 
 	public void setPanel(JPanel panel){
@@ -74,6 +85,36 @@ public class Window extends JFrame implements WindowListener{
 	}
 
 	public void windowStateChanged(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		
+		Main.gameWidth = this.getWidth();
+		Main.gameHeight = this.getHeight();
+		Main.ratioX = this.getWidth()/1024.0;
+		Main.ratioY = this.getHeight()/768.0;
+		Main.offsetX = Main.gameWidth - 1024;
+		this.getContentPane().repaint();
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 

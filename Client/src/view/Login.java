@@ -2,17 +2,13 @@ package view;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -52,7 +48,7 @@ public class Login extends JPanel implements ActionListener{
 		this.add(newAccount);
 		this.add(passwordForget);
 		
-		btnConnec.setBounds(490,430,210,90);
+		btnConnec.setBounds((int)(490*Main.ratioX),(int)(430*Main.ratioY),210,90);
 		btnConnec.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnConnec.setOpaque(false);
 		btnConnec.setContentAreaFilled(false);
@@ -62,18 +58,18 @@ public class Login extends JPanel implements ActionListener{
 		login.setBorder(null);
 		login.setForeground(Color.white);
 		login.setFont(fontBasic);
-		login.setBounds(390, 320, 280, 25);
+		login.setBounds((int)(390*Main.ratioX), (int)(320*Main.ratioY), 280, 25);
 		password.setOpaque(false);
 		password.setBorder(null);
 		password.setForeground(Color.white);
 		password.setFont(fontBasic);
-		password.setBounds(390, 390, 280, 25);
+		password.setBounds((int)(390*Main.ratioX), (int)(390*Main.ratioY), 280, 25);
 		newAccount.setForeground(Color.white);
 		newAccount.setFont(fontBasicLow);
-		newAccount.setBounds(348, 530, 300, 30);
+		newAccount.setBounds((int)(348*Main.ratioX), (int)(530*Main.ratioY), 300, 30);
 		passwordForget.setForeground(Color.white);
 		passwordForget.setFont(fontBasicLow);
-		passwordForget.setBounds(348, 560, 300, 30);
+		passwordForget.setBounds((int)(348*Main.ratioX), (int)(560*Main.ratioY), 300, 30);
 		
 		btnConnec.addActionListener(this);
 		login.addActionListener(this);
@@ -81,8 +77,15 @@ public class Login extends JPanel implements ActionListener{
 	}
 	
 	public void paintComponent(Graphics g) {
+		btnConnec.setLocation((int)(490*Main.ratioX  + 188.*(Main.ratioX-1.0)),(int)(430*Main.ratioY));
+		password.setLocation((int)(390*Main.ratioX), (int)(390*Main.ratioY));
+		login.setLocation((int)(390*Main.ratioX), (int)(320*Main.ratioY));
+		newAccount.setLocation((int)(348*Main.ratioX), (int)(530*Main.ratioY));
+		passwordForget.setLocation((int)(348*Main.ratioX), (int)(560*Main.ratioY));
+		
+		
         Graphics2D g2d = (Graphics2D)g;
-        g2d.drawImage(imgBackground, 0, 0, this);
+        g2d.drawImage(imgBackground, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {

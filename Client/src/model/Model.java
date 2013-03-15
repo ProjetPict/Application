@@ -4,7 +4,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import socketData.GameList;
-import view.Main;
 
 /**
  * Gere les connexions avec le serveur.
