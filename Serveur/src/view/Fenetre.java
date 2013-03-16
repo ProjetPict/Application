@@ -54,7 +54,7 @@ public class Fenetre extends JFrame {
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(100,100));
 		this.setResizable(false);
-		this.setSize(900, 600);
+		this.setSize(900, 700);
 		this.setJMenuBar(menuBar);
 		this.serverInfos = servInfo;
 		
@@ -92,7 +92,7 @@ public class Fenetre extends JFrame {
 		JSplitPane pan = new JSplitPane();
 		pan.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.add(pan);
-		pan.setDividerLocation(405);
+		pan.setDividerLocation(430);
 		pan.setTopComponent(monitor);
 		pan.setBottomComponent(console);
 		
@@ -110,7 +110,7 @@ public class Fenetre extends JFrame {
 		});
 	}
 	
-	public void updateGraph(int num) {
-		monitor.updateGraph(num);
+	public void updateGraph(int connected, long l) {
+		monitor.updateGraph(connected, l);
 	}
 }

@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.Window;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -30,6 +31,7 @@ public class Server extends Thread{
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private Fenetre fenetre;
+	private Runtime runtime;
 
 	public Server(){
 		players = new ArrayList<Player>();
@@ -55,11 +57,12 @@ public class Server extends Thread{
 		timer.schedule(new TimerTask() {
 			public void run()
 			{
-				fenetre.updateGraph(players.size());
+				runtime = Runtime.getRuntime();
+				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024);
 				//System.out.println(games.size() + " parties sont en cours.");
 				//System.out.println(players.size() + " joueurs connectés.");
 			}
-		}, 0, 1000);
+		}, 0, 30);
 
 		while(true){
 			try {

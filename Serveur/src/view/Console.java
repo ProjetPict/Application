@@ -3,6 +3,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -31,15 +33,13 @@ public class Console extends JPanel {
 		serverAnswer.setWrapStyleWord(true);
 		JScrollPane scroll = new JScrollPane(serverAnswer);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll.setPreferredSize(new Dimension(900, 300));
-		this.add(scroll);
 		historique = new ArrayList<String>();
 		
 		JPanel send = new JPanel(new BorderLayout());
 		send.add(serverCommand,BorderLayout.CENTER);
 		send.add(sendCommand,BorderLayout.EAST);
 		this.setLayout(new BorderLayout());
-		this.add(serverAnswer,BorderLayout.CENTER);
+		this.add(scroll,BorderLayout.CENTER);
 		this.add(send,BorderLayout.SOUTH);
 		this.setPreferredSize(new Dimension(890, 160));
 		
