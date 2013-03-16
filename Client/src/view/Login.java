@@ -30,7 +30,10 @@ public class Login extends JPanel implements ActionListener{
 	private JPasswordField password;
 	private JLabel newAccount;
 	private JLabel passwordForget;
+    private Image imgLogo = new ImageIcon(getClass().getResource("../ressources/images/logo.png")).getImage();
     private Image imgBackground = new ImageIcon(getClass().getResource("../ressources/images/login.jpg")).getImage();
+    private Image imgFieldUser = new ImageIcon(getClass().getResource("../ressources/images/field_login_username.png")).getImage();
+    private Image imgFieldPass = new ImageIcon(getClass().getResource("../ressources/images/field_login_password.png")).getImage();
     private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
     private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
 	
@@ -47,8 +50,9 @@ public class Login extends JPanel implements ActionListener{
 		this.add(btnConnec);
 		this.add(newAccount);
 		this.add(passwordForget);
-		
-		btnConnec.setBounds((int)(490*Main.ratioX),(int)(430*Main.ratioY),210,90);
+
+		int calcWidthUser = (int)(Main.gameWidth-330)/2;
+		btnConnec.setBounds(calcWidthUser+140,(int)(430*Main.ratioY),210,90);
 		btnConnec.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnConnec.setOpaque(false);
 		btnConnec.setContentAreaFilled(false);
@@ -58,18 +62,18 @@ public class Login extends JPanel implements ActionListener{
 		login.setBorder(null);
 		login.setForeground(Color.white);
 		login.setFont(fontBasic);
-		login.setBounds((int)(390*Main.ratioX), (int)(320*Main.ratioY), 280, 25);
+		login.setBounds(calcWidthUser+35, (int)(320*Main.ratioY), 280, 25);
 		password.setOpaque(false);
 		password.setBorder(null);
 		password.setForeground(Color.white);
 		password.setFont(fontBasic);
-		password.setBounds((int)(390*Main.ratioX), (int)(390*Main.ratioY), 280, 25);
+		password.setBounds(calcWidthUser+35, (int)(390*Main.ratioY), 280, 25);
 		newAccount.setForeground(Color.white);
 		newAccount.setFont(fontBasicLow);
-		newAccount.setBounds((int)(348*Main.ratioX), (int)(530*Main.ratioY), 300, 30);
+		newAccount.setBounds((int)(Main.gameWidth-330)/2, (int)(540*Main.ratioY), 300, 30);
 		passwordForget.setForeground(Color.white);
 		passwordForget.setFont(fontBasicLow);
-		passwordForget.setBounds((int)(348*Main.ratioX), (int)(560*Main.ratioY), 300, 30);
+		passwordForget.setBounds((int)(Main.gameWidth-330)/2, (int)(570*Main.ratioY), 300, 30);
 		
 		btnConnec.addActionListener(this);
 		login.addActionListener(this);
@@ -77,15 +81,18 @@ public class Login extends JPanel implements ActionListener{
 	}
 	
 	public void paintComponent(Graphics g) {
-		btnConnec.setLocation((int)(490*Main.ratioX  + 188.*(Main.ratioX-1.0)),(int)(430*Main.ratioY));
-		password.setLocation((int)(390*Main.ratioX), (int)(390*Main.ratioY));
-		login.setLocation((int)(390*Main.ratioX), (int)(320*Main.ratioY));
-		newAccount.setLocation((int)(348*Main.ratioX), (int)(530*Main.ratioY));
-		passwordForget.setLocation((int)(348*Main.ratioX), (int)(560*Main.ratioY));
-		
+		int calcWidthUser = (int)(Main.gameWidth-330)/2;
+		btnConnec.setLocation(calcWidthUser+140,(int)(430*Main.ratioY));
+		password.setLocation(calcWidthUser+35, (int)(390*Main.ratioY));
+		login.setLocation(calcWidthUser+35, (int)(320*Main.ratioY));
+		newAccount.setLocation((int)(Main.gameWidth-330)/2, (int)(540*Main.ratioY));
+		passwordForget.setLocation((int)(Main.gameWidth-330)/2, (int)(570*Main.ratioY));
 		
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(imgBackground, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
+        g2d.drawImage(imgLogo, (int)(Main.gameWidth-346)/2, (int)(50*Main.ratioX), 346, 116, this);
+        g2d.drawImage(imgFieldUser, calcWidthUser, (int)(320*Main.ratioY), 330, 30, this);
+        g2d.drawImage(imgFieldPass, calcWidthUser, (int)(390*Main.ratioY), 330, 30, this);
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
