@@ -1,10 +1,7 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.BorderLayout; 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,17 +11,23 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
+import server.Server;
 
 public class Console extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private JTextArea serverAnswer;
 	private JTextField serverCommand;
 	private JButton sendCommand;
 	private String interprete;
 	private ArrayList<String> historique;
+	private Commander cmd;
+	private Server serv;
 	
-	public Console() {
+	public Console(Server infos) {
+		cmd = new Commander(this,infos);
+		serv = infos;
+		
 		serverAnswer = new JTextArea(10,50);
 		serverCommand = new JTextField();
 		sendCommand = new JButton("Exécuter");
@@ -52,7 +55,12 @@ public class Console extends JPanel {
 					serverAnswer.setText(serverAnswer.getText().concat("Commande : "+interprete));
 				else
 					serverAnswer.setText(serverAnswer.getText().concat("\nCommande : "+interprete));
+				cmd.askCmd(interprete);
 			} 
 		});
+	}
+	
+	public void writeAnswer(String s) {
+		serverAnswer.setText(serverAnswer.getText().concat("\nRéponse : "+s));
 	}
 }

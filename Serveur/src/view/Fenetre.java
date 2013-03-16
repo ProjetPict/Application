@@ -21,7 +21,7 @@ import server.Server;
 
 public class Fenetre extends JFrame {
 	private Server serverInfos;
-	private Console console = new Console();
+	private Console console;
 	private Monitor monitor = new Monitor();
 	
 	private JMenuBar menuBar = new JMenuBar();
@@ -57,6 +57,7 @@ public class Fenetre extends JFrame {
 		this.setSize(900, 700);
 		this.setJMenuBar(menuBar);
 		this.serverInfos = servInfo;
+		console = new Console(servInfo);
 		
 		menuBar.add(fichier);
 		menuBar.add(edition);
