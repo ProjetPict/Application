@@ -1,12 +1,10 @@
 package model;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import socketData.Command;
 import socketData.Line;
 import socketData.Picture;
 
