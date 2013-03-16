@@ -36,7 +36,7 @@ public class Server extends Thread{
 	private DbConnection servDbConnec;
 	private ServerDatabase servDbLocale;
 
-	public Server(){
+	public Server() throws Exception{
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();
 		servDbLocale = new ServerDatabase();
@@ -48,8 +48,10 @@ public class Server extends Thread{
 		fenetre.writeAnnonce("> Connexion à la base de données...");
 		if(servDbConnec.connectDatabase())
 			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
-		else
-			fenetre.writeAnnonce("Echec !\n> Veuillez vérifier le paramètres de connection.");
+		else{
+			fenetre.writeAnnonce("Echec !\n> Veuillez vérifier le paramètre de connection avant de relancer le serveur.\n");
+			//throw new Exception("Echec connexion bdd");
+		}
 		servDbLocale.loadDatabase();
 		fenetre.writeAnnonce("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
 		try {

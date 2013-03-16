@@ -10,7 +10,13 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		server = new Server();
-		server.start();
+		try {
+			server = new Server();
+			server.start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
