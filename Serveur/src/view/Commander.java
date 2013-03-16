@@ -1,5 +1,7 @@
 package view;
 
+import java.util.ArrayList;
+
 import server.Server;
 
 /**
@@ -19,7 +21,25 @@ public class Commander {
 	}
 	
 	public void askCmd(String s) {
-		consoleCmd.writeAnswer("Erreur commande non reconnue.");
+		if(s.equals("historique")) {
+			ArrayList<String> historique = consoleCmd.getHistory();
+			String a = "";
+			if(historique.size()-1==0)
+				a+= "Aucun élément dans l'historique.";
+			else {
+				a+= historique.size()+" éléments dans l'historique";
+				for(int i=0; i<historique.size(); i++)
+					a+="\n>"+i+". "+historique.get(i);
+			}
+			consoleCmd.writeAnswer(a);
+		}
+		else if(s.equals("clear-historique")) {
+			consoleCmd.resetHistory();
+			consoleCmd.writeAnswer("Historique vidé.\n");
+		}
+		else {
+			consoleCmd.writeAnswer("Commande non reconnue.");
+		}
+			
 	}
-	
 }

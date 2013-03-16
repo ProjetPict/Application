@@ -69,8 +69,15 @@ public class Console extends JPanel {
 		cmd.askCmd(interprete);
 	}
 	
+	public ArrayList<String> getHistory() {
+		return historique;
+	}
+	
+	public void resetHistory() {
+		historique = new ArrayList<String>();
+	}
+	
 	public void writeAnswer(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat("\nRéponse : "+s));
-		
 	}
 }
