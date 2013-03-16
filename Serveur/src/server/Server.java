@@ -9,8 +9,6 @@ import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -58,7 +56,7 @@ public class Server extends Thread{
 			public void run()
 			{
 				runtime = Runtime.getRuntime();
-				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024);
+				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
 				//System.out.println(games.size() + " parties sont en cours.");
 				//System.out.println(players.size() + " joueurs connectés.");
 			}

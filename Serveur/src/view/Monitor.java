@@ -17,6 +17,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 public class Monitor extends JPanel {
 	
 	private TimeSeries tsConnect = new TimeSeries("Nombre de joueurs connectés", Millisecond.class);
+	private TimeSeries tsGames = new TimeSeries("Nombre de parties en cours", Millisecond.class);
 	private TimeSeries tsMemory = new TimeSeries("Mémoire utilisée par le serveur", Millisecond.class);
 	private ValueAxis axisM;
 	private ValueAxis axisC;
@@ -24,12 +25,15 @@ public class Monitor extends JPanel {
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JPanel memory;
     private JPanel connected;
+    private JPanel games;
 	
     public Monitor() {
     	memory = getGraph(tsMemory, -1, 200000, axisM, "Heure", "Ko");
     	connected = getGraph(tsConnect, -1, 10, axisC, "Heure", "");
+    	games = getGraph(tsGames, -1, 10, axisC, "Heure", "");
     	
     	tabbedPane.addTab("Nombre de joueurs connectés", connected);
+    	tabbedPane.addTab("Nombre de parties en cours", games);
     	tabbedPane.addTab("Utilisation de la mémoire", memory);
     	
     	this.add(tabbedPane);
@@ -58,8 +62,9 @@ public class Monitor extends JPanel {
         return genPan;
     }
     
-    public void updateGraph(int conn, long l) {
+    public void updateGraph(int conn, long l, int gam) {
     	tsConnect.addOrUpdate(new Millisecond(), conn);
     	tsMemory.addOrUpdate(new Millisecond(), l);
+    	tsGames.addOrUpdate(new Millisecond(), gam);
     }
 }
