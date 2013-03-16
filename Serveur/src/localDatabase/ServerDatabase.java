@@ -1,6 +1,9 @@
+package localDatabase;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
+
+import server.Statistiques;
 
 /**
  * Cette classe permet de créer une base de données propre au serveur basée sur celle du site

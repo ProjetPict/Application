@@ -1,3 +1,4 @@
+package server;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -5,12 +6,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.awt.Window;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import socketData.GameInfo;
 import socketData.GameList;
+import view.Fenetre;
 
 /**
  * Cette classe gère les nouvelles connexions, ainsi que
@@ -43,7 +46,6 @@ public class Server extends Thread{
 	public void run() {
 
 		Timer timer = new Timer();
-
 		//On affiche des infos toutes les 10 secondes
 		timer.schedule(new TimerTask() {
 			public void run()
