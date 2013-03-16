@@ -48,16 +48,25 @@ public class Console extends JPanel {
 		
 		sendCommand.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				interprete = serverCommand.getText();
-				historique.add(interprete);
-				serverCommand.setText("");
-				if(historique.size()==1)
-					serverAnswer.setText(serverAnswer.getText().concat("Commande : "+interprete));
-				else
-					serverAnswer.setText(serverAnswer.getText().concat("\nCommande : "+interprete));
-				cmd.askCmd(interprete);
+				sendCmd();
 			} 
 		});
+		serverCommand.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				sendCmd();
+			} 
+		});
+	}
+	
+	public void sendCmd() {
+		interprete = serverCommand.getText();
+		historique.add(interprete);
+		serverCommand.setText("");
+		if(historique.size()==1)
+			serverAnswer.setText(serverAnswer.getText().concat("Commande : "+interprete));
+		else
+			serverAnswer.setText(serverAnswer.getText().concat("\nCommande : "+interprete));
+		cmd.askCmd(interprete);
 	}
 	
 	public void writeAnswer(String s) {

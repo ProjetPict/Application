@@ -35,6 +35,7 @@ public class Monitor extends JPanel {
     	tabbedPane.addTab("Nombre de joueurs connectés", connected);
     	tabbedPane.addTab("Nombre de parties en cours", games);
     	tabbedPane.addTab("Utilisation de la mémoire", memory);
+    	tabbedPane.addTab("Informations du serveur", new JPanel());
     	
     	this.add(tabbedPane);
     }
