@@ -19,10 +19,15 @@ public class DbConnection extends Thread {
 	private String db_basename = "drawvs";
 	
 	public DbConnection() {
+		
+	}
+	
+	public boolean connectDatabase() {
 		try {
 			DbwConnection conn = new DbwConnection(db_link_url, db_username, db_password, db_hostname, db_basename);
+			return true;
 		} catch(SQLException e) {
-			System.out.println("> Impossible de se connecter à la base de données ("+e+")");
+			return false;
 		}
 	}
 	

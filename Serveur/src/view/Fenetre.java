@@ -115,4 +115,8 @@ public class Fenetre extends JFrame {
 	public void updateGraph(int connected, long l, int games) {
 		monitor.updateGraph(connected, l, games);
 	}
+	
+	public void writeAnnonce(String s) {
+		console.writeAnnonce(s);
+	}
 }

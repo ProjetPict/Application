@@ -35,7 +35,7 @@ public class Commander {
 		}
 		else if(s.equals("clear-historique")) {
 			consoleCmd.resetHistory();
-			consoleCmd.writeAnswer("Historique vidé.\n");
+			consoleCmd.writeAnswer("Historique vidé.");
 		}
 		else {
 			consoleCmd.writeAnswer("Commande non reconnue.");

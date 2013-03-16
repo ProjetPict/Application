@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout; 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,14 +10,15 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
 import server.Server;
 
 public class Console extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTextArea serverAnswer;
+	private JTextPane serverAnswer;
 	private JTextField serverCommand;
 	private JButton sendCommand;
 	private String interprete;
@@ -28,12 +30,11 @@ public class Console extends JPanel {
 		cmd = new Commander(this,infos);
 		serv = infos;
 		
-		serverAnswer = new JTextArea(10,50);
+		serverAnswer = new JTextPane();
 		serverCommand = new JTextField();
 		sendCommand = new JButton("Exécuter");
+
 		serverAnswer.setEditable(false);
-		serverAnswer.setLineWrap(true);
-		serverAnswer.setWrapStyleWord(true);
 		JScrollPane scroll = new JScrollPane(serverAnswer);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		historique = new ArrayList<String>();
@@ -62,10 +63,7 @@ public class Console extends JPanel {
 		interprete = serverCommand.getText();
 		historique.add(interprete);
 		serverCommand.setText("");
-		if(historique.size()==1)
-			serverAnswer.setText(serverAnswer.getText().concat("Commande : "+interprete));
-		else
-			serverAnswer.setText(serverAnswer.getText().concat("\nCommande : "+interprete));
+		serverAnswer.setText(serverAnswer.getText().concat("\nCommande : "+interprete));
 		cmd.askCmd(interprete);
 	}
 	
@@ -79,5 +77,9 @@ public class Console extends JPanel {
 	
 	public void writeAnswer(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat("\nRéponse : "+s));
+	}
+	
+	public void writeAnnonce(String s) {
+		serverAnswer.setText(serverAnswer.getText().concat(s));
 	}
 }

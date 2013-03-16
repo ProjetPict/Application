@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import localDatabase.DbConnection;
+import localDatabase.ServerDatabase;
+
 import socketData.GameInfo;
 import socketData.GameList;
 import view.Fenetre;
@@ -30,10 +33,25 @@ public class Server extends Thread{
 	private Socket socket;
 	private Fenetre fenetre;
 	private Runtime runtime;
+	private DbConnection servDbConnec;
+	private ServerDatabase servDbLocale;
 
 	public Server(){
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();
+		servDbLocale = new ServerDatabase();
+		servDbConnec = new DbConnection();
+		
+		fenetre = new Fenetre(this);
+		fenetre.setVisible(true);
+		fenetre.writeAnnonce("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
+		fenetre.writeAnnonce("> Connexion à la base de données...");
+		if(servDbConnec.connectDatabase())
+			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
+		else
+			fenetre.writeAnnonce("Echec !\n> Préparation de la base de données...");
+		servDbLocale.loadDatabase();
+		fenetre.writeAnnonce("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
 		try {
 			serverSocket = new ServerSocket(8448);
 		} catch (IOException e) {
@@ -49,8 +67,6 @@ public class Server extends Thread{
 	public void run() {
 
 		Timer timer = new Timer();
-		fenetre = new Fenetre(this);
-		fenetre.setVisible(true);
 		//On affiche des infos toutes les 10 secondes
 		timer.schedule(new TimerTask() {
 			public void run()
