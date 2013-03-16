@@ -1,6 +1,7 @@
 package server;
 
-import java.util.ArrayList; 
+
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.net.Socket;
 
 import socketData.GameInfo;
 import socketData.GameList;
+import view.Fenetre;
 
 /**
  * Cette classe gère les nouvelles connexions, ainsi que
@@ -27,6 +29,7 @@ public class Server extends Thread{
 	private static Map<String, Game> games;
 	private ServerSocket serverSocket;
 	private Socket socket;
+	private Fenetre fenetre;
 
 	public Server(){
 		players = new ArrayList<Player>();
@@ -46,14 +49,17 @@ public class Server extends Thread{
 	public void run() {
 
 		Timer timer = new Timer();
+		fenetre = new Fenetre(this);
+		fenetre.setVisible(true);
 		//On affiche des infos toutes les 10 secondes
 		timer.schedule(new TimerTask() {
 			public void run()
 			{
-				System.out.println(games.size() + " parties sont en cours.");
-				System.out.println(players.size() + " joueurs connectés.");
+				fenetre.updateGraph(players.size());
+				//System.out.println(games.size() + " parties sont en cours.");
+				//System.out.println(players.size() + " joueurs connectés.");
 			}
-		}, 0, 10000);
+		}, 0, 1000);
 
 		while(true){
 			try {
