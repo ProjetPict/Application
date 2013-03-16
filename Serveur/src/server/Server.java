@@ -1,6 +1,6 @@
 package server;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,7 +14,6 @@ import java.net.Socket;
 
 import socketData.GameInfo;
 import socketData.GameList;
-import view.Fenetre;
 
 /**
  * Cette classe gère les nouvelles connexions, ainsi que
