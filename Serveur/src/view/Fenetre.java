@@ -103,6 +103,7 @@ public class Fenetre extends JFrame {
 				a.setVisible(true);
 			}
 		});
+		
 		seelogs.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				Logs l = new Logs();

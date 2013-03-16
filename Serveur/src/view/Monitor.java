@@ -50,6 +50,7 @@ public class Monitor extends JPanel {
             true,
             false
         );
+        
         final XYPlot plot = connectChart.getXYPlot();
         axe = plot.getDomainAxis();
         axe.setAutoRange(true);

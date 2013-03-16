@@ -15,6 +15,7 @@ public class Commander {
 	public Commander(Console conso, Server serv) {
 		serverInfos = serv;
 		consoleCmd = conso;
+		
 	}
 	
 	public void askCmd(String s) {

@@ -62,5 +62,6 @@ public class Console extends JPanel {
 	
 	public void writeAnswer(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat("\nRéponse : "+s));
+		
 	}
 }
