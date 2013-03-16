@@ -49,7 +49,7 @@ public class Server extends Thread{
 		if(servDbConnec.connectDatabase())
 			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
 		else
-			fenetre.writeAnnonce("Echec !\n> Préparation de la base de données...");
+			fenetre.writeAnnonce("Echec !\n> Veuillez vérifier le paramètres de connection.");
 		servDbLocale.loadDatabase();
 		fenetre.writeAnnonce("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
 		try {
