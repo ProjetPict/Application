@@ -3,20 +3,25 @@ package model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Observable;
 
 import socketData.AnswerCommand;
 import socketData.GameList;
+import socketData.PlayerScore;
 
 /**
  * Gere les connexions avec le serveur.
  * @author christopher
  *
  */
-public class Model{
+public class Model extends Observable{
 	private ConnecToServer connec;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private GameObserver go;
+	private Map<String, PlayerScore> scores;
 	
 	
 	public Model(String host){
@@ -57,13 +62,31 @@ public class Model{
 		return connec.getGameList();
 	}
 	
+	public void addPlayerScore(PlayerScore ps)
+	{
+		scores.put(ps.login, ps);
+		setChanged();
+		notifyObservers();
+	}
+	
+	public Map<String, PlayerScore> getScores()
+	{
+		return scores;
+	}
+	
 	public String createGame(String name, String password, int Pmax){
-		return connec.createGame(name, password, Pmax);
+		String res = connec.createGame(name, password, Pmax);
+		if(res.equals("success"))
+			scores = new Hashtable<String, PlayerScore>();
+		return res;
 	}
 	
 	public String joinGame(String name, String password)
 	{
-		return connec.joinGame(name, password);
+		String res = connec.joinGame(name, password);
+		if(res.equals("success"))
+			scores = new Hashtable<String, PlayerScore>();
+		return res;
 	}
 	
 	public ObjectOutputStream getOutput(){
