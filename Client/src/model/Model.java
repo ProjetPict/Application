@@ -1,8 +1,10 @@
 package model;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import socketData.AnswerCommand;
 import socketData.GameList;
 
 /**
@@ -35,6 +37,20 @@ public class Model{
 	
 	public void disconnect(){
 		connec.disconnect();
+	}
+	
+	public void sendAnswer(String answer)
+	{
+		AnswerCommand ans = new AnswerCommand(answer, 62.0);
+		
+		try {
+			out.writeObject(ans);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public GameList getGameList(){

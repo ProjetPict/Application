@@ -87,7 +87,10 @@ public class Browser extends JPanel implements ActionListener{
 
 		slctSubPane.add(btnJoin, BorderLayout.SOUTH);
 		slctPane.add(slctSubPane,  BorderLayout.CENTER);
-		slctPane.add(btnPnlCreate, BorderLayout.SOUTH);
+		JPanel panel = new JPanel();
+		panel.add(btnPnlCreate);
+		panel.add(btnRefresh);
+		slctPane.add(panel, BorderLayout.SOUTH);
 
 		crtPane.setLayout(new BorderLayout());
 		crtSubPane.setLayout(new GridLayout(3,2));
@@ -98,6 +101,7 @@ public class Browser extends JPanel implements ActionListener{
 		crtSubPane.add(lblGamePmax);
 		crtSubPane.add(txtGamePmax);
 		crtPane.add(crtSubPane);
+		
 		crtPane.add(btnCreate, BorderLayout.SOUTH);
 
 		btnJoin.addActionListener(this);

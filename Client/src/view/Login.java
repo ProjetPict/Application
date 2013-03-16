@@ -99,7 +99,7 @@ public class Login extends JPanel implements ActionListener{
 		  if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
 			  boolean res = Main.getModel().connect(login.getText(),password.getText());
 			  if(res){
-				  javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
+				  //javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
 				  Main.getView().setPanel("Browser");
 			  }
 			  else
