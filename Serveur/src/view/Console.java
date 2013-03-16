@@ -61,10 +61,14 @@ public class Console extends JPanel {
 	
 	public void sendCmd() {
 		interprete = serverCommand.getText();
-		historique.add(interprete);
 		serverCommand.setText("");
 		serverAnswer.setText(serverAnswer.getText().concat("\nCommande : "+interprete));
 		cmd.askCmd(interprete);
+		historique.add(interprete);
+	}
+	
+	public void directAsk(String s) {
+		cmd.askCmd(s);
 	}
 	
 	public ArrayList<String> getHistory() {
@@ -73,6 +77,14 @@ public class Console extends JPanel {
 	
 	public void resetHistory() {
 		historique = new ArrayList<String>();
+	}
+	
+	public void setTextField(String s) {
+		serverCommand.setText(s);
+	}
+	
+	public String getTextField() {
+		return serverCommand.getText();
 	}
 	
 	public void writeAnswer(String s) {

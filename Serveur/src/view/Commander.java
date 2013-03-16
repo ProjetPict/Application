@@ -24,12 +24,12 @@ public class Commander {
 		if(s.equals("historique")) {
 			ArrayList<String> historique = consoleCmd.getHistory();
 			String a = "";
-			if(historique.size()-1==0)
+			if(historique.size()==0)
 				a+= "Aucun élément dans l'historique.";
 			else {
 				a+= historique.size()+" éléments dans l'historique";
 				for(int i=0; i<historique.size(); i++)
-					a+="\n>"+i+". "+historique.get(i);
+					a+="\n> "+(i+1)+". "+historique.get(i);
 			}
 			consoleCmd.writeAnswer(a);
 		}

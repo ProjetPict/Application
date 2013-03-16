@@ -48,7 +48,7 @@ public class Server extends Thread{
 		fenetre.writeAnnonce("> Connexion à la base de données...");
 		if(servDbConnec.connectDatabase())
 			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
-		else{
+		else {
 			fenetre.writeAnnonce("Echec !\n> Veuillez vérifier le paramètre de connection avant de relancer le serveur.\n");
 			//throw new Exception("Echec connexion bdd");
 		}

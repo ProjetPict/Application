@@ -23,6 +23,7 @@ public class Fenetre extends JFrame {
 	private Server serverInfos;
 	private Console console;
 	private Monitor monitor = new Monitor();
+	private ClipboardManager clipManage = new ClipboardManager();
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
@@ -36,9 +37,9 @@ public class Fenetre extends JFrame {
 	private JMenuItem close = new JMenuItem("Fermer");
 
 	private JMenuItem history = new JMenuItem("Historique des commandes");
-	private JMenuItem copy = new JMenuItem("Copier");
-	private JMenuItem paste = new JMenuItem("Coller");
-	private JMenuItem cut = new JMenuItem("Couper");
+	private JMenuItem copy = new JMenuItem("Copier le contenu de la ligne de commande");
+	private JMenuItem paste = new JMenuItem("Coller dans la ligne de commande");
+	private JMenuItem cut = new JMenuItem("Couper le contenu de la ligne de commande");
 
 	private JMenuItem annonce = new JMenuItem("Créer une annonce");
 	private JMenuItem save = new JMenuItem("Sauvegarder vers MySQL");
@@ -76,7 +77,8 @@ public class Fenetre extends JFrame {
 		edition.add(copy);
 		edition.add(cut);
 		edition.add(paste);
-		paste.setEnabled(false);
+		if(clipManage.getClipboardContents().length()==0)
+			paste.setEnabled(false);
 
 		maintenance.add(annonce);
 		maintenance.addSeparator();
@@ -97,17 +99,54 @@ public class Fenetre extends JFrame {
 		pan.setTopComponent(monitor);
 		pan.setBottomComponent(console);
 		
-		about.addActionListener(new ActionListener() { 
+		history.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				About a = new About();
-				a.setVisible(true);
+				console.directAsk("historique");
 			}
 		});
-		
+		copy.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				clipManage.setClipboardContents(console.getTextField());
+				paste.setEnabled(true);
+			}
+		});
+		cut.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				clipManage.setClipboardContents(console.getTextField());
+				console.setTextField("");
+				paste.setEnabled(true);
+			}
+		});
+		paste.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				console.setTextField(clipManage.getClipboardContents());
+			}
+		});
+		annonce.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				console.setTextField("annonce \"Annonce à transmettre aux clients\"");
+			}
+		});
+		save.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				console.directAsk("save mysql");
+			}
+		});
+		savelogs.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				console.directAsk("save logs");
+			}
+		});
 		seelogs.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				Logs l = new Logs();
 				l.setVisible(true);
+			}
+		});
+		about.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				About a = new About();
+				a.setVisible(true);
 			}
 		});
 	}
