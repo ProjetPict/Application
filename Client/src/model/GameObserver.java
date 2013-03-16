@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import socketData.Command;
 import socketData.Line;
 import socketData.Picture;
+import socketData.PlayerScore;
+import view.Main;
 
 
 /**
@@ -28,6 +31,16 @@ public class GameObserver extends Thread{
 	
 	public void run() {
 		boolean running = true;
+		Command cmd = new Command("getscores");
+		
+		try {
+			out.writeObject(cmd);
+			out.flush();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		while(running){
 			try {
 				Object obj=in.readObject();
@@ -39,6 +52,10 @@ public class GameObserver extends Thread{
 				{
 					
 					pict.addLine((Line) obj);
+				}
+				else if(obj instanceof PlayerScore)
+				{
+					Main.getModel().addPlayerScore((PlayerScore) obj);
 				}
 				
 			} catch (IOException e) {
