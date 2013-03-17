@@ -1,9 +1,14 @@
 package server;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
@@ -11,6 +16,8 @@ import java.util.TimerTask;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import javax.print.attribute.standard.Severity;
 
 import localDatabase.DbConnection;
 import localDatabase.ServerDatabase;
@@ -35,6 +42,7 @@ public class Server extends Thread{
 	private Runtime runtime;
 	private DbConnection servDbConnec;
 	private ServerDatabase servDbLocale;
+	private long launchTimeCalc;
 
 	public Server() throws Exception{
 		players = new ArrayList<Player>();
@@ -69,17 +77,36 @@ public class Server extends Thread{
 	public void run() {
 
 		Timer timer = new Timer();
-		//On affiche des infos toutes les 10 secondes
+		Timer autoSave = new Timer();
+		Timer launchTime = new Timer();
+		launchTimeCalc = 0;
+		//On actualise toutes les 30 millisecondes les graphiques
 		timer.schedule(new TimerTask() {
-			public void run()
-			{
+			public void run() {
 				runtime = Runtime.getRuntime();
 				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
-				//System.out.println(games.size() + " parties sont en cours.");
-				//System.out.println(players.size() + " joueurs connectés.");
 			}
 		}, 0, 30);
-
+		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
+		autoSave.schedule(new TimerTask() {
+			public void run() {
+				fenetre.writeAnnonce("\n# Sauvegarde automatique de l'historique dans la base de données...");
+				servDbLocale.saveStatistiques();
+				fenetre.writeAnnonce("Terminé !");
+			}
+		}, 600000, 600000);
+		launchTime.schedule(new TimerTask() {
+			Calendar dateDepart;
+			Locale locale = Locale.getDefault();
+			Date actuelle;
+			public void run() {
+				launchTimeCalc++;
+				actuelle = new Date();
+				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss" );
+				fenetre.setTimes(launchTimeCalc,dateFormat.format(actuelle));
+			}
+		},0,1000);
+		
 		while(true){
 			try {
 				socket = serverSocket.accept();
