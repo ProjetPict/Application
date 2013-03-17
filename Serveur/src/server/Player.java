@@ -286,6 +286,10 @@ public class Player extends Thread {
 		{
 			game.sendCommand(message, this);
 		}
+		else if(message.command.equals("getscores"))
+		{
+			game.sendScores(this);
+		}
 		else
 		{
 			sendResult(false);

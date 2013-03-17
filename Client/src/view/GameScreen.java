@@ -8,6 +8,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import model.GameObserver;
+
 /**
  * Ecran de jeu
  * @author christopher
@@ -19,10 +21,11 @@ public class GameScreen extends JPanel{
 	private DrawingArea drawingarea;
 	private ChatArea chatArea;
 	private JScrollPane scrlChat;
+	private GameObserver go;
 
 	public GameScreen(){
-		
-		drawingarea = new DrawingArea();
+		go = Main.getGameObserver();
+		drawingarea = new DrawingArea(go);
 		chatArea = new ChatArea();
 		
 		this.setLayout(null);
@@ -30,7 +33,7 @@ public class GameScreen extends JPanel{
 		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
 		this.add(drawingarea);
 		this.add(chatArea);
-
+		go.start();
 	}
 	
 	@Override

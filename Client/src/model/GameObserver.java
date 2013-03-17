@@ -55,12 +55,11 @@ public class GameObserver extends Thread{
 				}
 				else if(obj instanceof PlayerScore)
 				{
+					
 					Main.getModel().addPlayerScore((PlayerScore) obj);
 				}
 				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				running = false;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

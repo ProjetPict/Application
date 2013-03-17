@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import socketData.Command;
+import socketData.PlayerScore;
 
 /**
  * Gère une partie et ses joueurs.
@@ -199,6 +200,23 @@ public class Game extends Thread{
 					e.printStackTrace();
 				}
 
+			}
+		}
+	}
+	
+	public void sendScores(Player player)
+	{
+		ObjectOutputStream out = player.getOutput();
+		PlayerScore ps;
+		for(int i = 0; i < players.size(); i++){
+			//TODO Mettre les vraies valeurs
+			ps = new PlayerScore(player.getLogin(), 0, false);
+			try {
+				out.writeObject(ps);
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

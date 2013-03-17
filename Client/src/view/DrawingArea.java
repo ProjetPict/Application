@@ -38,7 +38,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	   // image mémoire correspondante au buffer
 	private Image image; 
 	
-	public DrawingArea(){
+	public DrawingArea(GameObserver go){
 		setBackground(Color.WHITE);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -49,9 +49,10 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		this.add(colorBoard, BorderLayout.SOUTH);
 		bufPic = new Picture();
 		bufPic.addObserver(this);
-		go = Main.getGameObserver();
+		this.go = go;
+		
 		go.setPicture(bufPic);
-		go.start();
+		
 		
 		//bufPic.addLine(new Line());;
 	}
