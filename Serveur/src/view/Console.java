@@ -15,6 +15,11 @@ import javax.swing.JTextPane;
 
 import server.Server;
 
+/**
+ * Génère et gère une console
+ * @author Matthieu
+ *
+ */
 public class Console extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -59,6 +64,9 @@ public class Console extends JPanel {
 		});
 	}
 	
+	/**
+	 * Envoi d'une commande a l'interprete
+	 */
 	public void sendCmd() {
 		interprete = serverCommand.getText();
 		serverCommand.setText("");
@@ -67,30 +75,58 @@ public class Console extends JPanel {
 		historique.add(interprete);
 	}
 	
+	/**
+	 * Permet d'interroger directement le serveur avec une commande sans passer par la zone de saisie
+	 * Utile si le script a besoin d'effectuer une commande sans intervention utilisateur
+	 * @param s Commande a envoyer
+	 */
 	public void directAsk(String s) {
 		cmd.askCmd(s);
 	}
 	
+	/**
+	 * Renvoi l'historique des commandes rentrees
+	 * @return
+	 */
 	public ArrayList<String> getHistory() {
 		return historique;
 	}
 	
+	/**
+	 * Remet a 0 l'historique
+	 */
 	public void resetHistory() {
 		historique = new ArrayList<String>();
 	}
 	
+	/**
+	 * Rentre une valeur dans la zone de saisie utilisateur de la console
+	 * @param s Valeur a mettre dans le JTextfield
+	 */
 	public void setTextField(String s) {
 		serverCommand.setText(s);
 	}
 	
+	/**
+	 * Retourne la valeur dans la zone de saisie utilisateur de la console
+	 * @return
+	 */
 	public String getTextField() {
 		return serverCommand.getText();
 	}
 	
+	/**
+	 * Ecrit les reponses fournies par le serveur
+	 * @param s Reponse a ecrire
+	 */
 	public void writeAnswer(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat("\nRéponse : "+s));
 	}
 	
+	/**
+	 * Permet d'ecrire sans la mise en forme "Reponse"/"Commande"
+	 * @param s Annonce a ecrire dans le terminal
+	 */
 	public void writeAnnonce(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat(s));
 	}

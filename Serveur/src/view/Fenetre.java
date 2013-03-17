@@ -18,7 +18,11 @@ import javax.swing.JSplitPane;
 
 import server.Server;
 
-
+/**
+ * Gère l'interface, la fenetre et la communication entre cette interface et le serveur
+ * @author Matthieu
+ *
+ */
 public class Fenetre extends JFrame {
 	private Server serverInfos;
 	private Console console;

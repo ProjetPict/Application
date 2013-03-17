@@ -4,6 +4,11 @@ import java.awt.datatransfer.*;
 import java.awt.*;
 import java.io.*;
 
+/**
+ * Gère les fonctions copier/coller
+ * @author Matthieu
+ *
+ */
 public class ClipboardManager implements ClipboardOwner {
 	
 	public ClipboardManager() {

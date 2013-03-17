@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Dimension;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -14,6 +16,12 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+/**
+ * Gère l'ensemble des graphes et du panel avec les onglets
+ * @author Matthieu
+ *
+ */
+
 public class Monitor extends JPanel {
 	
 	private TimeSeries tsConnect = new TimeSeries("Nombre de joueurs connectés", Millisecond.class);
@@ -26,20 +34,33 @@ public class Monitor extends JPanel {
 	private JPanel memory;
     private JPanel connected;
     private JPanel games;
+    private JPanel infos;
 	
     public Monitor() {
     	memory = getGraph(tsMemory, -1, 200000, axisM, "Heure", "Ko");
     	connected = getGraph(tsConnect, -1, 10, axisC, "Heure", "");
     	games = getGraph(tsGames, -1, 10, axisC, "Heure", "");
+    	infos = new JPanel();
     	
     	tabbedPane.addTab("Nombre de joueurs connectés", connected);
     	tabbedPane.addTab("Nombre de parties en cours", games);
     	tabbedPane.addTab("Utilisation de la mémoire", memory);
-    	tabbedPane.addTab("Informations du serveur", new JPanel());
+    	tabbedPane.addTab("Informations du serveur", infos);
     	
     	this.add(tabbedPane);
     }
     
+    
+    /**
+     * Retourne un JPanel contenant le graphe
+     * @param ts Ensemble de data a traiter
+     * @param min Valeur minimum du graphe
+     * @param max Valeur maximum du graphe
+     * @param axe Definition pour les axes
+     * @param axeX Legende du graphe en X
+     * @param axeY Legende du graphe en Y
+     * @return
+     */
     private JPanel getGraph(TimeSeries ts, int min, int max, ValueAxis axe, String axeX, String axeY) {
     	TimeSeriesCollection dataset = new TimeSeriesCollection(ts);
         JFreeChart connectChart = ChartFactory.createTimeSeriesChart(
@@ -47,11 +68,10 @@ public class Monitor extends JPanel {
             axeX,
             axeY,
             dataset,
-            true,
+            false,
             true,
             false
         );
-        
         final XYPlot plot = connectChart.getXYPlot();
         axe = plot.getDomainAxis();
         axe.setAutoRange(true);
@@ -64,6 +84,12 @@ public class Monitor extends JPanel {
         return genPan;
     }
     
+    /**
+     * Ajoute des valeurs sur le graphe
+     * @param conn Mise a jour du nombre de connectes
+     * @param l Mise a jour de la charge mémoire de la JVM
+     * @param gam Mise a jour du nombre de parties en cours
+     */
     public void updateGraph(int conn, long l, int gam) {
     	tsConnect.addOrUpdate(new Millisecond(), conn);
     	tsMemory.addOrUpdate(new Millisecond(), l);
