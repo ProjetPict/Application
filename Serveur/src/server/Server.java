@@ -176,7 +176,11 @@ public class Server extends Thread{
 	public static void removePlayer(Player player)
 	{
 		if(player.getGame() != null)
+		{
 			player.getGame().removePlayer(player);
+			player.setGame(null);
+		}
+		
 		players.remove(player);
 		System.out.println(player.getLogin() + " s'est deconnecté.");
 	}
@@ -189,6 +193,7 @@ public class Server extends Thread{
 	public static void removeGame(Game game)
 	{
 		System.out.println(game.getGameName() + " a été stoppée.");
+		game.stopGame();
 		games.remove(game.getGameName());
 	}
 

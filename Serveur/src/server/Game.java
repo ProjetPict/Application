@@ -4,10 +4,13 @@ package server;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.PlayerScore;
+import socketData.WordCommand;
 
 /**
  * Gère une partie et ses joueurs.
@@ -29,6 +32,9 @@ public class Game extends Thread{
 	private boolean running;
 	private boolean started; //True si la partie a demarré
 	private String word;
+	
+	private int time;
+	private Timer timer;
 
 
 	/**
@@ -85,9 +91,7 @@ public class Game extends Thread{
 	 */
 	public void run() {
 		running = true;
-
-		if(players.size() > 0)
-			System.out.println("Test de la partie de " + players.get(0).getLogin());
+		
 		while(running){
 
 			while(started)
@@ -99,23 +103,26 @@ public class Game extends Thread{
 				{
 					currentTurn++;
 					startTurn();
-
+					
+					
 					for(int i = 0; i < players.size(); i++)
 					{
 						drawingPlayer = players.get(i);
 						if(!drawingPlayer.isGhost())
 						{
+							
 							setupNextPlayer();
-
-
+							
+							sendCommand(new Command("startturn"));
 							//TODO timer de 60 secondes
-
+							
+							launchTimer(60);
 
 							computeScores();
 
 							for(int j = 0; j < players.size(); j++)
 							{
-								sendScores(players.get(j));
+								//sendScores(players.get(j));
 							}
 						}
 					}
@@ -205,6 +212,13 @@ public class Game extends Thread{
 		}
 		return false;
 	}
+	
+	public void stopGame()
+	{
+		timer.cancel();
+		running = false;
+		started = false;
+	}
 
 
 	/**
@@ -278,10 +292,66 @@ public class Game extends Thread{
 	{
 		sendCommand(cmd, null);
 	}
+	
+	
+	private boolean launchTimer(int t)
+	{
+		this.time = t;
+		
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			public void run() {
+				time--;
+			}
+		}, 0, 1000);
+		
+		while(time > 0)
+		{
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		timer.cancel();
+		
+		return true;
+	}
 
 	private void setupNextPlayer()
 	{
 		firstAnswers.clear();
+		word = "";
+		drawingPlayer.setDrawing(true);
+		
+		//TODO integrer le tirage de mots aléatoire
+		WordCommand choices = new WordCommand("test1", "test2", "test3", 1);
+		drawingPlayer.setChoices(choices);
+		
+		launchTimer(30);
+		System.out.println(time);
+		
+		if(word.equals(""))
+		{
+			ObjectOutputStream out = drawingPlayer.getOutput();
+			choices = new WordCommand("", "", "", 1);
+			
+			//TODO choix aleatoire entre les trois mots
+			choices.command = "default";
+			word = "default";
+			try {
+				out.writeObject(choices);
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
 		//TODO setupNextPlayer
 	}
 
@@ -359,5 +429,10 @@ public class Game extends Thread{
 		}
 		else
 			return false;
+	}
+	
+	public void setWord(String word)
+	{
+		this.word = word;
 	}
 }

@@ -11,6 +11,7 @@ import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.CreateJoinCommand;
 import socketData.Line;
+import socketData.WordCommand;
 
 
 /**
@@ -31,6 +32,7 @@ public class Player extends Thread {
 	private ObjectOutputStream out;
 	private int score;
 	private long nbPixels;
+	private WordCommand choices;
 
 	/**
 	 * @param login
@@ -117,6 +119,19 @@ public class Player extends Thread {
 	{
 		this.score = score;
 	}
+	
+	public void setChoices(WordCommand choices)
+	{
+		this.choices = choices;
+		
+		try {
+			out.writeObject(choices);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 
@@ -179,7 +194,6 @@ public class Player extends Thread {
 			while(connected && !socket.isClosed())
 			{
 				message = in.readObject();
-				System.out.println(login +" a envoyé la commande : " + message);
 				processTypeMessage(message);
 			}
 
@@ -259,12 +273,37 @@ public class Player extends Thread {
 		{
 			processAnswerMessage((AnswerCommand) message);
 		}
+		else if(message instanceof WordCommand)
+		{
+			processWordCommand((WordCommand) message);
+		}
 		else if(message instanceof Command)
 		{
 			processCommandMessage((Command) message);
 		}
 	}
 
+
+
+	private void processWordCommand(WordCommand message) {
+		if(drawing && game != null)
+		{
+			
+			if(!message.command.equals("") && choices != null)
+			{
+				String choice = message.command;
+				if(choice.equals(choices.word1) || choice.equals(choices.word2) 
+						|| choice.equals(choices.word3))
+				{
+					game.setWord(choice);
+					choices = null;
+				}
+			}
+		}
+		
+	}
+	
+	
 
 
 	/**
