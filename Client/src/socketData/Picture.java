@@ -40,5 +40,12 @@ public class Picture extends Observable{
 	{
 		return nbPixels;
 	}
+
+	public void clear() {
+		pict.clear();
+		nbPixels = 0;
+		setChanged();
+		notifyObservers();
+	}
 	
 }

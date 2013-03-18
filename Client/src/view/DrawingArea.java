@@ -15,8 +15,6 @@ import java.util.Observer;
 import javax.swing.JPanel;
 
 import model.GameObserver;
-import model.Model;
-
 import socketData.*;
 
 /**
@@ -58,6 +56,16 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		
 		
 		//bufPic.addLine(new Line());;
+	}
+	
+	public void clearScreen()
+	{
+		image = createImage((int)(Main.gameWidth),(int)(Main.gameHeight));
+        buffer = (Graphics2D) image.getGraphics();
+        buffer.setColor( Color.white );
+        buffer.fillRect( 0, 0, (int)(Main.gameWidth),(int)(Main.gameHeight));
+		bufPic.clear();
+		
 	}
 
 	
