@@ -11,6 +11,7 @@ import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.GameList;
 import socketData.PlayerScore;
+import socketData.WordCommand;
 import view.Main;
 
 /**
@@ -24,6 +25,7 @@ public class Model extends Observable{
 	private ObjectInputStream in;
 	private GameObserver go;
 	private Map<String, PlayerScore> scores;
+	private String word;
 	
 	
 	public Model(String host){
@@ -46,6 +48,11 @@ public class Model extends Observable{
 		connec.disconnect();
 	}
 	
+	public String getWord()
+	{
+		return word;
+	}
+	
 	public void processCommand(Command command)
 	{
 		if(command.command.equals("startturn"))
@@ -61,6 +68,18 @@ public class Model extends Observable{
 		{
 			setChanged();
 			this.notifyObservers(false);
+		}
+	}
+	
+	public void processWordCommand(WordCommand command)
+	{
+		if(command.command.equals(""))
+		{
+			Main.getView().chooseWord(command);	
+		}
+		else{
+			word = command.command;
+			Main.getView().closeDialog();
 		}
 	}
 	

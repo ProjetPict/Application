@@ -1,12 +1,11 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import socketData.WordCommand;
 
 import model.GameObserver;
 
@@ -54,5 +53,14 @@ public class GameScreen extends JPanel{
 	public long getNbPixels()
 	{
 		return drawingArea.getNbPixels();
+	}
+
+	public void chooseWord(WordCommand command) {
+		chatArea.chooseWord(command);
+	}
+
+	public void closeDialog() {
+		chatArea.getDialog().dispose();
+		
 	}
 }

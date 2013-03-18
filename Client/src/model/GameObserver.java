@@ -9,6 +9,7 @@ import socketData.Command;
 import socketData.Line;
 import socketData.Picture;
 import socketData.PlayerScore;
+import socketData.WordCommand;
 import view.Main;
 
 
@@ -58,6 +59,10 @@ public class GameObserver extends Thread{
 				{
 					
 					Main.getModel().addPlayerScore((PlayerScore) obj);
+				}
+				else if(obj instanceof WordCommand)
+				{
+					Main.getModel().processWordCommand((WordCommand) obj);
 				}
 				else if(obj instanceof Command)
 				{

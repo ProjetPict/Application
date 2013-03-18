@@ -2,16 +2,23 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 import socketData.PlayerScore;
+import socketData.WordCommand;
+
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -34,6 +41,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private Timer timer;
 	private int time;
 	private boolean drawing;
+	private JOptionPane pane;
+	private JDialog wordDialog;
+	private WordCommand wordCommand;
 
 	public ChatArea(boolean creator) {
 		setBackground(Color.WHITE);
@@ -132,5 +142,61 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				list.setListData(scores);
 			}
 		}
+	}
+	
+	public JDialog getDialog()
+	{
+		return wordDialog;
+	}
+
+	public void chooseWord(WordCommand command) {
+		String[] options = {command.word1, command.word2, command.word3};
+		wordCommand = command;
+		pane = new JOptionPane( 
+	         Main.texts.getString("chooseword"), 
+	         JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, 
+	         null, options, null);
+		
+		
+		wordDialog = pane.createDialog(getParent(), Main.texts.getString("words"));
+		wordDialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		wordDialog.setModal(false);
+		wordDialog.pack();
+		wordDialog.setVisible(true);
+		wordDialog.addComponentListener(new ComponentListener(){
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				wordCommand.command = (String) pane.getValue();
+				
+				if(wordCommand.command.equals("uninitializedValue"))
+				{
+					wordCommand.command = "";
+				}
+				
+				Main.getModel().sendCommand(wordCommand);
+				
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 	}
 }

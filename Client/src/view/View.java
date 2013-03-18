@@ -1,5 +1,6 @@
 package view;
 
+import socketData.WordCommand;
 import model.GameObserver;
 
 /**
@@ -49,6 +50,21 @@ public class View {
 	public void startTurn() 
 	{
 		gmScreen.startTurn();
+		
+	}
+
+	public void chooseWord(WordCommand command) {
+		gmScreen.chooseWord(command);
+		
+	}
+	
+	public Window getWindow()
+	{
+		return window;
+	}
+
+	public void closeDialog() {
+		gmScreen.closeDialog();
 		
 	}
 }

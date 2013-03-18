@@ -288,7 +288,6 @@ public class Player extends Thread {
 	private void processWordCommand(WordCommand message) {
 		if(drawing && game != null)
 		{
-			
 			if(!message.command.equals("") && choices != null)
 			{
 				String choice = message.command;
