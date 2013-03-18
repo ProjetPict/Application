@@ -32,8 +32,6 @@ public class Fenetre extends JFrame implements WindowListener {
 	private Console console;
 	private Monitor monitor = new Monitor();
 	private ClipboardManager clipManage = new ClipboardManager();
-	private Timer timer;
-	private int cdTime;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
@@ -111,7 +109,9 @@ public class Fenetre extends JFrame implements WindowListener {
 		
 		close.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				closeServer();
+				try {
+					closeServer();
+				} catch (InterruptedException e1) {}
 			}
 		});
 		history.addActionListener(new ActionListener() { 
@@ -178,19 +178,13 @@ public class Fenetre extends JFrame implements WindowListener {
 		console.writeAnnonce(s);
 	}
 	
-	public void closeServer() {
-		writeAnnonce("\n> Préparation à l'extinction du serveur. Veuillez patienter...\n> Sauvegarde dans la base de données...");
-		serverInfos.getDbInfos().saveStatistiques();
-		countDown(5);
-		writeAnnonce("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
-		countDown(5);
-		writeAnnonce("Terminé !\n> Arrêt du serveur dans 10 secondes...");
-		countDown(10);
-		System.exit(0);
+	public void closeServer() throws InterruptedException {
+		ShutDownEmergency cdTime = new ShutDownEmergency(10,console,serverInfos);
+		cdTime.start();
 	}
 	
 	public void windowClosing(WindowEvent e) {
-		closeServer();
+		//closeServer();
 	}
 
 	@Override
@@ -227,20 +221,6 @@ public class Fenetre extends JFrame implements WindowListener {
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	private void countDown(int t) {
-		cdTime = t;
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			public void run() {
-				cdTime--;
-				if(cdTime==0)
-					this.cancel();
-			}
-		}, 0, 1000);
-		while(cdTime>0) {}
-		timer.cancel();
 	}
 	
 }

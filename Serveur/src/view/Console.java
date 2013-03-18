@@ -130,4 +130,16 @@ public class Console extends JPanel {
 	public void writeAnnonce(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat(s));
 	}
+	
+	public String getConsoleContent() {
+		return serverAnswer.getText();
+	}
+	
+	public void rewriteConsoleContent(String s) {
+		serverAnswer.setText(s);
+	}
+	
+	public JTextPane getConsole() {
+		return serverAnswer;
+	}
 }
