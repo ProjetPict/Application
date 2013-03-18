@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,10 +35,10 @@ public class Login extends JPanel implements ActionListener{
 	private JPasswordField password;
 	private JLabel newAccount;
 	private JLabel passwordForget;
-    private Image imgLogo = new ImageIcon(getClass().getResource("../ressources/images/logo.png")).getImage();
-    private Image imgBackground = new ImageIcon(getClass().getResource("../ressources/images/login.jpg")).getImage();
-    private Image imgFieldUser = new ImageIcon(getClass().getResource("../ressources/images/field_login_username.png")).getImage();
-    private Image imgFieldPass = new ImageIcon(getClass().getResource("../ressources/images/field_login_password.png")).getImage();
+    private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png"));
+    private Image imgBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/login.jpg"));
+    private Image imgFieldUser = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_username.png"));
+    private Image imgFieldPass = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_password.png"));
     private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
     private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
 	
@@ -49,7 +50,7 @@ public class Login extends JPanel implements ActionListener{
 			}
 		});
 		this.setLayout(null);
-		btnConnec = new JButton(new ImageIcon(getClass().getResource("../ressources/images/btn_login.png")));
+		btnConnec = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/btn_login.png"))));
 		login = new JTextField(Main.texts.getString("login"));
 		login.addFocusListener(new FocusAdapter() {
 			@Override

@@ -2,6 +2,7 @@ package view;
 
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
@@ -34,7 +35,7 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 	    int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
 	    int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
 	    this.setLocation(x, y);
-	    this.setIconImage(new ImageIcon(getClass().getResource("../ressources/images/icon.png")).getImage());
+	    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
 	}
 
 	public void setPanel(JPanel panel){
