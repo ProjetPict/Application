@@ -61,6 +61,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JMenuItem infos = new JMenuItem("Obtenir les informations du serveur");
 
 	public Fenetre(Server servInfo){
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(100,100));
 		this.setResizable(false);
@@ -108,6 +109,11 @@ public class Fenetre extends JFrame implements WindowListener {
 		pan.setTopComponent(monitor);
 		pan.setBottomComponent(console);
 		
+		close.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				closeServer();
+			}
+		});
 		history.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				console.directAsk("historique");
@@ -172,15 +178,19 @@ public class Fenetre extends JFrame implements WindowListener {
 		console.writeAnnonce(s);
 	}
 	
-	public void windowClosing(WindowEvent e) {
-		writeAnnonce("> Préparation à l'extinction du serveur. Veuillez patienter...\n>Sauvegarde dans la base de données...");
+	public void closeServer() {
+		writeAnnonce("\n> Préparation à l'extinction du serveur. Veuillez patienter...\n> Sauvegarde dans la base de données...");
 		serverInfos.getDbInfos().saveStatistiques();
 		countDown(5);
 		writeAnnonce("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
 		countDown(5);
 		writeAnnonce("Terminé !\n> Arrêt du serveur dans 10 secondes...");
 		countDown(10);
-		this.dispose();
+		System.exit(0);
+	}
+	
+	public void windowClosing(WindowEvent e) {
+		closeServer();
 	}
 
 	@Override
