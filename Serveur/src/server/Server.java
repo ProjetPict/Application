@@ -40,8 +40,8 @@ public class Server extends Thread{
 	private Socket socket;
 	private Fenetre fenetre;
 	private Runtime runtime;
-	private DbConnection servDbConnec;
-	private ServerDatabase servDbLocale;
+	private static DbConnection servDbConnec;
+	private static ServerDatabase servDbLocale;
 	private long launchTimeCalc;
 
 	public Server() throws Exception{
@@ -256,4 +256,14 @@ public class Server extends Thread{
 
 		return result;
 	}
+	
+	public static ServerDatabase getDbInfos() {
+		return servDbLocale;
+	}
+	
+	public static DbConnection getDbConnInfos() {
+		return servDbConnec;
+	}
+	
+	
 }

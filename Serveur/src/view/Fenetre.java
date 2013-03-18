@@ -8,6 +8,10 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -23,11 +27,13 @@ import server.Server;
  * @author Matthieu
  *
  */
-public class Fenetre extends JFrame {
+public class Fenetre extends JFrame implements WindowListener {
 	private Server serverInfos;
 	private Console console;
 	private Monitor monitor = new Monitor();
 	private ClipboardManager clipManage = new ClipboardManager();
+	private Timer timer;
+	private int cdTime;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
@@ -55,7 +61,6 @@ public class Fenetre extends JFrame {
 	private JMenuItem infos = new JMenuItem("Obtenir les informations du serveur");
 
 	public Fenetre(Server servInfo){
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(100,100));
 		this.setResizable(false);
@@ -166,4 +171,66 @@ public class Fenetre extends JFrame {
 	public void writeAnnonce(String s) {
 		console.writeAnnonce(s);
 	}
+	
+	public void windowClosing(WindowEvent e) {
+		writeAnnonce("> Préparation à l'extinction du serveur. Veuillez patienter...\n>Sauvegarde dans la base de données...");
+		serverInfos.getDbInfos().saveStatistiques();
+		countDown(5);
+		writeAnnonce("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
+		countDown(5);
+		writeAnnonce("Terminé !\n> Arrêt du serveur dans 10 secondes...");
+		countDown(10);
+		this.dispose();
+	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void countDown(int t) {
+		cdTime = t;
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				cdTime--;
+				if(cdTime==0)
+					this.cancel();
+			}
+		}, 0, 1000);
+		while(cdTime>0) {}
+		timer.cancel();
+	}
+	
 }
