@@ -44,6 +44,7 @@ public class GameObserver extends Thread{
 		while(running){
 			try {
 				Object obj=in.readObject();
+				
 				if(obj instanceof Point)
 				{
 					pict.addPoint((Point)obj);
@@ -58,6 +59,12 @@ public class GameObserver extends Thread{
 					
 					Main.getModel().addPlayerScore((PlayerScore) obj);
 				}
+				else if(obj instanceof Command)
+				{
+					Main.getModel().processCommand((Command) obj);
+				}
+				else
+					obj = null;
 				
 			} catch (IOException e) {
 				running = false;

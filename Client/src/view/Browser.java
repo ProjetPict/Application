@@ -151,7 +151,7 @@ public class Browser extends JPanel implements ActionListener{
 		else if(result.equals("gamefull"))
 			JOptionPane.showMessageDialog(this,Main.texts.getString("game_full"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
 		else
-			Main.getView().setPanel("GameScreen");
+			Main.getView().setPanel("GameScreen", false);
 	}
 
 	private void createGame()
@@ -182,7 +182,7 @@ public class Browser extends JPanel implements ActionListener{
 				password = null;
 			res = Main.getModel().createGame(name, password, pmax, turns);
 			JOptionPane.showMessageDialog(this,res);
-			Main.getView().setPanel("GameScreen");
+			Main.getView().setPanel("GameScreen", true);
 		}
 		else
 		{

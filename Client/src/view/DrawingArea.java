@@ -15,6 +15,7 @@ import java.util.Observer;
 import javax.swing.JPanel;
 
 import model.GameObserver;
+import model.Model;
 
 import socketData.*;
 
@@ -30,7 +31,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 
 	//Picture hérite de Observable
 	private Picture bufPic;
-	private boolean allowDraw = true;
+	private boolean drawing = false;
 	private ColorBoard colorBoard;
 	private GameObserver go;
 	
@@ -49,6 +50,8 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		this.add(colorBoard, BorderLayout.SOUTH);
 		bufPic = new Picture();
 		bufPic.addObserver(this);
+		
+		Main.getModel().addObserver(this);
 		this.go = go;
 		
 		go.setPicture(bufPic);
@@ -70,10 +73,10 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		
 
 		 if(buffer==null){
-		        image = createImage(800,600);
+		        image = createImage((int)(Main.gameWidth),(int)(Main.gameHeight));
 		        buffer = (Graphics2D) image.getGraphics();
 		        buffer.setColor( Color.white );
-		        buffer.fillRect( 0, 0, 800, 600 );
+		        buffer.fillRect( 0, 0, (int)(Main.gameWidth),(int)(Main.gameHeight));
 		      }
 		for (Line l : bufPic.getLines() )
         {
@@ -103,7 +106,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		if(allowDraw){
+		if(drawing){
 			// TODO : Calculer dynamiquement l'épaisseur du trait en fonction de la taille de la zone en pixels
 			Point p = new Point(arg0.getX(), arg0.getY());
 			bufPic.addPoint(p);
@@ -113,7 +116,11 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		if(arg1 instanceof Boolean)
+			drawing = (Boolean) arg1;
+		
 		repaint();
+		
 	}
 	
 	@Override
@@ -135,7 +142,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		if(allowDraw){
+		if(drawing){
 			Line line = new Line(colorBoard.getSelectedColor(), 3);
 			bufPic.addLine(line);
 			go.sendNewLine(line);

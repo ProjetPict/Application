@@ -41,7 +41,7 @@ public class Main {
 		texts = ResourceBundle.getBundle("TextBundle", Locale.getDefault());
 		model = new Model(host);
 		view = new View();
-		view.setPanel("Login");
+		view.setPanel("Login", false);
 	}
 	
 	

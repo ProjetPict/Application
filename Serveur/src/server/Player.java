@@ -258,7 +258,7 @@ public class Player extends Thread {
 	{
 		if(message instanceof Point || message instanceof Line){
 			
-			if(!drawing){
+			if(drawing){
 				game.sendData(message, this);
 				sendResult(message!=null);
 			}

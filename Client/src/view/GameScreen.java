@@ -23,11 +23,10 @@ public class GameScreen extends JPanel{
 	private JScrollPane scrlChat;
 	private GameObserver go;
 
-	public GameScreen(){
+	public GameScreen(boolean creator){
 		go = Main.getGameObserver();
 		drawingArea = new DrawingArea(go);
-		chatArea = new ChatArea();
-		
+		chatArea = new ChatArea(creator);
 		this.setLayout(null);
 		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
 		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
@@ -47,9 +46,13 @@ public class GameScreen extends JPanel{
 		
 	}
 	
+	public void startTurn()
+	{
+		chatArea.launchTimer();
+	}
+	
 	public long getNbPixels()
 	{
 		return drawingArea.getNbPixels();
 	}
-
 }

@@ -112,10 +112,10 @@ public class Game extends Thread{
 						{
 
 							setupNextPlayer();
-
+							System.out.println("Avant debut tour");
 							sendCommand(new Command("startturn"));
 							//TODO timer de 60 secondes
-
+							System.out.println("Apres debut tour");
 							launchTimer(60);
 
 							computeScores();
@@ -124,6 +124,8 @@ public class Game extends Thread{
 							{
 								//sendScores(players.get(j));
 							}
+							
+							drawingPlayer.setDrawing(false);
 						}
 					}
 
@@ -207,6 +209,8 @@ public class Game extends Thread{
 	 */
 	public boolean addPlayer(Player p){
 		if(players.size() < pMax && !players.contains(p)){
+			if(started)
+				p.setGhost(true);
 			players.add(p);
 			return true;
 		}
@@ -323,7 +327,7 @@ public class Game extends Thread{
 					e.printStackTrace();
 				}
 			}
-
+			System.out.println("Fuck yeah");
 			timer.cancel();
 			timer = null;
 		}
@@ -343,8 +347,8 @@ public class Game extends Thread{
 		WordCommand choices = new WordCommand("test1", "test2", "test3", 1);
 		drawingPlayer.setChoices(choices);
 
-		launchTimer(30);
-		System.out.println(time);
+		launchTimer(1);
+		System.out.println("Time : " + time);
 
 		if(word.equals(""))
 		{
@@ -436,6 +440,7 @@ public class Game extends Thread{
 
 		if(players.size() >= 2)
 		{
+			System.out.println("Start game");
 			started = true;
 			return true;
 		}

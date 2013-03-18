@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.Observable;
 
 import socketData.AnswerCommand;
+import socketData.Command;
 import socketData.GameList;
 import socketData.PlayerScore;
+import view.Main;
 
 /**
  * Gere les connexions avec le serveur.
@@ -44,18 +46,46 @@ public class Model extends Observable{
 		connec.disconnect();
 	}
 	
+	public void processCommand(Command command)
+	{
+		if(command.command.equals("startturn"))
+		{
+			Main.getView().startTurn();
+		}
+		else if(command.command.equals("startdraw"))
+		{
+			setChanged();
+			this.notifyObservers(true);
+		}
+		else if(command.command.equals("stopdraw"))
+		{
+			setChanged();
+			this.notifyObservers(false);
+		}
+	}
+	
 	public void sendAnswer(String answer, long nbPixels)
 	{
 		AnswerCommand ans = new AnswerCommand(answer, nbPixels);
 		
+		sendCommand(ans);
+		
+	}
+	
+	public void sendCommand(String command)
+	{
+		sendCommand(new Command(command));
+	}
+	
+	public void sendCommand(Command command)
+	{
 		try {
-			out.writeObject(ans);
+			out.writeObject(command);
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public GameList getGameList(){

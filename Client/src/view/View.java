@@ -20,7 +20,7 @@ public class View {
 		window = new Window();
 	}
 
-	public void setPanel(String panelType){
+	public void setPanel(String panelType, boolean gameCreator){
 		if(panelType.equals("Browser")){
 			browser = new Browser();
 			window.setPanel(browser);
@@ -30,7 +30,7 @@ public class View {
 			window.setPanel(login);
 		}
 		else if (panelType.equals("GameScreen")){
-			gmScreen = new GameScreen();
+			gmScreen = new GameScreen(gameCreator);
 			window.setPanel(gmScreen);
 		}
 		window.setVisible(true);
@@ -44,5 +44,11 @@ public class View {
 	public void setGameObserver(GameObserver go)
 	{
 		this.go = go;
+	}
+
+	public void startTurn() 
+	{
+		gmScreen.startTurn();
+		
 	}
 }
