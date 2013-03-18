@@ -15,6 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Ecran de Login
@@ -38,10 +42,50 @@ public class Login extends JPanel implements ActionListener{
     private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
 	
 	public Login(){
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				requestFocus();
+			}
+		});
 		this.setLayout(null);
 		btnConnec = new JButton(new ImageIcon(getClass().getResource("../ressources/images/btn_login.png")));
 		login = new JTextField(Main.texts.getString("login"));
+		login.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if(login.getText().equals(Main.texts.getString("login"))){
+					login.setText("");
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(login.getText().equals(""))
+				{
+					login.setText(Main.texts.getString("login"));
+				}
+			}
+		});
+		
 		password = new JPasswordField("**********");
+		password.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				if(password.getText().equals("**********"))
+				{
+					password.setText("");
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(password.getText().equals(""))
+				{
+					password.setText("**********");
+				}
+			}
+		});
 		newAccount = new JLabel(Main.texts.getString("new_account"));
 		passwordForget = new JLabel(Main.texts.getString("password_forget"));
 		
@@ -78,6 +122,7 @@ public class Login extends JPanel implements ActionListener{
 		btnConnec.addActionListener(this);
 		login.addActionListener(this);
 		password.addActionListener(this);
+		
 	}
 	
 	public void paintComponent(Graphics g) {

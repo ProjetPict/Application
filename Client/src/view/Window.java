@@ -39,7 +39,6 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 
 	public void setPanel(JPanel panel){
 		this.setContentPane(panel);
-		this.getContentPane().revalidate();
 		//this.validate();
 	}
 

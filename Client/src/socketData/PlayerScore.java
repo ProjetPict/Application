@@ -20,4 +20,8 @@ public class PlayerScore implements Serializable {
 		this.hasFound = hasFound;
 	}
 
+	public String toString()
+	{
+		return login + " : " + score;
+	}
 }
