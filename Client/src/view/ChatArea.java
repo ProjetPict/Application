@@ -50,9 +50,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == textField)
 		{
-			if(!textField.getText().equals(""))
+			if(!textField.getText().equals("") && getParent() instanceof GameScreen && textField.getText().length() > 2)
 			{
-				Main.getModel().sendAnswer(textField.getText());
+				Main.getModel().sendAnswer(textField.getText(), ((GameScreen)getParent()).getNbPixels());
 				textField.setText("");
 			}
 		}
@@ -63,7 +63,6 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
 		
 		scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
 		if(scores.length > 0)

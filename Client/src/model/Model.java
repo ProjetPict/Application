@@ -44,9 +44,9 @@ public class Model extends Observable{
 		connec.disconnect();
 	}
 	
-	public void sendAnswer(String answer)
+	public void sendAnswer(String answer, long nbPixels)
 	{
-		AnswerCommand ans = new AnswerCommand(answer, 62.0);
+		AnswerCommand ans = new AnswerCommand(answer, nbPixels);
 		
 		try {
 			out.writeObject(ans);

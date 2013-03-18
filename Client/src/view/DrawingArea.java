@@ -57,6 +57,13 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		//bufPic.addLine(new Line());;
 	}
 
+	
+	public long getNbPixels()
+	{
+		return bufPic.getNbPixels();
+	}
+	
+	
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);

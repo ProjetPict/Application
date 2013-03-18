@@ -25,6 +25,8 @@ public class Game extends Thread{
 	private int currentTurn;
 	private boolean running;
 	private boolean started; //True si la partie a demarré
+	private long drawingPixels;
+	private String word;
 
 
 	/**
@@ -39,7 +41,8 @@ public class Game extends Thread{
 		players = new ArrayList<Player>();
 		players.add(creator);
 		drawingPlayer = null;
-
+		drawingPixels = 0;
+		
 		if(pMax > 1 && pMax <= 25)
 			this.pMax = pMax;
 		else
@@ -102,8 +105,7 @@ public class Game extends Thread{
 
 							//TODO timer de 60 secondes
 
-							
-
+						
 							computeScores();
 
 							for(int j = 0; j < players.size(); j++)
@@ -233,6 +235,12 @@ public class Game extends Thread{
 	 */
 	public void sendData(Object data, Player sender)
 	{
+		//TODO test : if sender == drawingplayer
+		if(data instanceof Point)
+		{
+			drawingPixels++;
+		}
+		
 		for(int i = 0; i < players.size(); i++){
 			if(sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
@@ -272,6 +280,7 @@ public class Game extends Thread{
 
 	private void setupNextPlayer()
 	{
+		drawingPixels = 0;
 		//TODO setupNextPlayer
 	}
 

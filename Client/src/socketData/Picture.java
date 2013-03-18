@@ -11,9 +11,11 @@ import java.util.Observable;
  */
 public class Picture extends Observable{
 	private ArrayList<Line> pict;
+	private long nbPixels;
 	
 	public Picture(){
 		pict  = new ArrayList<Line>();
+		nbPixels = 0;
 	}
 	
 	public ArrayList<Line> getLines(){
@@ -27,10 +29,16 @@ public class Picture extends Observable{
 	}
 	
 	public void addPoint(Point p){
+		nbPixels++;
 		int index = this.getLines().size() - 1;
 		this.getLines().get(index).addPoint(p);
 		setChanged();
 		notifyObservers();
+	}
+	
+	public long getNbPixels()
+	{
+		return nbPixels;
 	}
 	
 }

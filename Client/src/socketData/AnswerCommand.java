@@ -7,11 +7,11 @@ public class AnswerCommand extends Command {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public double time;
+	public long nbPixels;
 	
-	public AnswerCommand(String answer, double time)
+	public AnswerCommand(String answer, long nbPixels)
 	{
 		command = answer;
-		this.time = time;
+		this.nbPixels = nbPixels;
 	}
 }

@@ -18,33 +18,38 @@ import model.GameObserver;
 public class GameScreen extends JPanel{
 
 	private static final long serialVersionUID = 1L;
-	private DrawingArea drawingarea;
+	private DrawingArea drawingArea;
 	private ChatArea chatArea;
 	private JScrollPane scrlChat;
 	private GameObserver go;
 
 	public GameScreen(){
 		go = Main.getGameObserver();
-		drawingarea = new DrawingArea(go);
+		drawingArea = new DrawingArea(go);
 		chatArea = new ChatArea();
 		
 		this.setLayout(null);
-		drawingarea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
+		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
 		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
-		this.add(drawingarea);
+		this.add(drawingArea);
 		this.add(chatArea);
 		go.start();
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g){
-		drawingarea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
+		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
 		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
 		
 		
 		g.fillRect(0, 0, (int)(Main.gameWidth), (int)(Main.gameHeight));
 		
 		
+	}
+	
+	public long getNbPixels()
+	{
+		return drawingArea.getNbPixels();
 	}
 
 }
