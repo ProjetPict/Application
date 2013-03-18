@@ -32,10 +32,6 @@ import view.Fenetre;
  */
 public class Server extends Thread{
 	
-	public enum Position {
-		FIRST, SECOND, THIRD, OTHER, GHOST, NONE;
-	}
-	
 	final static int MAX_PLAYER = 10;
 	final static int TURNS = 5;
 	private static ArrayList<Player> players;

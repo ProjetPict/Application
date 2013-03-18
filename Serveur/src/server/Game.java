@@ -1,11 +1,11 @@
 package server;
 
 
-import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.PlayerScore;
 
@@ -16,6 +16,9 @@ import socketData.PlayerScore;
  */
 public class Game extends Thread{
 
+
+	private ArrayList<Player> podium; //Les trois premiers joueurs en terme de score
+	private ArrayList<Player> firstAnswers; //Les trois premiers joueurs à avoir répondu
 	private ArrayList<Player> players;
 	private Player drawingPlayer;
 	private String name;
@@ -25,7 +28,6 @@ public class Game extends Thread{
 	private int currentTurn;
 	private boolean running;
 	private boolean started; //True si la partie a demarré
-	private long drawingPixels;
 	private String word;
 
 
@@ -41,8 +43,8 @@ public class Game extends Thread{
 		players = new ArrayList<Player>();
 		players.add(creator);
 		drawingPlayer = null;
-		drawingPixels = 0;
-		
+		word = "";
+
 		if(pMax > 1 && pMax <= 25)
 			this.pMax = pMax;
 		else
@@ -55,6 +57,9 @@ public class Game extends Thread{
 
 		currentTurn = 0;
 		started = false;
+		podium = new ArrayList<Player>();
+		firstAnswers = new ArrayList<Player>();
+
 	}
 
 
@@ -89,23 +94,23 @@ public class Game extends Thread{
 			{
 				currentTurn = 0;
 				drawingPlayer = null;
-
+				podium.clear();
 				while(currentTurn <= turns)
 				{
 					currentTurn++;
 					startTurn();
-					
+
 					for(int i = 0; i < players.size(); i++)
 					{
 						drawingPlayer = players.get(i);
 						if(!drawingPlayer.isGhost())
 						{
 							setupNextPlayer();
-							
+
 
 							//TODO timer de 60 secondes
 
-						
+
 							computeScores();
 
 							for(int j = 0; j < players.size(); j++)
@@ -114,7 +119,7 @@ public class Game extends Thread{
 							}
 						}
 					}
-					
+
 					endTurn();
 				}
 
@@ -208,6 +213,7 @@ public class Game extends Thread{
 	 */
 	public void removePlayer(Player player){
 		players.remove(player);
+		podium.remove(player);
 		System.out.println(player.getLogin() + " a quitté la partie " + name);
 
 		if(players.size() <= 0) //S'il n'y a plus de joueurs, on arrête la partie
@@ -236,11 +242,6 @@ public class Game extends Thread{
 	public void sendData(Object data, Player sender)
 	{
 		//TODO test : if sender == drawingplayer
-		if(data instanceof Point)
-		{
-			drawingPixels++;
-		}
-		
 		for(int i = 0; i < players.size(); i++){
 			if(sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
@@ -280,7 +281,7 @@ public class Game extends Thread{
 
 	private void setupNextPlayer()
 	{
-		drawingPixels = 0;
+		firstAnswers.clear();
 		//TODO setupNextPlayer
 	}
 
@@ -297,6 +298,38 @@ public class Game extends Thread{
 	private void computeScores()
 	{
 		//TODO computeScores
+	}
+
+	public boolean checkAnswer(AnswerCommand answer, Player player)
+	{
+		boolean res = false;
+
+		if(answer.command.equals(word))
+		{
+			res = true;
+			player.setNbPixels(answer.nbPixels);
+
+			Player p;
+			boolean inserted = false;
+			for(int i = 0; i < firstAnswers.size(); i++)
+			{
+				p = firstAnswers.get(i);
+
+				if(p.getNbPixels() > player.getNbPixels())
+				{
+					inserted = true;
+					firstAnswers.add(i, player);
+					if(firstAnswers.size() > 3)
+						firstAnswers.remove(firstAnswers.size()-1);
+				}
+			}
+
+			if(!inserted)
+				firstAnswers.add(player);
+
+		}
+
+		return res;
 	}
 
 	public void sendScores(Player player)

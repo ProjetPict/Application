@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import server.Server.Position;
 import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.CreateJoinCommand;
@@ -31,8 +30,7 @@ public class Player extends Thread {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private int score;
-	private Position position;
-
+	private long nbPixels;
 
 	/**
 	 * @param login
@@ -50,6 +48,7 @@ public class Player extends Thread {
 		game = null;
 		connected = true;
 		drawing = false;
+		nbPixels = 0;
 	}
 
 
@@ -98,17 +97,15 @@ public class Player extends Thread {
 	}
 	
 	
-	public Position getPosition()
+	public long getNbPixels()
 	{
-		return position;
+		return nbPixels;
 	}
 	
-	
-	public void setPosition(Position position)
+	public void setNbPixels(long nbPixels)
 	{
-		this.position = position;
+		this.nbPixels = nbPixels;
 	}
-	
 	
 	public int getScore()
 	{
