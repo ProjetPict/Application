@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import javax.print.attribute.standard.Severity;
-
 import localDatabase.DbConnection;
 import localDatabase.ServerDatabase;
 
@@ -33,7 +31,13 @@ import view.Fenetre;
  *
  */
 public class Server extends Thread{
+	
+	public enum Position {
+		FIRST, SECOND, THIRD, OTHER, GHOST, NONE;
+	}
+	
 	final static int MAX_PLAYER = 10;
+	final static int TURNS = 5;
 	private static ArrayList<Player> players;
 	private static Map<String, Game> games;
 	private ServerSocket serverSocket;
@@ -136,7 +140,7 @@ public class Server extends Thread{
 	 * @param pMax
 	 * @return La partie créée
 	 */
-	public static Game createGame(Player creator, String name, String password, int pMax){
+	public static Game createGame(Player creator, String name, String password, int pMax, int turns){
 
 		Game game = null;
 
@@ -144,10 +148,9 @@ public class Server extends Thread{
 		{
 			if(!games.containsKey(name))
 			{
-				if(pMax > 1 && pMax < 25)
-					game = new Game(creator, name, password, pMax);
-				else
-					game = new Game(creator, name, password);
+				
+				game = new Game(creator, name, password, pMax, turns);
+			
 				games.put(name, game);
 				game.start();
 			}

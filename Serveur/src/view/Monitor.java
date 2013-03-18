@@ -44,6 +44,8 @@ public class Monitor extends JPanel {
 	private JLabel nbC;
 	private JLabel nbG;
 	private JLabel nbM;
+	private JLabel lblMaxRam;
+	private long maxRam;
 	
     public Monitor() {
     	memory = getGraph(tsMemory, -1, 200000, axisM, "Heure", "Ko");
@@ -55,6 +57,8 @@ public class Monitor extends JPanel {
     	nbC = new JLabel("");
     	nbG = new JLabel("");
     	nbM = new JLabel("");
+    	lblMaxRam = new JLabel("");
+    	maxRam = 0;
     	infos.add(new JLabel("Heure du serveur :"));
     	infos.add(timeLocal);
     	infos.add(new JLabel("Temps d'activité du serveur :"));
@@ -75,7 +79,9 @@ public class Monitor extends JPanel {
     	infos.add(nbG);
     	infos.add(new JLabel("Charge mémoire actuelle :"));
     	infos.add(nbM);
-    	SpringUtilities.makeGrid(infos, 8, 2, 5, 5, 5, 5);
+    	infos.add(new JLabel("Charge mémoire maximum :"));
+    	infos.add(lblMaxRam);
+    	SpringUtilities.makeGrid(infos, 9, 2, 5, 5, 5, 5);
     	tabbedPane.addTab("Nombre de joueurs connectés", connected);
     	tabbedPane.addTab("Nombre de parties en cours", games);
     	tabbedPane.addTab("Utilisation de la mémoire", memory);
@@ -131,6 +137,11 @@ public class Monitor extends JPanel {
     	nbC.setText(conn+" joueurs connectés");
     	nbG.setText(gam+" parties en cours");
     	nbM.setText(l+" Ko");
+    	
+    	if(l>maxRam)
+    		maxRam = l;
+    	
+    	lblMaxRam.setText(maxRam+" Ko");
     }
     
 	public void setTimes(long l, String s2) {

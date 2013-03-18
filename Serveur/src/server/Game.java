@@ -17,9 +17,12 @@ import socketData.PlayerScore;
 public class Game extends Thread{
 
 	private ArrayList<Player> players;
+	private Player drawingPlayer;
 	private String name;
 	private String password;
 	private int pMax;
+	private int turns;
+	private int currentTurn;
 	private boolean running;
 	private boolean started; //True si la partie a demarré
 
@@ -30,12 +33,24 @@ public class Game extends Thread{
 	 * @param name
 	 * @param password
 	 */
-	public Game(Player creator, String name, String password){
+	public Game(Player creator, String name, String password, int pMax, int turns){
 		this.name = name;
 		this.password = password; 	//vide si publique 
 		players = new ArrayList<Player>();
 		players.add(creator);
-		pMax = Server.MAX_PLAYER;					//valeur par défaut ?
+		drawingPlayer = null;
+
+		if(pMax > 1 && pMax <= 25)
+			this.pMax = pMax;
+		else
+			this.pMax = Server.MAX_PLAYER;
+
+		if(turns > 1 && turns <= 10)
+			this.turns = turns;
+		else
+			this.turns = Server.TURNS;
+
+		currentTurn = 0;
 		started = false;
 	}
 
@@ -62,9 +77,55 @@ public class Game extends Thread{
 	 */
 	public void run() {
 		running = true;
+
 		if(players.size() > 0)
 			System.out.println("Test de la partie de " + players.get(0).getLogin());
 		while(running){
+
+			while(started)
+			{
+				currentTurn = 0;
+				drawingPlayer = null;
+
+				while(currentTurn <= turns)
+				{
+					currentTurn++;
+					startTurn();
+					
+					for(int i = 0; i < players.size(); i++)
+					{
+						drawingPlayer = players.get(i);
+						if(!drawingPlayer.isGhost())
+						{
+							setupNextPlayer();
+							
+
+							//TODO timer de 60 secondes
+
+							
+
+							computeScores();
+
+							for(int j = 0; j < players.size(); j++)
+							{
+								sendScores(players.get(j));
+							}
+						}
+					}
+					
+					endTurn();
+				}
+
+				started = false;
+				Player player;
+				for(int i = 0; i < players.size(); i++)
+				{
+					player = players.get(i);
+					player.setScore(0);
+					if(player.isGhost())
+						player.setGhost(false);
+				}
+			}
 
 			try {
 				sleep(16);
@@ -186,11 +247,11 @@ public class Game extends Thread{
 			}
 		}
 	}
-	
+
 	public void sendCommand(Command cmd, Player sender)
 	{
 		for(int i = 0; i < players.size(); i++){
-			if(sender != players.get(i)){
+			if(sender == null || sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
 				try {
 					out.writeObject(cmd);
@@ -203,7 +264,32 @@ public class Game extends Thread{
 			}
 		}
 	}
-	
+
+	public void sendCommand(Command cmd)
+	{
+		sendCommand(cmd, null);
+	}
+
+	private void setupNextPlayer()
+	{
+		//TODO setupNextPlayer
+	}
+
+	private void startTurn()
+	{
+		//TODO startTurn
+	}
+
+	private void endTurn()
+	{
+		//TODO endTurn
+	}
+
+	private void computeScores()
+	{
+		//TODO computeScores
+	}
+
 	public void sendScores(Player player)
 	{
 		ObjectOutputStream out = player.getOutput();

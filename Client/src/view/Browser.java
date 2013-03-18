@@ -39,6 +39,8 @@ public class Browser extends JPanel implements ActionListener{
 	private JTextField txtGamePassword;
 	private JLabel lblGamePmax;
 	private JTextField txtGamePmax;
+	private JLabel lblTurn;
+	private JTextField txtTurn;
 
 	private JScrollPane scrlPane;
 	private JTable table;
@@ -61,7 +63,8 @@ public class Browser extends JPanel implements ActionListener{
 		txtGamePassword = new JTextField();
 		lblGamePmax = new JLabel(Main.texts.getString("max_p"));
 		txtGamePmax = new JTextField();
-
+		lblTurn = new JLabel(Main.texts.getString("turns"));
+		txtTurn = new JTextField();
 
 		slctPane = new JPanel();
 		slctSubPane = new JPanel();
@@ -93,13 +96,15 @@ public class Browser extends JPanel implements ActionListener{
 		slctPane.add(panel, BorderLayout.SOUTH);
 
 		crtPane.setLayout(new BorderLayout());
-		crtSubPane.setLayout(new GridLayout(3,2));
+		crtSubPane.setLayout(new GridLayout(4,2));
 		crtSubPane.add(lblGameName);
 		crtSubPane.add(txtGameName);
 		crtSubPane.add(lblGamePassword);
 		crtSubPane.add(txtGamePassword);
 		crtSubPane.add(lblGamePmax);
 		crtSubPane.add(txtGamePmax);
+		crtSubPane.add(lblTurn);
+		crtSubPane.add(txtTurn);
 		crtPane.add(crtSubPane);
 		
 		crtPane.add(btnCreate, BorderLayout.SOUTH);
@@ -155,18 +160,27 @@ public class Browser extends JPanel implements ActionListener{
 		String password = txtGamePassword.getText();
 		String res = "";
 		int pmax;
+		int turns;
+		
 		try{
 			pmax = Integer.valueOf(txtGamePmax.getText());
 		}catch(Exception e)
 		{
 			pmax = 0;
 		}
+		
+		try{
+			turns = Integer.valueOf(txtTurn.getText());
+		}catch(Exception e)
+		{
+			turns = 0;
+		}
 
 		if(name.length() >= 4)
 		{
 			if(password.equals(""))
 				password = null;
-			res = Main.getModel().createGame(name, password, pmax);
+			res = Main.getModel().createGame(name, password, pmax, turns);
 			JOptionPane.showMessageDialog(this,res);
 			Main.getView().setPanel("GameScreen");
 		}

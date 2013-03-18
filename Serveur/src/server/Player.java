@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import server.Server.Position;
 import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.CreateJoinCommand;
@@ -28,6 +30,8 @@ public class Player extends Thread {
 	private boolean drawing;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+	private int score;
+	private Position position;
 
 
 	/**
@@ -80,7 +84,7 @@ public class Player extends Thread {
 	 * 
 	 * @return La valeur de ghost. (true si le joueur est un joueur fantôme, false sinon)
 	 */
-	public boolean getGhost(){
+	public boolean isGhost(){
 		return ghost;
 	}
 
@@ -92,7 +96,30 @@ public class Player extends Thread {
 	public String getLogin(){
 		return login;
 	}
+	
+	
+	public Position getPosition()
+	{
+		return position;
+	}
+	
+	
+	public void setPosition(Position position)
+	{
+		this.position = position;
+	}
+	
+	
+	public int getScore()
+	{
+		return score;
+	}
 
+	
+	public void setScore(int score)
+	{
+		this.score = score;
+	}
 
 	/**
 	 * 
@@ -318,7 +345,7 @@ public class Player extends Thread {
 	{
 		if(message.command.equals("creategame"))
 		{
-			game = Server.createGame(this, message.name, message.password, message.pMax);
+			game = Server.createGame(this, message.name, message.password, message.pMax, message.turns);
 			sendResult(game != null);
 		}
 		else if(message.command.equals("joingame"))
@@ -326,96 +353,5 @@ public class Player extends Thread {
 			sendResult(Server.joinGame(this, message.name, message.password));
 		}
 
-	}
-
-
-
-	/**
-	 * Envoie les données à la Game
-	 * @param data
-	 */
-	public void processDrawingMessage(Point p)
-	{
-		
-	}
-
-
-
-	/**
-	 * Analyse la commande contenue dans le message et l'exécute. Obsolete.
-	 * @param message
-	 */
-	public void processStringMessage(String message){
-		if(message != null && !message.equals(""))
-		{
-			if(message.contains("%"))
-			{
-				String[] result = message.split("%"); //Le caractère % est le délimiteur entre les différents champs de la String
-				if(result.length == 2){
-					if(result[0].equals("creategame"))
-					{
-						game = Server.createGame(this, result[1], null, 0);
-						sendResult(game!=null);
-					}
-					else if(result[0].equals("joingame"))
-					{
-						sendResult(Server.joinGame(this, result[1], null));
-					}	
-				}
-				else if(result.length == 4)
-				{
-					System.out.println(result[3]);
-					if(result[0].equals("creategame") && result[2].equals("password"))
-					{
-						game = Server.createGame(this, result[1], result[3], 0);
-						sendResult(game!=null);
-					}
-					else if(result[0].equals("joingame") && result[2].equals("password"))
-					{
-						sendResult(Server.joinGame(this, result[1], result[3]));
-					}	
-				}
-			}
-			else 
-			{
-				if(message.equals("quit"))
-				{
-					connected = false;
-					try {
-						sendResult(true);
-						socket.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				else if(message.equals("startgame"))
-				{
-					if(game!=null)
-					{
-						sendResult(game.startGame());
-					}
-					else
-					{
-						sendResult(false);
-					}
-				}
-				else if(message.equals("getlist"))
-				{
-					try {
-						out.writeObject(Server.getGames());
-						out.flush();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				}
-				else
-				{
-					sendResult(false);
-				}
-			}
-		}
 	}
 }

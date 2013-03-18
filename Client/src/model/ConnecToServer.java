@@ -77,7 +77,7 @@ public class ConnecToServer{
 	
 	public String joinGame(String name, String password)
 	{
-		CreateJoinCommand com = new CreateJoinCommand(name, password, true);
+		CreateJoinCommand com = new CreateJoinCommand(name, password);
 		
 		Command result = null;
 		try{
@@ -151,8 +151,8 @@ public class ConnecToServer{
 	 * @param name
 	 * @return
 	 */
-	public String createGame(String name, String password, int Pmax){
-		CreateJoinCommand com = new CreateJoinCommand(name, password, Pmax);
+	public String createGame(String name, String password, int pMax, int turns){
+		CreateJoinCommand com = new CreateJoinCommand(name, password, pMax, turns);
 		Object conf=null;
 		
 		try{

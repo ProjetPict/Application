@@ -28,9 +28,9 @@ public class Main {
 	
 	public static void main(String[] argc)
 	{
-		/*Locale locale = new Locale("fr");
-		Locale locale2 = new Locale("en");*/
-		
+		//Locale locale = new Locale("fr");
+		//Locale locale2 = new Locale("en");
+		//texts = ResourceBundle.getBundle("TextBundle", locale2);
 		
 		gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
 		gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
