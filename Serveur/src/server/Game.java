@@ -32,7 +32,7 @@ public class Game extends Thread{
 	private boolean running;
 	private boolean started; //True si la partie a demarré
 	private String word;
-	
+
 	private int time;
 	private Timer timer;
 
@@ -91,7 +91,7 @@ public class Game extends Thread{
 	 */
 	public void run() {
 		running = true;
-		
+
 		while(running){
 
 			while(started)
@@ -103,19 +103,19 @@ public class Game extends Thread{
 				{
 					currentTurn++;
 					startTurn();
-					
-					
+
+
 					for(int i = 0; i < players.size(); i++)
 					{
 						drawingPlayer = players.get(i);
 						if(!drawingPlayer.isGhost())
 						{
-							
+
 							setupNextPlayer();
-							
+
 							sendCommand(new Command("startturn"));
 							//TODO timer de 60 secondes
-							
+
 							launchTimer(60);
 
 							computeScores();
@@ -212,10 +212,11 @@ public class Game extends Thread{
 		}
 		return false;
 	}
-	
+
 	public void stopGame()
 	{
-		timer.cancel();
+		if(timer != null)
+			timer.cancel();
 		running = false;
 		started = false;
 	}
@@ -228,6 +229,9 @@ public class Game extends Thread{
 	public void removePlayer(Player player){
 		players.remove(player);
 		podium.remove(player);
+		firstAnswers.remove(player);
+		if(drawingPlayer == player)
+			drawingPlayer = null;
 		System.out.println(player.getLogin() + " a quitté la partie " + name);
 
 		if(players.size() <= 0) //S'il n'y a plus de joueurs, on arrête la partie
@@ -292,33 +296,41 @@ public class Game extends Thread{
 	{
 		sendCommand(cmd, null);
 	}
-	
-	
+
+
 	private boolean launchTimer(int t)
 	{
-		this.time = t;
+		boolean res = true;
 		
-		Timer timer = new Timer();
-		
-		timer.schedule(new TimerTask() {
-			public void run() {
-				time--;
-			}
-		}, 0, 1000);
-		
-		while(time > 0)
+		if(timer == null)
 		{
-			try {
-				sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			this.time = t;
+
+			timer = new Timer();
+
+			timer.schedule(new TimerTask() {
+				public void run() {
+					time--;
+				}
+			}, 0, 1000);
+
+			while(time > 0)
+			{
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+
+			timer.cancel();
+			timer = null;
 		}
-		
-		timer.cancel();
-		
-		return true;
+		else
+			res = false;
+
+		return res;
 	}
 
 	private void setupNextPlayer()
@@ -326,19 +338,19 @@ public class Game extends Thread{
 		firstAnswers.clear();
 		word = "";
 		drawingPlayer.setDrawing(true);
-		
+
 		//TODO integrer le tirage de mots aléatoire
 		WordCommand choices = new WordCommand("test1", "test2", "test3", 1);
 		drawingPlayer.setChoices(choices);
-		
+
 		launchTimer(30);
 		System.out.println(time);
-		
+
 		if(word.equals(""))
 		{
 			ObjectOutputStream out = drawingPlayer.getOutput();
 			choices = new WordCommand("", "", "", 1);
-			
+
 			//TODO choix aleatoire entre les trois mots
 			choices.command = "default";
 			word = "default";
@@ -349,9 +361,9 @@ public class Game extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
-		
+
 		//TODO setupNextPlayer
 	}
 
@@ -430,7 +442,7 @@ public class Game extends Thread{
 		else
 			return false;
 	}
-	
+
 	public void setWord(String word)
 	{
 		this.word = word;

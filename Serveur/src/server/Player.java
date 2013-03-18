@@ -315,6 +315,7 @@ public class Player extends Thread {
 		if(message.command.equals("quit"))
 		{
 			connected = false;
+			Server.removePlayer(this);
 			try {
 				sendResult(true);
 				socket.close();
