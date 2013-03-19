@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -32,6 +33,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	private Console console;
 	private Monitor monitor = new Monitor();
 	private ClipboardManager clipManage = new ClipboardManager();
+	private boolean isDown;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
@@ -57,6 +59,9 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JMenuItem about = new JMenuItem("A propos");
 	private JMenuItem commands = new JMenuItem("Liste des commandes disponibles");
 	private JMenuItem infos = new JMenuItem("Obtenir les informations du serveur");
+	
+	private JSplitPane pan;
+	private JPanel servDown;
 
 	public Fenetre(Server servInfo){
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -67,6 +72,7 @@ public class Fenetre extends JFrame implements WindowListener {
 		this.setJMenuBar(menuBar);
 		this.serverInfos = servInfo;
 		console = new Console(servInfo);
+		isDown = false;
 		
 		menuBar.add(fichier);
 		menuBar.add(edition);
@@ -100,17 +106,39 @@ public class Fenetre extends JFrame implements WindowListener {
 		aide.add(commands);
 		aide.add(infos);
 		
-		JSplitPane pan = new JSplitPane();
+		pan = new JSplitPane();
 		pan.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.add(pan);
 		pan.setDividerLocation(430);
 		pan.setTopComponent(monitor);
 		pan.setBottomComponent(console);
 		
+		servDown = new JPanel();
+		servDown.add(new JLabel("Le serveur est actuellement éteint. Vous pouvez fermer la fenêtre ou le relancer."));
+		
+		start.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				stop.setEnabled(true);
+				start.setEnabled(false);
+				isDown = false;
+				switchPanel(servDown);
+			}
+		});
+		stop.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				try {
+					stopOrClose(false);
+					stop.setEnabled(false);
+					start.setEnabled(true);
+					isDown = true;
+					switchPanel(servDown);
+				} catch (InterruptedException e1) {}
+			}
+		});
 		close.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					closeServer();
+					stopOrClose(true);
 				} catch (InterruptedException e1) {}
 			}
 		});
@@ -178,8 +206,8 @@ public class Fenetre extends JFrame implements WindowListener {
 		console.writeAnnonce(s);
 	}
 	
-	public void closeServer() throws InterruptedException {
-		ShutDownEmergency cdTime = new ShutDownEmergency(10,console,serverInfos);
+	public void stopOrClose(boolean b) throws InterruptedException {
+		ShutDownEmergency cdTime = new ShutDownEmergency(10,console,serverInfos,b);
 		cdTime.start();
 	}
 	
@@ -223,4 +251,7 @@ public class Fenetre extends JFrame implements WindowListener {
 		
 	}
 	
+	public void switchPanel(JPanel newPan) {
+		this.setContentPane(newPan);
+	}
 }

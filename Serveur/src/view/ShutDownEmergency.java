@@ -7,11 +7,13 @@ public class ShutDownEmergency extends Thread {
 	private int max_count;
 	private Console console;
 	private Server serverInfos;
+	private boolean shutDown;
 
-	public ShutDownEmergency(int i, Console c, Server s) {
+	public ShutDownEmergency(int i, Console c, Server s, boolean b) {
 		max_count = i;
 		console = c;
 		serverInfos = s;
+		shutDown = b;
 	}
 	
 	@Override
@@ -35,6 +37,7 @@ public class ShutDownEmergency extends Thread {
 				console.rewriteConsoleContent(s.substring(0, s.length()-sub)+count+" seconde...");
 			console.getConsole().selectAll();
 		}
-		System.exit(0);
+		if(shutDown)
+			System.exit(0);
 	}
 }
