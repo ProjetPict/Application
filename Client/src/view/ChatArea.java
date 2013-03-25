@@ -2,12 +2,15 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
@@ -53,8 +56,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		Main.getModel().addObserver(this);
 
 		list = new JList();
-		list.setBounds(83, 84, 284, 80);
-		add(list);
+		list.setBounds(83, 84, 284, 150);
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setBounds(83, 84, 284, 150);
+		add(scrollPane);
 
 		lblTimer = new JLabel();
 		lblTimer.setBounds((int)(50*Main.ratioX), (int)(20*Main.ratioY), 46, 14);
@@ -134,7 +139,20 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			
 		}
 		else{
-			scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
+			Collection<PlayerScore> temp = Main.getModel().getScores().values();
+			scores = new PlayerScore[temp.size()];
+			//scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
+			
+			Iterator<PlayerScore> it = temp.iterator();
+			
+			int i = 0;
+			while(it.hasNext())
+			{
+				PlayerScore ps = it.next();
+				scores[i] = ps;
+				i++;
+			}
+			
 			if(scores.length > 0)
 			{
 				list.setListData(scores);

@@ -26,7 +26,6 @@ public class GameScreen extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private DrawingArea drawingArea;
 	private ChatArea chatArea;
-	private JScrollPane scrlChat;
 	private GameObserver go;
 	private JOptionPane pane;
 	private JDialog wordDialog;

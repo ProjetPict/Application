@@ -96,14 +96,13 @@ public class Server extends Thread{
 			}
 		}, 600000, 600000);
 		launchTime.schedule(new TimerTask() {
-			Calendar dateDepart;
-			Locale locale = Locale.getDefault();
-			Date actuelle;
+			
+			Date current;
 			public void run() {
 				launchTimeCalc++;
-				actuelle = new Date();
+				current = new Date();
 				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss" );
-				fenetre.setTimes(launchTimeCalc,dateFormat.format(actuelle));
+				fenetre.setTimes(launchTimeCalc,dateFormat.format(current));
 			}
 		},0,1000);
 		

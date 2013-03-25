@@ -216,6 +216,8 @@ public class Game extends Thread{
 			if(started)
 				p.setGhost(true);
 			players.add(p);
+			p.sendResult(true);
+			sendScoresToAll();
 			return true;
 		}
 		return false;
@@ -462,13 +464,22 @@ public class Game extends Thread{
 		PlayerScore ps;
 		for(int i = 0; i < players.size(); i++){
 
-			ps = new PlayerScore(player.getLogin(), player.getScore(), player.hasFound());
+			ps = new PlayerScore(players.get(i).getLogin(), players.get(i).getScore(), 
+					players.get(i).hasFound());
 			try {
 				out.writeObject(ps);
 				out.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void sendScoresToAll()
+	{
+		for(int i = 0; i < players.size(); i++)
+		{
+			sendScores(players.get(i));
 		}
 	}
 

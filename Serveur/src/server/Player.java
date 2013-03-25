@@ -227,6 +227,7 @@ public class Player extends Thread {
 	 */
 	public void sendResult(boolean result)
 	{
+		
 		try {
 			if(result)
 			{
@@ -240,6 +241,7 @@ public class Player extends Thread {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			
 		}
 	}
 
@@ -396,10 +398,15 @@ public class Player extends Thread {
 		{
 			game = Server.createGame(this, message.name, message.password, message.pMax, message.turns);
 			sendResult(game != null);
+			
+			if(game != null)
+			{
+				game.sendScores(this);
+			}
 		}
 		else if(message.command.equals("joingame"))
 		{
-			sendResult(Server.joinGame(this, message.name, message.password));
+			Server.joinGame(this, message.name, message.password);
 		}
 
 	}
