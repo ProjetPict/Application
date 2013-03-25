@@ -16,7 +16,7 @@ import socketData.WordCommand;
 
 /**
  * Cette classe est un thread qui permet de maintenir la connexion avec un joueur et d'intercepter
- * les données qu'il envoie depuis son socket.
+ * les donnï¿½es qu'il envoie depuis son socket.
  * @author Jerome
  *
  */
@@ -31,6 +31,7 @@ public class Player extends Thread {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private int score;
+	private boolean hasFound;
 	private long nbPixels;
 	private WordCommand choices;
 
@@ -51,6 +52,7 @@ public class Player extends Thread {
 		connected = true;
 		drawing = false;
 		nbPixels = 0;
+		hasFound=false;
 	}
 
 
@@ -83,7 +85,7 @@ public class Player extends Thread {
 
 	/**
 	 * 
-	 * @return La valeur de ghost. (true si le joueur est un joueur fantôme, false sinon)
+	 * @return La valeur de ghost. (true si le joueur est un joueur fantï¿½me, false sinon)
 	 */
 	public boolean isGhost(){
 		return ghost;
@@ -114,6 +116,13 @@ public class Player extends Thread {
 		return score;
 	}
 
+	public boolean getHasFound(){
+		return hasFound;
+	}
+	
+	public void resetHasFound(){
+		hasFound = false;
+	}
 	
 	public void setScore(int score)
 	{
@@ -181,8 +190,8 @@ public class Player extends Thread {
 
 
 	/**
-	 * Surcharge de la fonction run() de Thread. On boucle à l'infini tant
-	 * que la connexion n'est pas coupée, et on récupère les données que le
+	 * Surcharge de la fonction run() de Thread. On boucle ï¿½ l'infini tant
+	 * que la connexion n'est pas coupï¿½e, et on rï¿½cupï¿½re les donnï¿½es que le
 	 * joueur envoie.
 	 */
 	public void run(){
@@ -201,7 +210,7 @@ public class Player extends Thread {
 			Server.removePlayer(this);
 
 		} catch (IOException e1) {
-			System.out.println("Connexion à " + login + " perdue.");
+			System.out.println("Connexion ï¿½ " + login + " perdue.");
 			connected = false;
 			Server.removePlayer(this);
 		} catch (ClassNotFoundException e) {
@@ -213,7 +222,7 @@ public class Player extends Thread {
 
 
 	/**
-	 * Cette méthode envoie "success" ou "fail" au client.
+	 * Cette mï¿½thode envoie "success" ou "fail" au client.
 	 * @param result
 	 */
 	public void sendResult(boolean result)
@@ -250,7 +259,7 @@ public class Player extends Thread {
 
 
 	/**
-	 * Cette méthode détermine le type du message passé en paramètre, et appelle la fonction
+	 * Cette mï¿½thode dï¿½termine le type du message passï¿½ en paramï¿½tre, et appelle la fonction
 	 * de traitement correspondante.
 	 * @param message
 	 */
@@ -368,6 +377,10 @@ public class Player extends Thread {
 	 */
 	private void processAnswerMessage(AnswerCommand message) {
 		// TODO Auto-generated method stub
+		if(game.checkAnswer(message, this)){
+			hasFound = true;
+		}
+			
 
 	}
 

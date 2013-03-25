@@ -38,7 +38,6 @@ public class GameObserver extends Thread{
 			out.writeObject(cmd);
 			out.flush();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -74,7 +73,6 @@ public class GameObserver extends Thread{
 			} catch (IOException e) {
 				running = false;
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				running = false;
 			}
@@ -89,7 +87,6 @@ public class GameObserver extends Thread{
 			out.writeObject(p);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}		
@@ -101,7 +98,6 @@ public class GameObserver extends Thread{
 			out.writeObject(line);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}

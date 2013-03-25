@@ -104,6 +104,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			timer.cancel();
 		timer = new Timer();
 
+		
 		lblTimer.setText(String.valueOf(time));
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -125,6 +126,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		if(arg instanceof Boolean)
 		{
 			drawing = (Boolean) arg;
+			
+			if(drawing == true)
+				textField.setEnabled(false);
+			else
+				textField.setEnabled(true);
 			
 		}
 		else{

@@ -13,7 +13,7 @@ import socketData.PlayerScore;
 import socketData.WordCommand;
 
 /**
- * Gère une partie et ses joueurs.
+ * Gï¿½re une partie et ses joueurs.
  * @author Jerome
  *
  */
@@ -21,7 +21,7 @@ public class Game extends Thread{
 
 
 	private ArrayList<Player> podium; //Les trois premiers joueurs en terme de score
-	private ArrayList<Player> firstAnswers; //Les trois premiers joueurs à avoir répondu
+	private ArrayList<Player> firstAnswers; //Les trois premiers joueurs ï¿½ avoir rï¿½pondu
 	private ArrayList<Player> players;
 	private Player drawingPlayer;
 	private String name;
@@ -30,7 +30,7 @@ public class Game extends Thread{
 	private int turns;
 	private int currentTurn;
 	private boolean running;
-	private boolean started; //True si la partie a demarré
+	private boolean started; //True si la partie a demarrï¿½
 	private String word;
 
 	private int time;
@@ -86,7 +86,7 @@ public class Game extends Thread{
 
 
 	/**
-	 * Surcharge de la méthode run() de Thread. Inutile pour l'instant mais elle devrait servir à faire
+	 * Surcharge de la mï¿½thode run() de Thread. Inutile pour l'instant mais elle devrait servir ï¿½ faire
 	 * "tourner" la partie (changement de joueurs, de tour, etc...)
 	 */
 	public void run() {
@@ -121,10 +121,15 @@ public class Game extends Thread{
 
 							for(int j = 0; j < players.size(); j++)
 							{
-								//sendScores(players.get(j));
+								sendScores(players.get(j));
 							}
 							
 							drawingPlayer.setDrawing(false);
+							
+							for(Player p: players){
+								p.resetHasFound();
+							}
+							
 						}
 					}
 
@@ -154,7 +159,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return True si la partie est privée, false sinon.
+	 * @return True si la partie est privï¿½e, false sinon.
 	 */
 	public boolean isPrivate(){
 		if(password != null)
@@ -166,7 +171,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return True si la partie a demarré, false sinon
+	 * @return True si la partie a demarrï¿½, false sinon
 	 */
 	public boolean isStarted()
 	{
@@ -176,7 +181,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return Le mot de passe de la partie (peut être null).
+	 * @return Le mot de passe de la partie (peut ï¿½tre null).
 	 */
 	public String getPassword(){
 		return password;
@@ -194,17 +199,17 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return Retourne le nombre de joueurs maximum autorisés dans la partie.
+	 * @return Retourne le nombre de joueurs maximum autorisï¿½s dans la partie.
 	 */
 	public int getJMax(){
 		return pMax;
 	}
 
-
+	
 	/**
 	 * Ajoute un joueur dans la partie.
 	 * @param p
-	 * @return True si l'ajout est un succès, false sinon
+	 * @return True si l'ajout est un succï¿½s, false sinon
 	 */
 	public boolean addPlayer(Player p){
 		if(players.size() < pMax && !players.contains(p)){
@@ -235,9 +240,9 @@ public class Game extends Thread{
 		firstAnswers.remove(player);
 		if(drawingPlayer == player)
 			drawingPlayer = null;
-		System.out.println(player.getLogin() + " a quitté la partie " + name);
+		System.out.println(player.getLogin() + " a quittï¿½ la partie " + name);
 
-		if(players.size() <= 0) //S'il n'y a plus de joueurs, on arrête la partie
+		if(players.size() <= 0) //S'il n'y a plus de joueurs, on arrï¿½te la partie
 		{
 			running = false;
 			Server.removeGame(this);
@@ -256,7 +261,7 @@ public class Game extends Thread{
 
 
 	/**
-	 * Envoie data à tout les joueurs de la partie, à l'exception du joueur d'origine
+	 * Envoie data ï¿½ tout les joueurs de la partie, ï¿½ l'exception du joueur d'origine
 	 * @param p
 	 * @param sender
 	 */
@@ -342,7 +347,7 @@ public class Game extends Thread{
 		word = "";
 		drawingPlayer.setDrawing(true);
 
-		//TODO integrer le tirage de mots aléatoire
+		//TODO integrer le tirage de mots alï¿½atoire
 		WordCommand choices = new WordCommand("test1", "test2", "test3", 1);
 		drawingPlayer.setChoices(choices);
 
@@ -381,8 +386,43 @@ public class Game extends Thread{
 
 	private void computeScores()
 	{
-		//TODO computeScores
+		int nbFound = 0; //number of player who found the word
+		
+		//Set score for "finding players"
+		for(Player p: players){
+			if(p.getHasFound()){
+				nbFound++;
+				
+				if(firstAnswers.contains(p)){
+					int rank = firstAnswers.indexOf(p);
+					switch(rank){
+					case 0 : p.setScore(p.getScore()+5); break;
+					case 1 : p.setScore(p.getScore()+4); break;
+					case 2 : p.setScore(p.getScore()+3); break;
+					}
+				}else{
+					p.setScore(p.getScore()+1);
+				}
+			}
+		}
+		
+		//Set score for the "drawing player"
+		int findingRatio = (nbFound/(players.size()-1))*100;
+		
+		if(findingRatio == 100){
+			drawingPlayer.setScore(drawingPlayer.getScore()+5);
+		}else if(findingRatio > 75){
+			drawingPlayer.setScore(drawingPlayer.getScore()+4);
+		}else if(findingRatio > 50){
+			drawingPlayer.setScore(drawingPlayer.getScore()+3);
+		}else if(findingRatio > 25){
+			drawingPlayer.setScore(drawingPlayer.getScore()+2);
+		}else if(nbFound > 0){
+			drawingPlayer.setScore(drawingPlayer.getScore()+1);
+		}
+		
 	}
+	
 
 	public boolean checkAnswer(AnswerCommand answer, Player player)
 	{
@@ -421,13 +461,12 @@ public class Game extends Thread{
 		ObjectOutputStream out = player.getOutput();
 		PlayerScore ps;
 		for(int i = 0; i < players.size(); i++){
-			//TODO Mettre les vraies valeurs
-			ps = new PlayerScore(player.getLogin(), 0, false);
+
+			ps = new PlayerScore(player.getLogin(), player.getScore(), player.getHasFound());
 			try {
 				out.writeObject(ps);
 				out.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -452,4 +491,5 @@ public class Game extends Thread{
 		time = 0;
 		this.word = word;
 	}
+	
 }
