@@ -390,7 +390,7 @@ public class Game extends Thread{
 		
 		//Set score for "finding players"
 		for(Player p: players){
-			if(p.getHasFound()){
+			if(p.hasFound() && p != drawingPlayer){
 				nbFound++;
 				
 				if(firstAnswers.contains(p)){
@@ -462,7 +462,7 @@ public class Game extends Thread{
 		PlayerScore ps;
 		for(int i = 0; i < players.size(); i++){
 
-			ps = new PlayerScore(player.getLogin(), player.getScore(), player.getHasFound());
+			ps = new PlayerScore(player.getLogin(), player.getScore(), player.hasFound());
 			try {
 				out.writeObject(ps);
 				out.flush();

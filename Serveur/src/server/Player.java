@@ -116,7 +116,7 @@ public class Player extends Thread {
 		return score;
 	}
 
-	public boolean getHasFound(){
+	public boolean hasFound(){
 		return hasFound;
 	}
 	
