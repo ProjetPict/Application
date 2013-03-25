@@ -22,12 +22,12 @@ import socketData.*;
  */
 public class Browser extends JPanel implements ActionListener{
 
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private JButton btnJoin;
 	private JButton btnPnlCreate;
 	private JButton btnCreate;
@@ -106,7 +106,7 @@ public class Browser extends JPanel implements ActionListener{
 		crtSubPane.add(lblTurn);
 		crtSubPane.add(txtTurn);
 		crtPane.add(crtSubPane);
-		
+
 		crtPane.add(btnCreate, BorderLayout.SOUTH);
 
 		btnJoin.addActionListener(this);
@@ -161,14 +161,14 @@ public class Browser extends JPanel implements ActionListener{
 		String res = "";
 		int pmax;
 		int turns;
-		
+
 		try{
 			pmax = Integer.valueOf(txtGamePmax.getText());
 		}catch(Exception e)
 		{
 			pmax = 0;
 		}
-		
+
 		try{
 			turns = Integer.valueOf(txtTurn.getText());
 		}catch(Exception e)
@@ -182,7 +182,8 @@ public class Browser extends JPanel implements ActionListener{
 				password = null;
 			res = Main.getModel().createGame(name, password, pmax, turns);
 			JOptionPane.showMessageDialog(this,res);
-			Main.getView().setPanel("GameScreen", true);
+			if(res.equals("success"))
+				Main.getView().setPanel("GameScreen", true);
 		}
 		else
 		{
