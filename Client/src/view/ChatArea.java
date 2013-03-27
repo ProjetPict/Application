@@ -141,9 +141,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			}
 		}
 		else if(e.getSource() == btnStartGame)
-		{
+		{	
+			if(scores.length>1)
+			{
 			Main.getModel().sendCommand("startgame");
 			btnStartGame.setVisible(false);
+			}
 		}
 
 	}
