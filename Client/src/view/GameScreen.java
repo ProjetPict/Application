@@ -59,6 +59,7 @@ public class GameScreen extends JPanel{
 	{
 		drawingArea.clearScreen();
 		chatArea.launchTimer();
+		chatArea.enableStartButton(false);
 	}
 	
 	public long getNbPixels()

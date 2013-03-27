@@ -106,6 +106,15 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		}
 	}
 
+	public void enableStartButton(boolean enable)
+	{
+		if(btnStartGame != null)
+		{
+			
+			btnStartGame.setVisible(enable);
+		}
+	}
+
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -142,8 +151,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		}
 		else if(e.getSource() == btnStartGame)
 		{
-			Main.getModel().sendCommand("startgame");
-			btnStartGame.setVisible(false);
+			if(scores.length>1)
+			{
+				Main.getModel().sendCommand("startgame");
+			}
 		}
 
 	}
@@ -228,5 +239,4 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			}
 		}
 	}
-
 }
