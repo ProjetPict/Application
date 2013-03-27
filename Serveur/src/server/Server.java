@@ -86,7 +86,7 @@ public class Server extends Thread{
 				runtime = Runtime.getRuntime();
 				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
 			}
-		}, 0, 30);
+		}, 0, 3000);
 		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
 		autoSave.schedule(new TimerTask() {
 			public void run() {
