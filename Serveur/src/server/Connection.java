@@ -68,14 +68,21 @@ public class Connection extends Thread {
 			System.out.println("Quelqu'un s'est connecté");
 
 			Object login;
+			Object password;
 			try {
 				login = in.readObject();
-				if(login instanceof Command)
+				password = in.readObject();
+				if(login instanceof Command && password instanceof Command)
 				{
+					Command l = (Command) login;
+					Command p = (Command) password;
+					
+					//TODO verifier le login et le password
 					Server.createPlayer(((Command)login).command, socket, this);
 					out.writeObject(new Command("success"));
-					System.out.println(login +" vient de se connecter ");
 					out.flush();
+					System.out.println(login +" vient de se connecter ");
+					
 				}	
 
 			} catch (ClassNotFoundException e) {
