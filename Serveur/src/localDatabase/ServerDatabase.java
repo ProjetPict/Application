@@ -1,18 +1,10 @@
 package localDatabase;
 
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import dbwConnection.ResultSet;
-
 import server.Statistiques;
-
 
 /**
  * Cette classe permet de créer une base de données propre au serveur basée sur celle du site
@@ -67,6 +59,10 @@ public class ServerDatabase {
 	
 	public void saveDatabase() {
 		
+	}
+	
+	public HashMap<String, String> getUsersList() {
+		return servDbUsersLogs;
 	}
 	
 	public ArrayList<String> getWordsList(int difficulty) {
