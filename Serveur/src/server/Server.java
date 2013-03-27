@@ -57,7 +57,7 @@ public class Server extends Thread{
 		fenetre.setVisible(true);
 		fenetre.writeAnnonce("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
 		fenetre.writeAnnonce("> Connexion à la base de données...");
-		while(tentatives<=5 && !success) {
+		while(tentatives<5 && !success) {
 			if(servDbConnec.connectDatabase())
 				success=true;
 			else
@@ -71,7 +71,7 @@ public class Server extends Thread{
 			tentatives = 0;
 			success = false;
 			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
-			while(tentatives<=5 && !success) {
+			while(tentatives<5 && !success) {
 				if(servDbLocale.loadDatabase())
 					success=true;
 				else
