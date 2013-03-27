@@ -47,21 +47,44 @@ public class Server extends Thread{
 	public Server() throws Exception{
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();
-		servDbLocale = new ServerDatabase();
 		servDbConnec = new DbConnection();
+		servDbLocale = new ServerDatabase(servDbConnec);
+		
+		int tentatives = 1;
+		boolean success = false;
 		
 		fenetre = new Fenetre(this);
 		fenetre.setVisible(true);
 		fenetre.writeAnnonce("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
 		fenetre.writeAnnonce("> Connexion à la base de données...");
-		if(servDbConnec.connectDatabase())
-			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
-		else {
-			fenetre.writeAnnonce("Echec !\n> Veuillez vérifier le paramètre de connection avant de relancer le serveur.\n");
-			//throw new Exception("Echec connexion bdd");
+		while(tentatives<=5 && !success) {
+			if(servDbConnec.connectDatabase())
+				success=true;
+			else
+				fenetre.writeAnnonce("Echec ("+tentatives+"/5)\n> Nouvelle tentative de connexion à la base de données...");
+			tentatives++;
 		}
-		servDbLocale.loadDatabase();
-		fenetre.writeAnnonce("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
+		if(!success) {
+			fenetre.writeAnnonce("Echec (5/5)\n> Veuillez vérifier les paramètres de connexion avant de relancer le serveur.\n");
+			//throw new Exception("Echec lors de la connexion à la base de données");
+		} else {
+			tentatives = 0;
+			success = false;
+			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
+			while(tentatives<=5 && !success) {
+				if(servDbLocale.loadDatabase())
+					success=true;
+				else
+					fenetre.writeAnnonce("Echec ("+tentatives+"/5)\n> Nouvelle tentative de récupération de la base de données...");
+				tentatives++;
+			}
+			if(success)
+				fenetre.writeAnnonce("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
+			else {
+				fenetre.writeAnnonce("Echec (5/5)\n> Veuillez vérifier l'état de la base de données avant de relancer le serveur.\n");
+				//throw new Exception("Echec lors de la récupération de la base de données");
+			}
+		}
 		try {
 			serverSocket = new ServerSocket(8448);
 		} catch (IOException e) {
@@ -80,13 +103,13 @@ public class Server extends Thread{
 		Timer autoSave = new Timer();
 		Timer launchTime = new Timer();
 		launchTimeCalc = 0;
-		//On actualise toutes les 30 millisecondes les graphiques
+		//On actualise toutes les 1 seconde les graphiques
 		timer.schedule(new TimerTask() {
 			public void run() {
 				runtime = Runtime.getRuntime();
 				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
 			}
-		}, 0, 3000);
+		}, 0, 1000);
 		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
 		autoSave.schedule(new TimerTask() {
 			public void run() {

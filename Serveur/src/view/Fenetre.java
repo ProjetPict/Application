@@ -42,7 +42,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	 
 	private JMenuItem start = new JMenuItem("Lancer le serveur");
 	private JMenuItem restart = new JMenuItem("Relancer le serveur");
-	private JMenuItem stop = new JMenuItem("Arrï¿½ter le serveur");
+	private JMenuItem stop = new JMenuItem("Arrêter le serveur");
 	private JMenuItem close = new JMenuItem("Fermer");
 
 	private JMenuItem history = new JMenuItem("Historique des commandes");
@@ -50,7 +50,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JMenuItem paste = new JMenuItem("Coller dans la ligne de commande");
 	private JMenuItem cut = new JMenuItem("Couper le contenu de la ligne de commande");
 
-	private JMenuItem annonce = new JMenuItem("Crï¿½er une annonce");
+	private JMenuItem annonce = new JMenuItem("Créer une annonce");
 	private JMenuItem save = new JMenuItem("Sauvegarder vers MySQL");
 	private JMenuItem savelogs = new JMenuItem("Exporter le journal de logs");
 	private JMenuItem seelogs = new JMenuItem("Voir le journal de logs");
@@ -114,7 +114,7 @@ public class Fenetre extends JFrame implements WindowListener {
 		pan.setBottomComponent(console);
 		
 		servDown = new JPanel();
-		servDown.add(new JLabel("Le serveur est actuellement ï¿½teint. Vous pouvez fermer la fenï¿½tre ou le relancer."));
+		servDown.add(new JLabel("Le serveur est actuellement éteint. Vous pouvez fermer la fenêtre ou le relancer."));
 		
 		start.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
@@ -167,7 +167,7 @@ public class Fenetre extends JFrame implements WindowListener {
 		});
 		annonce.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				console.setTextField("annonce \"Annonce ï¿½ transmettre aux clients\"");
+				console.setTextField("annonce \"Annonce a transmettre aux clients\"");
 			}
 		});
 		save.addActionListener(new ActionListener() { 
