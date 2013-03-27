@@ -114,7 +114,7 @@ public class Server extends Thread{
 		autoSave.schedule(new TimerTask() {
 			public void run() {
 				fenetre.writeAnnonce("\n# Sauvegarde automatique de l'historique dans la base de données...");
-				servDbLocale.saveStatistiques();
+				servDbLocale.saveDatabase();
 				fenetre.writeAnnonce("Terminé !");
 			}
 		}, 600000, 600000);

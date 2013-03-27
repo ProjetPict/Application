@@ -22,7 +22,7 @@ public class ShutDownEmergency extends Thread {
 		int sub = 13;
 		String s;
 		console.writeAnnonce("\n> Préparation à l'extinction du serveur. Veuillez patienter...\n> Sauvegarde dans la base de données...");
-		serverInfos.getDbInfos().saveStatistiques();
+		serverInfos.getDbInfos().saveDatabase();
 		console.writeAnnonce("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
 		console.writeAnnonce("Terminé !\n> Arrêt du serveur dans 9 secondes...");
 		while(count>0) {
