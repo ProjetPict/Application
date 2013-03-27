@@ -1,6 +1,7 @@
 package server;
 
 
+import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.TimerTask;
 import socketData.AnswerCommand;
 import socketData.Command;
 import socketData.ChatCommand;
+import socketData.Line;
+import socketData.Picture;
 import socketData.PlayerScore;
 import socketData.WordCommand;
 
@@ -34,6 +37,8 @@ public class Game extends Thread{
 	private boolean started; //True si la partie a demarrï¿½
 	private String word;
 	private int difficulty;
+	
+	private Picture currentDrawing;
 
 	private int time;
 	private Timer timer;
@@ -51,6 +56,7 @@ public class Game extends Thread{
 		players = new ArrayList<Player>();
 		players.add(creator);
 		drawingPlayer = null;
+		currentDrawing = new Picture();
 		word = "";
 
 		if(pMax > 1 && pMax <= 25)
@@ -96,7 +102,6 @@ public class Game extends Thread{
 				{
 					currentTurn++;
 					startTurn();
-
 
 					for(int i = 0; i < players.size(); i++)
 					{
@@ -210,7 +215,7 @@ public class Game extends Thread{
 				p.setGhost(true);
 			players.add(p);
 			p.sendResult(true);
-			sendScoresToAll();
+			sendScoresToAll(p);
 			return true;
 		}
 		return false;
@@ -235,7 +240,7 @@ public class Game extends Thread{
 		firstAnswers.remove(player);
 		if(drawingPlayer == player)
 			drawingPlayer = null;
-		System.out.println(player.getLogin() + " a quittï¿½ la partie " + name);
+		System.out.println(player.getLogin() + " a quitté la partie " + name);
 
 		if(players.size() <= 0) //S'il n'y a plus de joueurs, on arrï¿½te la partie
 		{
@@ -263,6 +268,12 @@ public class Game extends Thread{
 	public void sendData(Object data, Player sender)
 	{
 		//TODO test : if sender == drawingplayer
+		
+		if(data instanceof Point)
+			currentDrawing.addPoint((Point) data);
+		else
+			currentDrawing.addLine((Line) data);
+		
 		for(int i = 0; i < players.size(); i++){
 			if(sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
@@ -278,6 +289,7 @@ public class Game extends Thread{
 		}
 	}
 
+	
 	public void sendChatMsg(ChatCommand msg)
 	{
 		for(int i = 0; i < players.size(); i++){
@@ -357,6 +369,7 @@ public class Game extends Thread{
 	{
 		firstAnswers.clear();
 		word = "";
+		currentDrawing.clear();
 		drawingPlayer.setDrawing(true);
 
 		//TODO integrer le tirage de mots alï¿½atoire
@@ -507,11 +520,12 @@ public class Game extends Thread{
 		}
 	}
 
-	public void sendScoresToAll()
+	public void sendScoresToAll(Player p)
 	{
 		for(int i = 0; i < players.size(); i++)
 		{
-			sendScores(players.get(i));
+			if(p != null && players.get(i) != p) 
+				sendScores(players.get(i));
 		}
 	}
 
@@ -533,6 +547,21 @@ public class Game extends Thread{
 			timer.cancel();
 		time = 0;
 		this.word = word;
+	}
+
+
+	public void sendDrawing(Player player) {
+		if(player.isGhost())
+		{
+			ObjectOutputStream out = player.getOutput();
+			try {
+				out.writeObject(currentDrawing);
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

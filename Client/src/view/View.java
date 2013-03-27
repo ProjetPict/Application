@@ -1,5 +1,6 @@
 package view;
 
+import socketData.Picture;
 import socketData.WordCommand;
 import model.GameObserver;
 
@@ -65,6 +66,11 @@ public class View {
 
 	public void closeDialog() {
 		gmScreen.closeDialog();
+		
+	}
+
+	public void setPicture(Picture pict) {
+		gmScreen.setPicture(pict);
 		
 	}
 }

@@ -79,11 +79,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		chat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		chatDoc = chat.getStyledDocument();
 		chatMAS = chat.getInputAttributes();
-		/*chat.setLineWrap(true);
-		chat.setWrapStyleWord(true);*/
+		
 
 		scrollPaneChat = new JScrollPane(chat);
-
 		scrollPaneChat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		add(scrollPaneChat);

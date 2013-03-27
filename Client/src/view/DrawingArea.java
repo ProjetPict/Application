@@ -73,6 +73,15 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	{
 		return bufPic.getNbPixels();
 	}
+	
+	public void setPicture(Picture pict)
+	{
+		bufPic.deleteObservers();
+		bufPic = pict;
+		this.gameObs.setPicture(bufPic);
+		bufPic.addObserver(this);
+		repaint();
+	}
 
 
 	@Override

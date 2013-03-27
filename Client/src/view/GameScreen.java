@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import socketData.Picture;
 import socketData.WordCommand;
 
 import model.GameObserver;
@@ -26,22 +27,24 @@ public class GameScreen extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private DrawingArea drawingArea;
 	private ChatArea chatArea;
-	private GameObserver go;
+	private GameObserver gameObs;
 	private JOptionPane pane;
 	private JDialog wordDialog;
 	private WordCommand wordCommand;
 	private int time;
 
 	public GameScreen(boolean creator){
-		go = Main.getGameObserver();
-		drawingArea = new DrawingArea(go);
+		gameObs = Main.getGameObserver();
+		drawingArea = new DrawingArea(gameObs);
 		chatArea = new ChatArea(creator);
 		this.setLayout(null);
 		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
 		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
 		this.add(drawingArea);
 		this.add(chatArea);
-		go.start();
+		gameObs.start();
+		Main.getModel().sendCommand("getscores");
+		Main.getModel().sendCommand("getdrawing");
 	}
 	
 	@Override
@@ -140,5 +143,10 @@ public class GameScreen extends JPanel{
 
 	public void closeDialog() {
 		wordDialog.dispose();
+	}
+
+	public void setPicture(Picture pict) {
+		drawingArea.setPicture(pict);
+		
 	}
 }

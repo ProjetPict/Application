@@ -65,6 +65,10 @@ public class GameObserver extends Thread{
 				else if(obj instanceof Command){
 					Main.getModel().processCommand((Command) obj);
 				}
+				else if(obj instanceof Picture)
+				{
+					Main.getView().setPicture((Picture) obj);
+				}
 				else
 					obj = null;
 				
