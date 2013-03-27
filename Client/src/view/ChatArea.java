@@ -9,14 +9,12 @@ import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
-
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import socketData.ChatCommand;
 import socketData.PlayerScore;
 import java.awt.Color;
@@ -24,6 +22,10 @@ import java.awt.Graphics;
 
 import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class ChatArea extends JPanel implements ActionListener, Observer{
 
@@ -34,7 +36,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private JTextField textAnswer;
 	private PlayerScore[] scores;
 	private JList list;
-	private JList chat;
+	private JTextPane chat;
 	private JScrollPane scrollPaneChat;
 	private JScrollPane scrollPaneScore;
 	private JTextField textChat;
@@ -45,9 +47,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private Timer timer;
 	private int time;
 	private boolean drawing;
-	private DefaultListModel dlm;
+	private StyledDocument chatDoc;
+	private MutableAttributeSet chatMAS;
 
 	public ChatArea(boolean creator) {
+
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
 		setLayout(null);
@@ -70,11 +74,17 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		add(scrollPaneScore);
 
-		dlm = new DefaultListModel();
-		chat = new JList();
-		chat.setModel(dlm);
+		chat = new JTextPane();
+		chat.setEditable(false);
 		chat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
+		chatDoc = chat.getStyledDocument();
+		chatMAS = chat.getInputAttributes();
+		/*chat.setLineWrap(true);
+		chat.setWrapStyleWord(true);*/
+
 		scrollPaneChat = new JScrollPane(chat);
+
+		scrollPaneChat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		add(scrollPaneChat);
 
@@ -100,9 +110,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 		textAnswer.setBounds((int)(100*Main.ratioX), (int)(650*Main.ratioY), 178, 20);
-		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
+		//textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
 		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 100, 20);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
+		textChat.repaint();
+		scrollPaneChat.repaint();
 		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		if(creator)
 			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(296*Main.ratioY), 89, 23);
@@ -174,14 +186,26 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		}
 		else if(arg instanceof ChatCommand){
 
-			dlm.addElement(((ChatCommand) arg).author + " : " + ((ChatCommand) arg).command);
+			ChatCommand cmd = (ChatCommand)arg;
+			try {
 
-			//descente auto de l'ascenceur
-			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
-					chat.ensureIndexIsVisible(chat.getModel().getSize()-1);
+				if(cmd.author == null || cmd.author.equals(""))
+				{
+					StyleConstants.setItalic(chatMAS, true);
+					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.command + "\n", chatMAS);
 				}
-			});
+				else{
+					StyleConstants.setBold(chatMAS, true);
+					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.author, chatMAS);
+					StyleConstants.setBold(chatMAS, false);
+					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), " : " + cmd.command + "\n", chatMAS);
+				}
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			chat.setCaretPosition(chat.getDocument().getLength());
 		}
 		else{
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();
