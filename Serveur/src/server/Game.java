@@ -9,7 +9,7 @@ import java.util.TimerTask;
 
 import socketData.AnswerCommand;
 import socketData.Command;
-import socketData.ChatMsg;
+import socketData.ChatCommand;
 import socketData.PlayerScore;
 import socketData.WordCommand;
 
@@ -286,7 +286,7 @@ public class Game extends Thread{
 		}
 	}
 	
-	public void sendChatMsg(ChatMsg msg)
+	public void sendChatMsg(ChatCommand msg)
 	{
 		for(int i = 0; i < players.size(); i++){
 			//if(!msg.author.equals(players.get(i).getLogin())){

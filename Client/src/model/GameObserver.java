@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import socketData.ChatMsg;
+import socketData.ChatCommand;
 import socketData.Command;
 import socketData.Line;
 import socketData.Picture;
@@ -59,11 +59,11 @@ public class GameObserver extends Thread{
 				else if(obj instanceof WordCommand){
 					Main.getModel().processWordCommand((WordCommand) obj);
 				}
+				else if(obj instanceof ChatCommand){
+					Main.getModel().processChatMsg((ChatCommand) obj);
+				}
 				else if(obj instanceof Command){
 					Main.getModel().processCommand((Command) obj);
-				}
-				else if(obj instanceof ChatMsg){
-					Main.getModel().processChatMsg((ChatMsg) obj);
 				}
 				else
 					obj = null;

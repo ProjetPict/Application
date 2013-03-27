@@ -9,7 +9,7 @@ import java.util.Observable;
 
 import socketData.AnswerCommand;
 import socketData.Command;
-import socketData.ChatMsg;
+import socketData.ChatCommand;
 import socketData.GameList;
 import socketData.PlayerScore;
 import socketData.WordCommand;
@@ -72,7 +72,7 @@ public class Model extends Observable{
 		}
 	}
 	
-	public void processChatMsg(ChatMsg msg){
+	public void processChatMsg(ChatCommand msg){
 		setChanged();
 		this.notifyObservers(msg);
 	}
@@ -113,17 +113,12 @@ public class Model extends Observable{
 		}
 	}
 	
-	public void sendChatMsg(String msg)
+	public void sendChatMessage(String msg)
 	{
-		ChatMsg chatMsg = new ChatMsg(msg, Main.player);
-		try {
-			out.writeObject(chatMsg);
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		sendCommand(new ChatCommand(msg, Main.player));
 	}
+	
+	
 	public GameList getGameList(){
 		return connec.getGameList();
 	}

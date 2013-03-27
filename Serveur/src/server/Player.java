@@ -9,7 +9,7 @@ import java.net.Socket;
 
 import socketData.AnswerCommand;
 import socketData.Command;
-import socketData.ChatMsg;
+import socketData.ChatCommand;
 import socketData.CreateJoinCommand;
 import socketData.Line;
 import socketData.WordCommand;
@@ -289,23 +289,20 @@ public class Player extends Thread {
 		{
 			processWordCommand((WordCommand) message);
 		}
+		else if(message instanceof ChatCommand)
+		{
+			game.sendChatMsg((ChatCommand) message);
+			//System.out.print(((ChatCommand) message).author + " envoie un message sur le chat\n");
+		}
 		else if(message instanceof Command)
 		{
 			processCommandMessage((Command) message);
 		}
-		else if(message instanceof ChatMsg)
-		{
-			processCommandChatMsg((ChatMsg) message);
-			System.out.print(((ChatMsg) message).author + " envoie un message sur le chat\n");
-		}
+		
 		
 	}
 
-	private void processCommandChatMsg(ChatMsg msg){
-		game.sendChatMsg(msg);
-	}
-
-
+	
 	private void processWordCommand(WordCommand message) {
 		if(drawing && game != null)
 		{

@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.ListModel;
 
-import socketData.ChatMsg;
+import socketData.ChatCommand;
 import socketData.PlayerScore;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -44,6 +44,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private Timer timer;
 	private int time;
 	private boolean drawing;
+	private DefaultListModel dlm;
 
 	public ChatArea(boolean creator) {
 		setBackground(Color.WHITE);
@@ -68,7 +69,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		add(scrollPaneScore);
 		
+		dlm = new DefaultListModel();
 		chat = new JList();
+		chat.setModel(dlm);
 		chat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		scrollPaneChat = new JScrollPane(chat);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
@@ -120,7 +123,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		{
 			if(!textChat.getText().equals("") && getParent() instanceof GameScreen && textChat.getText().length() > 0)
 			{
-				Main.getModel().sendChatMsg(textChat.getText());
+				Main.getModel().sendChatMessage(textChat.getText());
 				textChat.setText("");
 			}
 		}
@@ -168,16 +171,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				textAnswer.setEnabled(true);
 			
 		}
-		else if(arg instanceof ChatMsg){
-			/*DefaultListModel mod = (DefaultListModel) chat.getModel();
-			mod.addElement(((ChatMsg) arg).author + " : " + ((ChatMsg) arg).msg);
-			chat.setModel(mod);*/
-			DefaultListModel dLM = new DefaultListModel();
-			for(int i=0; i < chat.getModel().getSize(); i++){
-				dLM.addElement(chat.getModel().getElementAt(i));
-			}
-			dLM.addElement(((ChatMsg) arg).author + " : " + ((ChatMsg) arg).msg);
-			chat.setModel(dLM);
+		else if(arg instanceof ChatCommand){
+			
+			dlm.addElement(((ChatCommand) arg).author + " : " + ((ChatCommand) arg).command);
+			
 		}
 		else{
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();
