@@ -9,6 +9,7 @@ import java.util.Observable;
 
 import socketData.AnswerCommand;
 import socketData.Command;
+import socketData.ChatMsg;
 import socketData.GameList;
 import socketData.PlayerScore;
 import socketData.WordCommand;
@@ -71,6 +72,11 @@ public class Model extends Observable{
 		}
 	}
 	
+	public void processChatMsg(ChatMsg msg){
+		setChanged();
+		this.notifyObservers(msg);
+	}
+	
 	public void processWordCommand(WordCommand command)
 	{
 		if(command.command.equals(""))
@@ -107,6 +113,17 @@ public class Model extends Observable{
 		}
 	}
 	
+	public void sendChatMsg(String msg)
+	{
+		ChatMsg chatMsg = new ChatMsg(msg, Main.player);
+		try {
+			out.writeObject(chatMsg);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public GameList getGameList(){
 		return connec.getGameList();
 	}

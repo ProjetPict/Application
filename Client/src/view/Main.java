@@ -15,6 +15,7 @@ public class Main {
 	private static Model model;
 	private static View view;
 	private static String host = "localhost";
+	public static String player;
 	public static ResourceBundle texts;
 	public static final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 	public static final int SCREEN_HEIGHT = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;

@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 import socketData.AnswerCommand;
 import socketData.Command;
+import socketData.ChatMsg;
 import socketData.PlayerScore;
 import socketData.WordCommand;
 
@@ -282,6 +283,23 @@ public class Game extends Thread{
 				}
 
 			}
+		}
+	}
+	
+	public void sendChatMsg(ChatMsg msg)
+	{
+		for(int i = 0; i < players.size(); i++){
+			//if(!msg.author.equals(players.get(i).getLogin())){
+				ObjectOutputStream out = players.get(i).getOutput();
+				try {
+					out.writeObject(msg);
+					out.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			//}
 		}
 	}
 

@@ -146,6 +146,7 @@ public class Login extends JPanel implements ActionListener{
 			  boolean res = Main.getModel().connect(login.getText(),password.getText());
 			  if(res){
 				  //javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
+				  Main.player = login.getText();
 				  Main.getView().setPanel("Browser", false);
 			  }
 			  else

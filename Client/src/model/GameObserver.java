@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import socketData.ChatMsg;
 import socketData.Command;
 import socketData.Line;
 import socketData.Picture;
@@ -45,27 +46,24 @@ public class GameObserver extends Thread{
 			try {
 				Object obj=in.readObject();
 				
-				if(obj instanceof Point)
-				{
+				if(obj instanceof Point){
 					pict.addPoint((Point)obj);
 				}
-				else if(obj instanceof Line)
-				{
-					
+				else if(obj instanceof Line){
 					pict.addLine((Line) obj);
 				}
-				else if(obj instanceof PlayerScore)
-				{
+				else if(obj instanceof PlayerScore){
 					
 					Main.getModel().addPlayerScore((PlayerScore) obj);
 				}
-				else if(obj instanceof WordCommand)
-				{
+				else if(obj instanceof WordCommand){
 					Main.getModel().processWordCommand((WordCommand) obj);
 				}
-				else if(obj instanceof Command)
-				{
+				else if(obj instanceof Command){
 					Main.getModel().processCommand((Command) obj);
+				}
+				else if(obj instanceof ChatMsg){
+					Main.getModel().processChatMsg((ChatMsg) obj);
 				}
 				else
 					obj = null;

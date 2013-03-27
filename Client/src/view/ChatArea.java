@@ -9,11 +9,14 @@ import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.ListModel;
 
+import socketData.ChatMsg;
 import socketData.PlayerScore;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -27,9 +30,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textField;
+	private JTextField textAnswer;
 	private PlayerScore[] scores;
 	private JList list;
+	private JList chat;
+	private JScrollPane scrollPaneChat;
+	private JScrollPane scrollPaneScore;
+	private JTextField textChat;
 	private JLabel lblAnswer;
 	private JButton btnStartGame;
 	private boolean creator;
@@ -43,23 +50,35 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		scores = new PlayerScore[]{};
 		setLayout(null);
 		drawing = true;
-		textField = new JTextField();
-		textField.setBounds((int)(132*Main.ratioX), (int)(646*Main.ratioY), 186, 20);
-		add(textField);
-		textField.setColumns(10);
-		textField.addActionListener(this);
+		textAnswer = new JTextField();
+		textAnswer.setBounds((int)(132*Main.ratioX), (int)(646*Main.ratioY), 186, 20);
+		add(textAnswer);
+		textAnswer.setColumns(10);
+		textAnswer.addActionListener(this);
 
 		lblAnswer = new JLabel(Main.texts.getString("answer"));
-		lblAnswer.setBounds((int)(76*Main.ratioX), (int)(649*Main.ratioY), 46, 14);
+		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 46, 30);
 		add(lblAnswer);
 
 		Main.getModel().addObserver(this);
 
 		list = new JList();
-		list.setBounds(83, 84, 284, 150);
-		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setBounds(83, 84, 284, 150);
-		add(scrollPane);
+		list.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY), (int)(200*Main.ratioX), (int)(150*Main.ratioY));
+		scrollPaneScore = new JScrollPane(list);
+		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
+		add(scrollPaneScore);
+		
+		chat = new JList();
+		chat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
+		scrollPaneChat = new JScrollPane(chat);
+		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
+		add(scrollPaneChat);
+		
+		textChat = new JTextField();
+		textChat.addActionListener(this);
+		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
+		add(textChat);
+		
 
 		lblTimer = new JLabel();
 		lblTimer.setBounds((int)(50*Main.ratioX), (int)(20*Main.ratioY), 46, 14);
@@ -67,7 +86,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		
 		if(creator){
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
-			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(296*Main.ratioY), 89, 23);
+			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(50*Main.ratioY), 89, 23);
 			btnStartGame.addActionListener(this);
 			add(btnStartGame);
 		}
@@ -76,8 +95,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
-		textField.setBounds((int)(132*Main.ratioX), (int)(646*Main.ratioY), 186, 20);
-		lblAnswer.setBounds((int)(76*Main.ratioX), (int)(649*Main.ratioY), 46, 14);
+		textAnswer.setBounds((int)(100*Main.ratioX), (int)(650*Main.ratioY), 178, 20);
+		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
+		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 100, 20);
+		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
+		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		if(creator)
 			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(296*Main.ratioY), 89, 23);
 
@@ -86,12 +108,20 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == textField)
+		if(e.getSource() == textAnswer)
 		{
-			if(!textField.getText().equals("") && getParent() instanceof GameScreen && textField.getText().length() > 2)
+			if(!textAnswer.getText().equals("") && getParent() instanceof GameScreen && textAnswer.getText().length() > 2)
 			{
-				Main.getModel().sendAnswer(textField.getText(), ((GameScreen)getParent()).getNbPixels());
-				textField.setText("");
+				Main.getModel().sendAnswer(textAnswer.getText(), ((GameScreen)getParent()).getNbPixels());
+				textAnswer.setText("");
+			}
+		}
+		else if(e.getSource() == textChat)
+		{
+			if(!textChat.getText().equals("") && getParent() instanceof GameScreen && textChat.getText().length() > 0)
+			{
+				Main.getModel().sendChatMsg(textChat.getText());
+				textChat.setText("");
 			}
 		}
 		else if(e.getSource() == btnStartGame)
@@ -133,10 +163,21 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			drawing = (Boolean) arg;
 			
 			if(drawing == true)
-				textField.setEnabled(false);
+				textAnswer.setEnabled(false);
 			else
-				textField.setEnabled(true);
+				textAnswer.setEnabled(true);
 			
+		}
+		else if(arg instanceof ChatMsg){
+			/*DefaultListModel mod = (DefaultListModel) chat.getModel();
+			mod.addElement(((ChatMsg) arg).author + " : " + ((ChatMsg) arg).msg);
+			chat.setModel(mod);*/
+			DefaultListModel dLM = new DefaultListModel();
+			for(int i=0; i < chat.getModel().getSize(); i++){
+				dLM.addElement(chat.getModel().getElementAt(i));
+			}
+			dLM.addElement(((ChatMsg) arg).author + " : " + ((ChatMsg) arg).msg);
+			chat.setModel(dLM);
 		}
 		else{
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();

@@ -91,8 +91,8 @@ public class Fenetre extends JFrame implements WindowListener {
 		edition.add(cut);
 		edition.add(paste);
 		clipManage = new ClipboardManager();
-		if(clipManage.getClipboardContents().length()==0)
-			paste.setEnabled(false);
+		/*if(clipManage.getClipboardContents().length()==0)
+			paste.setEnabled(false);*/
 
 		maintenance.add(annonce);
 		maintenance.addSeparator();
