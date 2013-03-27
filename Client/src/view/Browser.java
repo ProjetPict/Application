@@ -180,7 +180,8 @@ public class Browser extends JPanel implements ActionListener{
 		{
 			if(password.equals(""))
 				password = null;
-			res = Main.getModel().createGame(name, password, pmax, turns);
+			//TODO ajouter choix difficulté
+			res = Main.getModel().createGame(name, password, pmax, turns, 1);
 			JOptionPane.showMessageDialog(this,res);
 			if(res.equals("success"))
 				Main.getView().setPanel("GameScreen", true);

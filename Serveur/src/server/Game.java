@@ -33,6 +33,7 @@ public class Game extends Thread{
 	private boolean running;
 	private boolean started; //True si la partie a demarr�
 	private String word;
+	private int difficulty;
 
 	private int time;
 	private Timer timer;
@@ -44,7 +45,7 @@ public class Game extends Thread{
 	 * @param name
 	 * @param password
 	 */
-	public Game(Player creator, String name, String password, int pMax, int turns){
+	public Game(Player creator, String name, String password, int pMax, int turns, int difficulty){
 		this.name = name;
 		this.password = password; 	//vide si publique 
 		players = new ArrayList<Player>();
@@ -61,28 +62,19 @@ public class Game extends Thread{
 			this.turns = turns;
 		else
 			this.turns = Server.TURNS;
+		
+		if(difficulty >= 0 && difficulty <= 3)
+		{
+			this.difficulty = difficulty;
+		}
+		else
+			this.difficulty = 0;
 
 		currentTurn = 0;
 		started = false;
 		podium = new ArrayList<Player>();
 		firstAnswers = new ArrayList<Player>();
 
-	}
-
-
-	/**
-	 * 
-	 * @param creator
-	 * @param name
-	 * @param password
-	 * @param pMax
-	 */
-	public Game(Player creator, String name, String password, int pMax){
-		players = new ArrayList<Player>();
-		players.add(creator);
-		this.password = password; 	//vide si publique 
-		this.pMax = pMax;
-		this.name = name;
 	}
 
 
@@ -113,9 +105,9 @@ public class Game extends Thread{
 						{
 
 							setupNextPlayer();
-							
+
 							sendCommand(new Command("startturn"));
-							
+
 							launchTimer(60);
 
 							computeScores();
@@ -124,13 +116,13 @@ public class Game extends Thread{
 							{
 								sendScores(players.get(j));
 							}
-							
+
 							drawingPlayer.setDrawing(false);
-							
+
 							for(Player p: players){
 								p.resetHasFound();
 							}
-							
+
 						}
 					}
 
@@ -206,7 +198,7 @@ public class Game extends Thread{
 		return pMax;
 	}
 
-	
+
 	/**
 	 * Ajoute un joueur dans la partie.
 	 * @param p
@@ -285,19 +277,19 @@ public class Game extends Thread{
 			}
 		}
 	}
-	
+
 	public void sendChatMsg(ChatCommand msg)
 	{
 		for(int i = 0; i < players.size(); i++){
 			//if(!msg.author.equals(players.get(i).getLogin())){
-				ObjectOutputStream out = players.get(i).getOutput();
-				try {
-					out.writeObject(msg);
-					out.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			ObjectOutputStream out = players.get(i).getOutput();
+			try {
+				out.writeObject(msg);
+				out.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			//}
 		}
@@ -329,7 +321,7 @@ public class Game extends Thread{
 	private boolean launchTimer(int t)
 	{
 		boolean res = true;
-		
+
 		if(timer == null)
 		{
 			this.time = t;
@@ -351,7 +343,7 @@ public class Game extends Thread{
 					e.printStackTrace();
 				}
 			}
-			
+
 			timer.cancel();
 			timer = null;
 		}
@@ -368,7 +360,8 @@ public class Game extends Thread{
 		drawingPlayer.setDrawing(true);
 
 		//TODO integrer le tirage de mots al�atoire
-		WordCommand choices = new WordCommand("test1", "test2", "test3", 1);
+		String[] words = chooseNextWords();
+		WordCommand choices = new WordCommand(words[0], words[1], words[2], 1);
 		drawingPlayer.setChoices(choices);
 
 		launchTimer(30);
@@ -394,6 +387,27 @@ public class Game extends Thread{
 		//TODO setupNextPlayer
 	}
 
+	private String[] chooseNextWords() {
+		ArrayList<String> words = Server.getDbInfos().getWordsList(difficulty);
+		String[] choices = new String[]{"", "", ""};
+
+		String random;
+		int randomIndex;
+		
+		for(int i = 0; i < 3; i++)
+		{
+			do{
+				randomIndex = (int)(Math.random() * words.size());
+				random = words.get(randomIndex);
+			}while(choices[0].equals(random) || choices[1].equals(random) 
+					|| choices[2].equals(random));
+			choices[i] = random;
+		}
+
+		return choices;
+	}
+
+
 	private void startTurn()
 	{
 		//TODO startTurn
@@ -407,12 +421,12 @@ public class Game extends Thread{
 	private void computeScores()
 	{
 		int nbFound = 0; //number of player who found the word
-		
+
 		//Set score for "finding players"
 		for(Player p: players){
 			if(p.hasFound() && p != drawingPlayer){
 				nbFound++;
-				
+
 				if(firstAnswers.contains(p)){
 					int rank = firstAnswers.indexOf(p);
 					switch(rank){
@@ -425,10 +439,10 @@ public class Game extends Thread{
 				}
 			}
 		}
-		
+
 		//Set score for the "drawing player"
 		int findingRatio = (nbFound/(players.size()-1))*100;
-		
+
 		if(findingRatio == 100){
 			drawingPlayer.setScore(drawingPlayer.getScore()+5);
 		}else if(findingRatio > 75){
@@ -440,9 +454,9 @@ public class Game extends Thread{
 		}else if(nbFound > 0){
 			drawingPlayer.setScore(drawingPlayer.getScore()+1);
 		}
-		
+
 	}
-	
+
 
 	public boolean checkAnswer(AnswerCommand answer, Player player)
 	{
@@ -492,7 +506,7 @@ public class Game extends Thread{
 			}
 		}
 	}
-	
+
 	public void sendScoresToAll()
 	{
 		for(int i = 0; i < players.size(); i++)
@@ -520,5 +534,5 @@ public class Game extends Thread{
 		time = 0;
 		this.word = word;
 	}
-	
+
 }

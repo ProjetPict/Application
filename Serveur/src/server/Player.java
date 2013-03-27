@@ -100,18 +100,18 @@ public class Player extends Thread {
 	public String getLogin(){
 		return login;
 	}
-	
-	
+
+
 	public long getNbPixels()
 	{
 		return nbPixels;
 	}
-	
+
 	public void setNbPixels(long nbPixels)
 	{
 		this.nbPixels = nbPixels;
 	}
-	
+
 	public int getScore()
 	{
 		return score;
@@ -120,20 +120,20 @@ public class Player extends Thread {
 	public boolean hasFound(){
 		return hasFound;
 	}
-	
+
 	public void resetHasFound(){
 		hasFound = false;
 	}
-	
+
 	public void setScore(int score)
 	{
 		this.score = score;
 	}
-	
+
 	public void setChoices(WordCommand choices)
 	{
 		this.choices = choices;
-		
+
 		try {
 			out.writeObject(choices);
 			out.flush();
@@ -228,7 +228,7 @@ public class Player extends Thread {
 	 */
 	public void sendResult(boolean result)
 	{
-		
+
 		try {
 			if(result)
 			{
@@ -242,7 +242,7 @@ public class Player extends Thread {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 		}
 	}
 
@@ -269,7 +269,7 @@ public class Player extends Thread {
 	public void processTypeMessage(Object message)
 	{
 		if(message instanceof Point || message instanceof Line){
-			
+
 			if(drawing){
 				game.sendData(message, this);
 				sendResult(message!=null);
@@ -298,11 +298,11 @@ public class Player extends Thread {
 		{
 			processCommandMessage((Command) message);
 		}
-		
-		
+
+
 	}
 
-	
+
 	private void processWordCommand(WordCommand message) {
 		if(drawing && game != null)
 		{
@@ -317,10 +317,10 @@ public class Player extends Thread {
 				}
 			}
 		}
-		
+
 	}
-	
-	
+
+
 
 
 	/**
@@ -389,7 +389,7 @@ public class Player extends Thread {
 		if(game.checkAnswer(message, this)){
 			hasFound = true;
 		}
-			
+
 
 	}
 
@@ -403,9 +403,10 @@ public class Player extends Thread {
 	{
 		if(message.command.equals("creategame"))
 		{
-			game = Server.createGame(this, message.name, message.password, message.pMax, message.turns);
+			game = Server.createGame(this, message.name, message.password, message.pMax, 
+					message.turns, message.difficulty);
 			sendResult(game != null);
-			
+
 			if(game != null)
 			{
 				game.sendScores(this);

@@ -158,7 +158,8 @@ public class Server extends Thread{
 	 * @param pMax
 	 * @return La partie créée
 	 */
-	public static Game createGame(Player creator, String name, String password, int pMax, int turns){
+	public static Game createGame(Player creator, String name, String password, int pMax, 
+			int turns, int difficulty){
 
 		Game game = null;
 
@@ -167,7 +168,7 @@ public class Server extends Thread{
 			if(!games.containsKey(name))
 			{
 				
-				game = new Game(creator, name, password, pMax, turns);
+				game = new Game(creator, name, password, pMax, turns, difficulty);
 			
 				games.put(name, game);
 				game.start();

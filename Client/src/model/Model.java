@@ -135,8 +135,9 @@ public class Model extends Observable{
 		return scores;
 	}
 	
-	public String createGame(String name, String password, int pMax, int turns){
-		String res = connec.createGame(name, password, pMax, turns);
+	public String createGame(String name, String password, int pMax, 
+			int turns, int difficulty){
+		String res = connec.createGame(name, password, pMax, turns, difficulty);
 		if(res.equals("success"))
 			scores = new Hashtable<String, PlayerScore>();
 		return res;
