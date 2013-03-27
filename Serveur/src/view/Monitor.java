@@ -70,7 +70,7 @@ public class Monitor extends JPanel {
     		infos.add(new JLabel("Impossible de récupérer l'adresse ip."));
     	}
     	infos.add(new JLabel("Intervalle de sauvegarde historique :"));
-    	infos.add(new JLabel("Toutes les 20 minutes"));
+    	infos.add(new JLabel("Toutes les 10 minutes"));
     	infos.add(new JLabel(""));
     	infos.add(new JLabel(""));
     	infos.add(new JLabel("Joueurs connectés :"));

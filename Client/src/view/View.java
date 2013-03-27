@@ -15,6 +15,7 @@ public class View {
 	private static Window window;
 	private Login login;
 	private Browser browser;
+	private BrowserVDeux browserV2;
 	private GameScreen gmScreen;
 	private GameObserver go;
 
@@ -26,6 +27,8 @@ public class View {
 		if(panelType.equals("Browser")){
 			browser = new Browser();
 			window.setPanel(browser);
+			//browserV2 = new BrowserVDeux();
+			//window.setPanel(browserV2);
 		}
 		else if (panelType.equals("Login")){
 			login = new Login();
