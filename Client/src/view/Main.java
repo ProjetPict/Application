@@ -1,5 +1,9 @@
 package view;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import model.GameObserver;
@@ -14,7 +18,7 @@ public class Main {
 
 	private static Model model;
 	private static View view;
-	private static String host = "localhost";
+	private static String host;
 	public static String player;
 	public static ResourceBundle texts;
 	public static final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -40,6 +44,24 @@ public class Main {
 		offsetX = (gameWidth - 1024)/2;
 		
 		texts = ResourceBundle.getBundle("TextBundle", Locale.getDefault());
+		
+		//Get the host from the property file
+		Properties hostProp = new Properties();
+		FileReader fr;
+
+		try {
+			fr = new FileReader("host.conf");
+			hostProp.load(fr);
+			
+			host = hostProp.getProperty("host");
+			
+			fr.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		model = new Model(host);
 		view = new View();
 		view.setPanel("Login", false);
