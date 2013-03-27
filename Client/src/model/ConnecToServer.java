@@ -32,7 +32,8 @@ public class ConnecToServer{
 	{
 		
 		
-		Command com = new Command(login);
+		Command log = new Command(login);
+		Command pass = new Command(password);
 		
 		if(connected){
 			return false;
@@ -49,7 +50,9 @@ public class ConnecToServer{
 		try{
 			//attente du signal d'envoi et envoi du login
 			
-			out.writeObject(com);
+			out.writeObject(log);
+			out.flush();
+			out.writeObject(pass);
 			out.flush();
 		}catch (IOException e) {
 			e.printStackTrace();
