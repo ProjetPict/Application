@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 
 import socketData.ChatCommand;
 import socketData.PlayerScore;
@@ -68,7 +69,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		scrollPaneScore = new JScrollPane(list);
 		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		add(scrollPaneScore);
-		
+
 		dlm = new DefaultListModel();
 		chat = new JList();
 		chat.setModel(dlm);
@@ -76,17 +77,17 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		scrollPaneChat = new JScrollPane(chat);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		add(scrollPaneChat);
-		
+
 		textChat = new JTextField();
 		textChat.addActionListener(this);
 		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
 		add(textChat);
-		
+
 
 		lblTimer = new JLabel();
 		lblTimer.setBounds((int)(50*Main.ratioX), (int)(20*Main.ratioY), 46, 14);
 		add(lblTimer);
-		
+
 		if(creator){
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
 			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(50*Main.ratioY), 89, 23);
@@ -142,12 +143,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			timer.cancel();
 		timer = new Timer();
 
-		
+
 		lblTimer.setText(String.valueOf(time));
 		timer.schedule(new TimerTask() {
 			public void run() {
 				time--;
-				
+
 				lblTimer.setText(String.valueOf(time));
 				if(time <= 0)
 					this.cancel();
@@ -164,25 +165,31 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		if(arg instanceof Boolean)
 		{
 			drawing = (Boolean) arg;
-			
+
 			if(drawing == true)
 				textAnswer.setEnabled(false);
 			else
 				textAnswer.setEnabled(true);
-			
+
 		}
 		else if(arg instanceof ChatCommand){
-			
+
 			dlm.addElement(((ChatCommand) arg).author + " : " + ((ChatCommand) arg).command);
-			
+
+			//descente auto de l'ascenceur
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					chat.ensureIndexIsVisible(chat.getModel().getSize()-1);
+				}
+			});
 		}
 		else{
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();
 			scores = new PlayerScore[temp.size()];
 			//scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
-			
+
 			Iterator<PlayerScore> it = temp.iterator();
-			
+
 			int i = 0;
 			while(it.hasNext())
 			{
@@ -190,12 +197,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				scores[i] = ps;
 				i++;
 			}
-			
+
 			if(scores.length > 0)
 			{
 				list.setListData(scores);
 			}
 		}
 	}
-	
+
 }
