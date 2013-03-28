@@ -20,6 +20,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Ecran de Login
@@ -29,19 +32,19 @@ import java.awt.event.MouseEvent;
 public class Login extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private JButton btnConnec;
 	private JTextField login;
-	private JPasswordField password;
+	public JPasswordField password;
 	private JLabel newAccount;
 	private JLabel passwordForget;
-    private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png"));
-    private Image imgBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/login.jpg"));
-    private Image imgFieldUser = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_username.png"));
-    private Image imgFieldPass = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_password.png"));
-    private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
-    private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
-	
+	private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png"));
+	private Image imgBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/login.jpg"));
+	private Image imgFieldUser = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_username.png"));
+	private Image imgFieldPass = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_password.png"));
+	private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
+	private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
+
 	public Login(){
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -51,7 +54,12 @@ public class Login extends JPanel implements ActionListener{
 		});
 		this.setLayout(null);
 		btnConnec = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/btn_login.png"))));
-		login = new JTextField(Main.texts.getString("login"));
+		String strLogin = Main.settingsProp.getProperty("username");
+
+		if(strLogin!= null)
+			login = new JTextField(strLogin);
+		else
+			login = new JTextField(Main.texts.getString("login"));
 		login.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -59,7 +67,7 @@ public class Login extends JPanel implements ActionListener{
 					login.setText("");
 				}
 			}
-			
+
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				if(login.getText().equals(""))
@@ -68,28 +76,15 @@ public class Login extends JPanel implements ActionListener{
 				}
 			}
 		});
+
+		if(strLogin!= null)
+			password = new JPasswordField("");
+		else
+			password = new JPasswordField("**********");
 		
-		password = new JPasswordField("**********");
-		password.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				if(password.getText().equals("**********"))
-				{
-					password.setText("");
-				}
-			}
-			
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				if(password.getText().equals(""))
-				{
-					password.setText("**********");
-				}
-			}
-		});
 		newAccount = new JLabel(Main.texts.getString("new_account"));
 		passwordForget = new JLabel(Main.texts.getString("password_forget"));
-		
+
 		this.add(login);
 		this.add(password);
 		this.add(btnConnec);
@@ -119,13 +114,13 @@ public class Login extends JPanel implements ActionListener{
 		passwordForget.setForeground(Color.white);
 		passwordForget.setFont(fontBasicLow);
 		passwordForget.setBounds((int)(Main.gameWidth-330)/2, (int)(570*Main.ratioY), 300, 30);
-		
+
 		btnConnec.addActionListener(this);
 		login.addActionListener(this);
 		password.addActionListener(this);
-		
+
 	}
-	
+
 	public void paintComponent(Graphics g) {
 		int calcWidthUser = (int)(Main.gameWidth-330)/2;
 		btnConnec.setLocation(calcWidthUser+140,(int)(430*Main.ratioY));
@@ -133,24 +128,34 @@ public class Login extends JPanel implements ActionListener{
 		login.setLocation(calcWidthUser+35, (int)(320*Main.ratioY));
 		newAccount.setLocation((int)(Main.gameWidth-330)/2, (int)(540*Main.ratioY));
 		passwordForget.setLocation((int)(Main.gameWidth-330)/2, (int)(570*Main.ratioY));
-		
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.drawImage(imgBackground, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
-        g2d.drawImage(imgLogo, (int)(Main.gameWidth-346)/2, (int)(50*Main.ratioX), 346, 116, this);
-        g2d.drawImage(imgFieldUser, calcWidthUser, (int)(320*Main.ratioY), 330, 30, this);
-        g2d.drawImage(imgFieldPass, calcWidthUser, (int)(390*Main.ratioY), 330, 30, this);
+
+		Graphics2D g2d = (Graphics2D)g;
+		g2d.drawImage(imgBackground, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
+		g2d.drawImage(imgLogo, (int)(Main.gameWidth-346)/2, (int)(50*Main.ratioX), 346, 116, this);
+		g2d.drawImage(imgFieldUser, calcWidthUser, (int)(320*Main.ratioY), 330, 30, this);
+		g2d.drawImage(imgFieldPass, calcWidthUser, (int)(390*Main.ratioY), 330, 30, this);
 	}
-	
+
 	public void actionPerformed(ActionEvent arg0) {
-		  if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
-			  boolean res = Main.getModel().connect(login.getText(),password.getText());
-			  if(res){
-				  //javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
-				  Main.player = login.getText();
-				  Main.getView().setPanel("Browser", false);
-			  }
-			  else
-				  javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_fail"));
-		  } 
+		if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
+			boolean res = Main.getModel().connect(login.getText(),password.getText());
+			if(res){
+				//javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
+				Main.settingsProp.setProperty("username", login.getText());
+				try {
+					Main.settingsProp.store(new FileOutputStream("settings.conf"), null);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Main.player = login.getText();
+				Main.getView().setPanel("Browser", false);
+			}
+			else
+				javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_fail"));
+		} 
 	}
 }

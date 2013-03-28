@@ -79,7 +79,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		chat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		chatDoc = chat.getStyledDocument();
 		chatMAS = chat.getInputAttributes();
-		
+
 
 		scrollPaneChat = new JScrollPane(chat);
 		scrollPaneChat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -108,7 +108,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	{
 		if(btnStartGame != null)
 		{
-			
+
 			btnStartGame.setVisible(enable);
 		}
 	}
@@ -179,6 +179,14 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	}
 
 
+	public void cancelTimer()
+	{
+		time = 0;
+		timer.cancel();
+		timer = null;
+	}
+
+
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -201,9 +209,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				if(cmd.author == null || cmd.author.equals(""))
 				{
 					StyleConstants.setItalic(chatMAS, true);
-					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.command + "\n", chatMAS);
+					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.command, chatMAS);
+					StyleConstants.setItalic(chatMAS, false);
+					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), "\n", chatMAS);
+					
 				}
 				else{
+					StyleConstants.setItalic(chatMAS, false);
 					StyleConstants.setBold(chatMAS, true);
 					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.author, chatMAS);
 					StyleConstants.setBold(chatMAS, false);

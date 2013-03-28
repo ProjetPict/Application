@@ -60,6 +60,10 @@ public class Model extends Observable{
 		{
 			Main.getView().startTurn();
 		}
+		else if(command.command.equals("endturn"))
+		{
+			Main.getView().endTurn();
+		}
 		else if(command.command.equals("startdraw"))
 		{
 			setChanged();

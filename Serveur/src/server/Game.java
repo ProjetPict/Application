@@ -37,6 +37,7 @@ public class Game extends Thread{
 	private boolean started; //True si la partie a demarrï¿½
 	private String word;
 	private int difficulty;
+	private int nbAnswer;
 	
 	private Picture currentDrawing;
 
@@ -58,6 +59,7 @@ public class Game extends Thread{
 		drawingPlayer = null;
 		currentDrawing = new Picture();
 		word = "";
+		nbAnswer = 0;
 
 		if(pMax > 1 && pMax <= 25)
 			this.pMax = pMax;
@@ -114,13 +116,15 @@ public class Game extends Thread{
 							sendCommand(new Command("startturn"));
 
 							launchTimer(60);
-
+							
 							computeScores();
 
 							for(int j = 0; j < players.size(); j++)
 							{
 								sendScores(players.get(j));
 							}
+							
+							sendCommand(new Command("endturn"));
 
 							drawingPlayer.setDrawing(false);
 
@@ -216,6 +220,7 @@ public class Game extends Thread{
 			players.add(p);
 			p.sendResult(true);
 			sendScoresToAll(p);
+			sendCommand(new ChatCommand(p.getLogin() + " a rejoint la partie.", null));
 			return true;
 		}
 		return false;
@@ -247,6 +252,8 @@ public class Game extends Thread{
 			running = false;
 			Server.removeGame(this);
 		}
+		else
+			sendCommand(new ChatCommand(player.getLogin() + " a quitté la partie.", null));
 	}
 
 
@@ -330,10 +337,8 @@ public class Game extends Thread{
 	}
 
 
-	private boolean launchTimer(int t)
+	private void launchTimer(int t)
 	{
-		boolean res = true;
-
 		if(timer == null)
 		{
 			this.time = t;
@@ -359,16 +364,13 @@ public class Game extends Thread{
 			timer.cancel();
 			timer = null;
 		}
-		else
-			res = false;
-
-		return res;
 	}
 
 	private void setupNextPlayer()
 	{
 		firstAnswers.clear();
 		word = "";
+		nbAnswer = 0;
 		currentDrawing.clear();
 		drawingPlayer.setDrawing(true);
 
@@ -478,6 +480,13 @@ public class Game extends Thread{
 		if(answer.command.equals(word))
 		{
 			res = true;
+			nbAnswer++;
+			
+			if(nbAnswer >= players.size()-1)
+			{
+				time = 0;
+			}
+			
 			player.setNbPixels(answer.nbPixels);
 
 			Player p;

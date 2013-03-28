@@ -1,4 +1,6 @@
 package view;
+import java.awt.Toolkit;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class Main {
 	public static double ratioY;
 	public static double offsetX;
 	public static double offsetY;
+	public static Properties settingsProp;
 	
 	
 	public static void main(String[] argc)
@@ -46,16 +49,16 @@ public class Main {
 		texts = ResourceBundle.getBundle("TextBundle", Locale.getDefault());
 		
 		//Get the host from the property file
-		Properties hostProp = new Properties();
-		FileReader fr;
+		settingsProp = new Properties();
+		
 
 		try {
-			fr = new FileReader("host.conf");
-			hostProp.load(fr);
 			
-			host = hostProp.getProperty("host");
 			
-			fr.close();
+			settingsProp.load(new FileInputStream("settings.conf"));
+			
+			host = settingsProp.getProperty("host");
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

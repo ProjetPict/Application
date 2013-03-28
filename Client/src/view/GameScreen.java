@@ -149,4 +149,9 @@ public class GameScreen extends JPanel{
 		drawingArea.setPicture(pict);
 		
 	}
+
+	public void endTurn() {
+		drawingArea.clearScreen();
+		chatArea.cancelTimer();
+	}
 }
