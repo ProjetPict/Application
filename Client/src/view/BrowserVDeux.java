@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -19,6 +20,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -71,10 +73,9 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	private JComboBox jcbDifficulty;
 	
 	private JLabel lblFilter;
-	private JLabel lblShowEmpty;
-	private JComboBox jcbShowEmpty;
-	private JLabel lblShowFull;
-	private JComboBox jcbShowFull;
+	private JCheckBox cbShowFull;
+	private JCheckBox cbShowPrivate;
+	private JCheckBox cbShowActive;
 	private JLabel lblSearch;
 	private JTextField txtSearch;
 	private JButton btnApply;
@@ -104,18 +105,20 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		txtTurn = new JTextField();
 		lblDifficulty = new JLabel(Main.texts.getString("difficulty_choice"));
 		String[] difficulties = { Main.texts.getString("difficulty_easy"), Main.texts.getString("difficulty_medium"), Main.texts.getString("difficulty_hard") };
-		String[] yesNo = { Main.texts.getString("yes"), Main.texts.getString("no") };
 		jcbDifficulty = new JComboBox(difficulties);
 		
 		lblFilter = new JLabel(Main.texts.getString("filter"));
 		lblFilter.setFont(new Font("Arial", Font.PLAIN, 26));
-		lblShowEmpty = new JLabel(Main.texts.getString("show_empty"));
-		jcbShowEmpty = new JComboBox(yesNo);
-		lblShowFull = new JLabel(Main.texts.getString("show_empty"));
-		jcbShowFull = new JComboBox(yesNo);
+		cbShowFull = new JCheckBox(Main.texts.getString("show_full"),true);
+		cbShowFull.setBackground(Color.white);
+		cbShowPrivate = new JCheckBox(Main.texts.getString("show_private"),true);
+		cbShowPrivate.setBackground(Color.white);
+		cbShowActive = new JCheckBox(Main.texts.getString("show_active"),true);
+		cbShowActive.setBackground(Color.white);
 		lblSearch = new JLabel(Main.texts.getString("search"));
+		lblSearch.setFont(new Font("Arial", Font.PLAIN, 26));
 		txtSearch = new JTextField();
-		btnApply = new JButton(Main.texts.getString("apply"));
+		btnApply = new JButton(Main.texts.getString("search"));
 
 		crtPane = new JPanel();
 		crtPane.setVisible(false);
@@ -141,10 +144,9 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		this.add(btnRefresh);
 		this.add(scrlPane);
 		this.add(lblFilter);
-		this.add(lblShowEmpty);
-		this.add(jcbShowEmpty);
-		this.add(lblShowFull);
-		this.add(jcbShowFull);
+		this.add(cbShowFull);
+		this.add(cbShowPrivate);
+		this.add(cbShowActive);
 		this.add(lblSearch);
 		this.add(txtSearch);
 		this.add(btnApply);
@@ -191,14 +193,13 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		btnJoin.setBounds((int)Main.gameWidth-310, 150, 250, 30);
 		btnPnlCreate.setBounds((int)Main.gameWidth-310, 190, 250, 30);
 		btnRefresh.setBounds((int)Main.gameWidth-310, 230, 250, 30);
-		lblFilter.setLocation((int)Main.gameWidth-310, 290);
-		lblShowEmpty.setLocation((int)Main.gameWidth-310, 325);
-		jcbShowEmpty.setLocation((int)Main.gameWidth-310, 345);
-		lblShowFull.setLocation((int)Main.gameWidth-310, 380);
-		jcbShowFull.setLocation((int)Main.gameWidth-310, 400);
-		lblSearch.setLocation((int)Main.gameWidth-310, 435);
-		txtSearch.setBounds((int)Main.gameWidth-310, 465, 250, 30);
-		btnApply.setBounds((int)Main.gameWidth-310, 500, 250, 30);
+		lblFilter.setLocation((int)Main.gameWidth-307, 290);
+		cbShowFull.setLocation((int)Main.gameWidth-310, 320);
+		cbShowPrivate.setLocation((int)Main.gameWidth-310, 340);
+		cbShowActive.setLocation((int)Main.gameWidth-310, 360);
+		lblSearch.setLocation((int)Main.gameWidth-310, 410);
+		txtSearch.setBounds((int)Main.gameWidth-310, 440, 250, 30);
+		btnApply.setBounds((int)Main.gameWidth-310, 475, 250, 30);
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
         g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
