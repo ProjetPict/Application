@@ -2,11 +2,15 @@ package view;
 import java.awt.Toolkit;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import model.GameObserver;
 import model.Model;
@@ -33,54 +37,57 @@ public class Main {
 	public static double offsetY;
 	public static Properties settingsProp;
 	
-	
-	public static void main(String[] argc)
-	{
-		//Locale locale = new Locale("fr");
-		//Locale locale2 = new Locale("en");
-		//texts = ResourceBundle.getBundle("TextBundle", locale2);
-		
-		gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
-		gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
-		ratioX = gameWidth/1024.0;
-		ratioY = gameHeight/768.0;
-		offsetX = (gameWidth - 1024)/2;
-		
-		texts = ResourceBundle.getBundle("TextBundle", Locale.getDefault());
-		
-		//Get the host from the property file
-		settingsProp = new Properties();
-		
-
-		try {
+	public static void main(String[] argc) {
+		if(isUnique()) {
+			//Locale locale = new Locale("fr");
+			//Locale locale2 = new Locale("en");
+			//texts = ResourceBundle.getBundle("TextBundle", locale2);
+			gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
+			gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
+			ratioX = gameWidth/1024.0;
+			ratioY = gameHeight/768.0;
+			offsetX = (gameWidth - 1024)/2;
+			texts = ResourceBundle.getBundle("TextBundle", Locale.getDefault());
+			//Get the host from the property file
+			settingsProp = new Properties();
 			
-			
-			settingsProp.load(new FileInputStream("settings.conf"));
-			
-			host = settingsProp.getProperty("host");
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				settingsProp.load(new FileInputStream("src/ressources/files/settings.conf"));
+				host = settingsProp.getProperty("host");
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			model = new Model(host);
+			view = new View();
+			view.setPanel("Login", false);
+		} else {
+			JOptionPane.showMessageDialog(null,"Une instance de DrawVS semble être déjà lancée. Merci de fermer la précédente avant d'en lancer une nouvelle.","DrawVS est déjà lancé", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		model = new Model(host);
-		view = new View();
-		view.setPanel("Login", false);
 	}
 	
 	
-	public static Model getModel(){
+	public static Model getModel() {
 		return model;
 	}
 	
-	public static View getView(){
+	public static View getView() {
 		return view;
 	}
 	
-	public static GameObserver getGameObserver()
-	{
+	public static GameObserver getGameObserver() {
 		return model.getGameObserver();
+	}
+	
+	public static boolean isUnique() {
+	    boolean unique;
+	    try {
+	        unique = new FileOutputStream("src/ressources/files/lock.ini").getChannel().tryLock() != null;
+	    } catch(IOException ie) {
+	        unique = false;
+	    }
+	    return true;
+	    //return unique;
 	}
 }

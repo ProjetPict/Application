@@ -1,21 +1,14 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
@@ -23,11 +16,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -130,7 +121,8 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		fillTable();
 		scrlPane = new JScrollPane(table);
 		
-		fadeEffect = new JPanel() {  
+		fadeEffect = new JPanel() {
+			private static final long serialVersionUID = 1L;
 			public void paintComponent(Graphics g) {  
 				g.setColor(new Color(0, 0, 0, 0.7f));  
 				g.fillRect(0, 0, (int)Main.gameWidth, (int)Main.gameHeight);  
@@ -190,6 +182,7 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	}
 	
 	public void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D)g;
 		scrlPane.setBounds(50, 150, (int)Main.gameWidth-375, (int)Main.gameHeight-230);
 		btnJoin.setBounds((int)Main.gameWidth-310, 150, 250, 30);
 		btnPnlCreate.setBounds((int)Main.gameWidth-310, 190, 250, 30);
@@ -201,14 +194,11 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		lblSearch.setLocation((int)Main.gameWidth-310, 410);
 		txtSearch.setBounds((int)Main.gameWidth-310, 440, 250, 30);
 		btnApply.setBounds((int)Main.gameWidth-310, 475, 250, 30);
-        Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
         g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
         g2d.drawImage(imgLogo, 15, 8, 259, 87, this);
         if(toFade) {
         	fadeEffect.setVisible(true);
-        	//g2d.setColor(new Color(1, 0, 0, 0.5f));
-        	//g2d.drawImage(imgBlack, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
         } else {
         	fadeEffect.setVisible(false);
         }
