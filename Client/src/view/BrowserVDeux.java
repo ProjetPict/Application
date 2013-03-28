@@ -122,6 +122,7 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		scrlPane = new JScrollPane(table);
 		
 		this.add(btnPnlCreate);
+		this.add(btnJoin);
 		this.add(btnRefresh);
 		this.add(scrlPane);
 		this.add(lblFilter);
@@ -172,16 +173,17 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	
 	public void paintComponent(Graphics g) {
 		scrlPane.setBounds(50, 150, (int)Main.gameWidth-375, (int)Main.gameHeight-230);
-		btnPnlCreate.setBounds((int)Main.gameWidth-310, 150, 250, 30);
-		btnRefresh.setBounds((int)Main.gameWidth-310, 190, 250, 30);
-		lblFilter.setLocation((int)Main.gameWidth-310, 250);
-		lblShowEmpty.setLocation((int)Main.gameWidth-310, 285);
-		jcbShowEmpty.setLocation((int)Main.gameWidth-310, 305);
-		lblShowFull.setLocation((int)Main.gameWidth-310, 340);
-		jcbShowFull.setLocation((int)Main.gameWidth-310, 360);
-		lblSearch.setLocation((int)Main.gameWidth-310, 395);
-		txtSearch.setBounds((int)Main.gameWidth-310, 415, 250, 30);
-		btnApply.setBounds((int)Main.gameWidth-310, 460, 250, 30);
+		btnJoin.setBounds((int)Main.gameWidth-310, 150, 250, 30);
+		btnPnlCreate.setBounds((int)Main.gameWidth-310, 190, 250, 30);
+		btnRefresh.setBounds((int)Main.gameWidth-310, 230, 250, 30);
+		lblFilter.setLocation((int)Main.gameWidth-310, 290);
+		lblShowEmpty.setLocation((int)Main.gameWidth-310, 325);
+		jcbShowEmpty.setLocation((int)Main.gameWidth-310, 345);
+		lblShowFull.setLocation((int)Main.gameWidth-310, 380);
+		jcbShowFull.setLocation((int)Main.gameWidth-310, 400);
+		lblSearch.setLocation((int)Main.gameWidth-310, 435);
+		txtSearch.setBounds((int)Main.gameWidth-310, 465, 250, 30);
+		btnApply.setBounds((int)Main.gameWidth-310, 500, 250, 30);
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
         g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
