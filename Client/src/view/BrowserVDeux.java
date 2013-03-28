@@ -164,6 +164,7 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		createPane.add(jcbDifficulty);
 		createPane.add(btnCreate);
 		createPane.add(btnCreateClose);
+		jcbDifficulty.setBackground(Color.white);
 		SpringUtilities.makeGrid(createPane, 6, 2, 5, 5, 5, 5);
 		newGameOptions = new JDialog();
 		newGameOptions.setSize(400, 200);
