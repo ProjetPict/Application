@@ -26,10 +26,10 @@ public class View {
 	public void setPanel(String panelType, boolean gameCreator){
 		window.setVisible(true);
 		if(panelType.equals("Browser")){
-			browser = new Browser();
-			window.setPanel(browser);
-			//browserV2 = new BrowserVDeux();
-			//window.setPanel(browserV2);
+			//browser = new Browser();
+			//window.setPanel(browser);
+			browserV2 = new BrowserVDeux();
+			window.setPanel(browserV2);
 		}
 		else if (panelType.equals("Login")){
 			login = new Login();

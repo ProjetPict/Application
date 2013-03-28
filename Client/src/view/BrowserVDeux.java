@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -61,6 +62,8 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	private JTextField txtGamePmax;
 	private JLabel lblTurn;
 	private JTextField txtTurn;
+	private JLabel lblDifficulty;
+	private JComboBox jcbDifficulty;
 
 	private JScrollPane scrlPane;
 	private JTable table;
@@ -86,6 +89,9 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		txtGamePmax = new JTextField();
 		lblTurn = new JLabel(Main.texts.getString("turns"));
 		txtTurn = new JTextField();
+		lblDifficulty = new JLabel(Main.texts.getString("difficulty_choice"));
+		String[] difficulties = { Main.texts.getString("difficulty_easy"), Main.texts.getString("difficulty_medium"), Main.texts.getString("difficulty_hard") };
+		jcbDifficulty = new JComboBox(difficulties);
 
 		crtPane = new JPanel();
 		crtPane.setVisible(false);
@@ -110,9 +116,11 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		createPane.add(txtGamePmax);
 		createPane.add(lblTurn);
 		createPane.add(txtTurn);
+		createPane.add(lblDifficulty);
+		createPane.add(jcbDifficulty);
 		createPane.add(btnCreate);
 		createPane.add(btnCreateClose);
-		SpringUtilities.makeGrid(createPane, 5, 2, 5, 5, 5, 5);
+		SpringUtilities.makeGrid(createPane, 6, 2, 5, 5, 5, 5);
 		newGameOptions = new JDialog();
 		newGameOptions.setSize(400, 200);
 		newGameOptions.addWindowFocusListener(new WindowFocusListener() {
@@ -132,6 +140,7 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		btnJoin.addActionListener(this);
 		btnPnlCreate.addActionListener(this);
 		btnCreate.addActionListener(this);
+		btnCreateClose.addActionListener(this);
 		btnRefresh.addActionListener(this);
 	}
 	
@@ -147,21 +156,26 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		if(arg0.getSource() == btnJoin){
+		if(arg0.getSource() == btnJoin) {
 			joinGame();
 		}
-		else if(arg0.getSource() == btnPnlCreate){
+		else if(arg0.getSource() == btnPnlCreate) {
 			newGameOptions.setLocationRelativeTo(this);
 			newGameOptions.setVisible(true);
 			toFade = true;
 			callEventRepaint();
 		} 
-		else if(arg0.getSource() == btnCreate){
+		else if(arg0.getSource() == btnCreate) {
 			createGame();
 		}
-		else if(arg0.getSource() == btnRefresh){
+		else if(arg0.getSource() == btnRefresh) {
 			fillTable();
-		} 
+		}
+		else if(arg0.getSource() == btnCreateClose) {
+			newGameOptions.setVisible(false);
+			toFade = false;
+			callEventRepaint();
+		}
 	}
 
 	private void joinGame() {
@@ -190,22 +204,19 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		int pmax;
 		int turns;
 
-		try{
+		try {
 			pmax = Integer.valueOf(txtGamePmax.getText());
-		}catch(Exception e)
-		{
+		} catch(Exception e) {
 			pmax = 0;
 		}
 
-		try{
+		try {
 			turns = Integer.valueOf(txtTurn.getText());
-		}catch(Exception e)
-		{
+		} catch(Exception e) {
 			turns = 0;
 		}
 
-		if(name.length() >= 4)
-		{
+		if(name.length() >= 4) {
 			if(password.equals(""))
 				password = null;
 			//TODO ajouter choix difficulté
@@ -214,8 +225,7 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 			if(res.equals("success"))
 				Main.getView().setPanel("GameScreen", true);
 		}
-		else
-		{
+		else {
 			JOptionPane.showMessageDialog(this,Main.texts.getString("name_short"));
 		}
 
