@@ -37,7 +37,7 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 	    this.setLocation(x, y);
 	    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
 	}
-
+	
 	public void setPanel(JPanel panel){
 		this.setContentPane(panel);
 		//this.validate();
@@ -91,7 +91,6 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		
 		Main.gameWidth = this.getWidth();
 		Main.gameHeight = this.getHeight();
 		Main.ratioX = this.getWidth()/1024.0;

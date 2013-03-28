@@ -28,7 +28,7 @@ public class View {
 		if(panelType.equals("Browser")){
 			//browser = new Browser();
 			//window.setPanel(browser);
-			browserV2 = new BrowserVDeux();
+			browserV2 = new BrowserVDeux(window);
 			window.setPanel(browserV2);
 		}
 		else if (panelType.equals("Login")){

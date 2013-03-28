@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -40,14 +42,16 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 
+	private Window mainWindow;
+	
     private Image imgBlank = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/blank.png"));
-    private Image imgBlack = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/black.png"));
     private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo_small.png"));
     private Image imgTop = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/top.png"));
 
     private JDialog newGameOptions;
     private JPanel createPane;
     private boolean toFade = false;
+    private JPanel fadeEffect;
     
 	private JButton btnJoin;
 	private JButton btnPnlCreate;
@@ -82,7 +86,9 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	private GameList gl;
 
 
-	public BrowserVDeux() {
+	public BrowserVDeux(Window win) {
+		mainWindow = win;
+		
 		btnJoin = new JButton(Main.texts.getString("connection"));
 		btnPnlCreate = new JButton(Main.texts.getString("g_create"));
 		btnCreate = new JButton(Main.texts.getString("send"));
@@ -120,6 +126,15 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		table.setDefaultRenderer(Boolean.class, new BooleanCellRenderer());
 		fillTable();
 		scrlPane = new JScrollPane(table);
+		
+		fadeEffect = new JPanel() {  
+			public void paintComponent(Graphics g) {  
+				g.setColor(new Color(0, 0, 0, 0.7f));  
+				g.fillRect(0, 0, (int)Main.gameWidth, (int)Main.gameHeight);  
+			}  
+		};
+		fadeEffect.setOpaque(false);
+		mainWindow.setGlassPane(fadeEffect);
 		
 		this.add(btnPnlCreate);
 		this.add(btnJoin);
@@ -189,7 +204,11 @@ public class BrowserVDeux extends JPanel implements ActionListener{
         g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
         g2d.drawImage(imgLogo, 15, 8, 259, 87, this);
         if(toFade) {
-        	g2d.drawImage(imgBlack, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
+        	fadeEffect.setVisible(true);
+        	//g2d.setColor(new Color(1, 0, 0, 0.5f));
+        	//g2d.drawImage(imgBlack, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
+        } else {
+        	fadeEffect.setVisible(false);
         }
 	}
 	
