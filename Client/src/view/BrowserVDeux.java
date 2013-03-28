@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -64,13 +65,19 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	private JTextField txtTurn;
 	private JLabel lblDifficulty;
 	private JComboBox jcbDifficulty;
+	
+	private JLabel lblFilter;
+	private JLabel lblShowEmpty;
+	private JComboBox jcbShowEmpty;
+	private JLabel lblShowFull;
+	private JComboBox jcbShowFull;
+	private JLabel lblSearch;
+	private JTextField txtSearch;
+	private JButton btnApply;
 
 	private JScrollPane scrlPane;
 	private JTable table;
-	private JPanel slctPane;
-	private JPanel slctSubPane;
 	private JPanel crtPane;
-	private JPanel crtSubPane;
 
 	private GameList gl;
 
@@ -91,11 +98,21 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		txtTurn = new JTextField();
 		lblDifficulty = new JLabel(Main.texts.getString("difficulty_choice"));
 		String[] difficulties = { Main.texts.getString("difficulty_easy"), Main.texts.getString("difficulty_medium"), Main.texts.getString("difficulty_hard") };
+		String[] yesNo = { Main.texts.getString("yes"), Main.texts.getString("no") };
 		jcbDifficulty = new JComboBox(difficulties);
+		
+		lblFilter = new JLabel(Main.texts.getString("filter"));
+		lblFilter.setFont(new Font("Arial", Font.PLAIN, 26));
+		lblShowEmpty = new JLabel(Main.texts.getString("show_empty"));
+		jcbShowEmpty = new JComboBox(yesNo);
+		lblShowFull = new JLabel(Main.texts.getString("show_empty"));
+		jcbShowFull = new JComboBox(yesNo);
+		lblSearch = new JLabel(Main.texts.getString("search"));
+		txtSearch = new JTextField();
+		btnApply = new JButton(Main.texts.getString("apply"));
 
 		crtPane = new JPanel();
 		crtPane.setVisible(false);
-		crtSubPane = new JPanel();
 
 		table = new JTable();
 		table.setShowGrid(false);
@@ -103,9 +120,18 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 		table.setDefaultRenderer(Boolean.class, new BooleanCellRenderer());
 		fillTable();
 		scrlPane = new JScrollPane(table);
+		
 		this.add(btnPnlCreate);
 		this.add(btnRefresh);
 		this.add(scrlPane);
+		this.add(lblFilter);
+		this.add(lblShowEmpty);
+		this.add(jcbShowEmpty);
+		this.add(lblShowFull);
+		this.add(jcbShowFull);
+		this.add(lblSearch);
+		this.add(txtSearch);
+		this.add(btnApply);
 
 		createPane = new JPanel(new SpringLayout());
 		createPane.add(lblGameName);
@@ -145,11 +171,21 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 	}
 	
 	public void paintComponent(Graphics g) {
+		scrlPane.setBounds(50, 150, (int)Main.gameWidth-375, (int)Main.gameHeight-230);
+		btnPnlCreate.setBounds((int)Main.gameWidth-310, 150, 250, 30);
+		btnRefresh.setBounds((int)Main.gameWidth-310, 190, 250, 30);
+		lblFilter.setLocation((int)Main.gameWidth-310, 250);
+		lblShowEmpty.setLocation((int)Main.gameWidth-310, 285);
+		jcbShowEmpty.setLocation((int)Main.gameWidth-310, 305);
+		lblShowFull.setLocation((int)Main.gameWidth-310, 340);
+		jcbShowFull.setLocation((int)Main.gameWidth-310, 360);
+		lblSearch.setLocation((int)Main.gameWidth-310, 395);
+		txtSearch.setBounds((int)Main.gameWidth-310, 415, 250, 30);
+		btnApply.setBounds((int)Main.gameWidth-310, 460, 250, 30);
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
         g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
         g2d.drawImage(imgLogo, 15, 8, 259, 87, this);
-        scrlPane.setLocation(250, (int)Main.gameWidth/2-250);
         if(toFade) {
         	g2d.drawImage(imgBlack, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
         }
