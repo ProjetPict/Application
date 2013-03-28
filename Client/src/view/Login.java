@@ -143,7 +143,7 @@ public class Login extends JPanel implements ActionListener{
 				//javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
 				Main.settingsProp.setProperty("username", login.getText());
 				try {
-					Main.settingsProp.store(new FileOutputStream("settings.conf"), null);
+					Main.settingsProp.store(new FileOutputStream("files/settings.conf"), null);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -52,7 +52,7 @@ public class Main {
 			settingsProp = new Properties();
 			
 			try {
-				settingsProp.load(new FileInputStream("src/ressources/files/settings.conf"));
+				settingsProp.load(new FileInputStream("files/settings.conf"));
 				host = settingsProp.getProperty("host");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -83,11 +83,11 @@ public class Main {
 	public static boolean isUnique() {
 	    boolean unique;
 	    try {
-	        unique = new FileOutputStream("src/ressources/files/lock.ini").getChannel().tryLock() != null;
+	        unique = new FileOutputStream("files/lock.ini").getChannel().tryLock() != null;
 	    } catch(IOException ie) {
 	        unique = false;
 	    }
-	    return true;
-	    //return unique;
+	    //return true;
+	    return unique;
 	}
 }
