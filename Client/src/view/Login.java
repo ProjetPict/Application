@@ -9,13 +9,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -24,9 +17,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 /**
  * Ecran de Login
- * @author Christopher, Matthieu
+ * @author Christopher Cacciatore, Matthieu Douris
  *
  */
 public class Login extends JPanel implements ActionListener{
@@ -138,17 +138,15 @@ public class Login extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
-			boolean res = Main.getModel().connect(login.getText(),password.getText());
+			boolean res = Main.getModel().connect(login.getText(), new String(password.getPassword()));
 			if(res){
-				//javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_succes"));
+				//javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_success"));
 				Main.settingsProp.setProperty("username", login.getText());
 				try {
 					Main.settingsProp.store(new FileOutputStream("files/settings.conf"), null);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				Main.player = login.getText();

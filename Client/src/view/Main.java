@@ -1,22 +1,19 @@
 package view;
-import java.awt.Toolkit;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import model.GameObserver;
 import model.Model;
 
 /**
- * Classe de dÃ©marrage : instancie le modÃ¨le et la vue
+ * Classe de démarrage : instancie le modèle et la vue
  * @author christopher
  *
  */

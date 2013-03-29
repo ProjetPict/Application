@@ -3,17 +3,16 @@ import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.JList;
-import javax.swing.JComboBox;
 
 /**
  * Palette de couleurs
- * @author christopher
+ * @author christopher cacciatore
  *
  */
 public class ColorBoard extends JPanel{

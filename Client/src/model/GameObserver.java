@@ -16,7 +16,7 @@ import view.Main;
 
 /**
  * 
- * @author Nicolas
+ * @author Nicolas Spagnulo
  *
  */
 
@@ -33,14 +33,6 @@ public class GameObserver extends Thread{
 	
 	public void run() {
 		boolean running = true;
-		/*Command cmd = new Command("getscores");
-		
-		try {
-			out.writeObject(cmd);
-			out.flush();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}*/
 		
 		while(running){
 			try {

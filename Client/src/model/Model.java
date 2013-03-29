@@ -17,7 +17,7 @@ import view.Main;
 
 /**
  * Gere les connexions avec le serveur.
- * @author christopher
+ * @author christopher cacciatore
  *
  */
 public class Model extends Observable{
@@ -112,7 +112,6 @@ public class Model extends Observable{
 			out.writeObject(command);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

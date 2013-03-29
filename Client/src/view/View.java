@@ -5,7 +5,7 @@ import socketData.WordCommand;
 import model.GameObserver;
 
 /**
- * Transmet les diffÃ©rents Ã©crans Ã  la fenÃªtre principale.
+ * Transmet les différents écrans à la fenêtre principale.
  * @author christopher
  *
  */
@@ -14,7 +14,7 @@ public class View {
 
 	private static Window window;
 	private Login login;
-	private Browser browser;
+	//private Browser browser;
 	private BrowserVDeux browserV2;
 	private GameScreen gmScreen;
 	private GameObserver go;

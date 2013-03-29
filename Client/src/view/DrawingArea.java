@@ -29,7 +29,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 
 	private static final long serialVersionUID = 1L;
 
-	//Picture hÃ©rite de Observable
+	//Picture hérite de Observable
 	private Picture bufPic;
 	private boolean drawing = false;
 	private ColorBoard colorBoard;

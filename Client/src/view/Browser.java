@@ -17,7 +17,7 @@ import socketData.*;
 
 /**
  * Ecran de selection/creation de partie
- * @author christopher
+ * @author christopher cacciatore
  *
  */
 public class Browser extends JPanel implements ActionListener{

@@ -2,6 +2,12 @@ package socketData;
 
 import java.io.Serializable;
 
+/**
+ * Une commande contenant un message de Chat
+ * @author christopher
+ *
+ */
+
 public class ChatCommand extends Command implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

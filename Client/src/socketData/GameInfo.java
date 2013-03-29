@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 /**
  * Cette classe contient les informations d'une partie nécessaires à l'explorateur de partie du client.
- * @author Jerome
+ * @author Jerome Port
  *
  */
 public class GameInfo implements Serializable{

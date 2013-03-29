@@ -28,7 +28,7 @@ import socketData.*;
 
 /**
  * Ecran de selection/creation de partie
- * @author Christopher, Matthieu
+ * @author Christopher Cacciatore, Matthieu Douris
  *
  */
 public class BrowserVDeux extends JPanel implements ActionListener{

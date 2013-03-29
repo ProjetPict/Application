@@ -10,16 +10,14 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
+import model.GameObserver;
 import socketData.Picture;
 import socketData.WordCommand;
 
-import model.GameObserver;
-
 /**
  * Ecran de jeu
- * @author christopher
+ * @author christopher cacciatore
  *
  */
 public class GameScreen extends JPanel{

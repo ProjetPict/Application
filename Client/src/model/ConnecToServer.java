@@ -8,8 +8,8 @@ import socketData.*;
 
 
 /**
- * Gère la connexion et l'envoi de requêtes (creategame, joingame, quit...) au serveur
- * @author christopher
+ * G�re la connexion et l'envoi de requ�tes (creategame, joingame, quit...) au serveur
+ * @author christopher cacciatore
  *
  */
 public class ConnecToServer{
@@ -128,7 +128,6 @@ public class ConnecToServer{
 			out.writeObject(com);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 			return null;
 		}
@@ -136,11 +135,11 @@ public class ConnecToServer{
 		try {
 			res = in.readObject();
 		} catch (IOException e) {
-			//En cas de problème de connexion
+			//En cas de probl�me de connexion
 			e.printStackTrace();
 			return null;
 		} catch (ClassNotFoundException e) {
-			//Au cas où le serveur n'envoie pas une donnée du bon type
+			//Au cas o� le serveur n'envoie pas une donn�e du bon type
 			e.printStackTrace();
 			return null;
 		}
@@ -150,9 +149,8 @@ public class ConnecToServer{
 	}
 	
 	/**
-	 * Demande la création d'une partie au serveur
-	 * @param name
-	 * @return
+	 * Demande la cr�ation d'une partie au serveur
+	 * 
 	 */
 	public String createGame(String name, String password, int pMax, 
 			int turns, int difficulty){
@@ -169,10 +167,8 @@ public class ConnecToServer{
 		try {
 			conf = in.readObject();
 		} catch (IOException e) {
-			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 		}
 		

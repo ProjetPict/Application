@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Une ligne est reprÃ©sentÃ©e par un ensemble de DrawingData
- * @author christopher
+ * Une ligne est représentée par un ensemble de DrawingData
+ * @author christopher cacciatore
  *
  */
 public class Line implements Serializable {
