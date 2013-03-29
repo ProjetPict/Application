@@ -20,7 +20,7 @@ import model.GameObserver;
 import socketData.*;
 
 /**
- * La zone oÃ¹ le joueur peut dessiner/voir le dessin se former.
+ * La zone où le joueur peut dessiner/voir le dessin se former.
  * @author christopher
  *
  */

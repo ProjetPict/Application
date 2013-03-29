@@ -117,7 +117,6 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 		textAnswer.setBounds((int)(100*Main.ratioX), (int)(650*Main.ratioY), 178, 20);
-		//textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
 		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 100, 20);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		textChat.repaint();

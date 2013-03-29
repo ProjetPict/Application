@@ -36,9 +36,6 @@ public class Main {
 	
 	public static void main(String[] argc) {
 		if(isUnique()) {
-			//Locale locale = new Locale("fr");
-			//Locale locale2 = new Locale("en");
-			//texts = ResourceBundle.getBundle("TextBundle", locale2);
 			gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
 			gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
 			ratioX = gameWidth/1024.0;
@@ -84,7 +81,7 @@ public class Main {
 	    } catch(IOException ie) {
 	        unique = false;
 	    }
-	    //return true;
+
 	    return unique;
 	}
 }

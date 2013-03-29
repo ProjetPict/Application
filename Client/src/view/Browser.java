@@ -180,7 +180,6 @@ public class Browser extends JPanel implements ActionListener{
 		{
 			if(password.equals(""))
 				password = null;
-			//TODO ajouter choix difficulté
 			res = Main.getModel().createGame(name, password, pmax, turns, 1);
 			JOptionPane.showMessageDialog(this,res);
 			if(res.equals("success"))
@@ -191,7 +190,6 @@ public class Browser extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(this,Main.texts.getString("name_short"));
 		}
 
-		//TODO : rejoindre la partie cree a l'instant
 	}
 
 	private void fillTable()

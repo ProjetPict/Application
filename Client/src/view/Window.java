@@ -27,7 +27,6 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("DrawVS");
 		this.setMinimumSize(new Dimension(640,480));
-		//this.setLocation(new Point(100,100));
 		this.setResizable(true);
 		this.setSize((int)Main.gameWidth, (int)Main.gameHeight);
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -39,7 +38,6 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 	
 	public void setPanel(JPanel panel){
 		this.setContentPane(panel);
-		//this.validate();
 	}
 
 	private void onClose(){

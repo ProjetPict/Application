@@ -140,7 +140,6 @@ public class Login extends JPanel implements ActionListener{
 		if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
 			boolean res = Main.getModel().connect(login.getText(), new String(password.getPassword()));
 			if(res){
-				//javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_success"));
 				Main.settingsProp.setProperty("username", login.getText());
 				try {
 					Main.settingsProp.store(new FileOutputStream("files/settings.conf"), null);

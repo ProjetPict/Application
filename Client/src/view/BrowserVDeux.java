@@ -278,7 +278,6 @@ public class BrowserVDeux extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(this,Main.texts.getString("name_short"));
 		}
 
-		//TODO : rejoindre la partie cree a l'instant
 	}
 
 	private void fillTable() {
