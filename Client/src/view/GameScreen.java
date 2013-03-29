@@ -50,7 +50,7 @@ public class GameScreen extends JPanel{
 		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
 		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
 		
-		
+		drawingArea.validate();
 		g.fillRect(0, 0, (int)(Main.gameWidth), (int)(Main.gameHeight));
 		
 		
@@ -61,6 +61,7 @@ public class GameScreen extends JPanel{
 		drawingArea.clearScreen();
 		chatArea.launchTimer();
 		chatArea.enableStartButton(false);
+		chatArea.enableAnswer(true);
 	}
 	
 	public long getNbPixels()
@@ -150,6 +151,7 @@ public class GameScreen extends JPanel{
 
 	public void endTurn() {
 		drawingArea.clearScreen();
+		chatArea.enableAnswer(false);
 		chatArea.cancelTimer();
 	}
 }

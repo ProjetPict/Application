@@ -55,13 +55,14 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
 		setLayout(null);
-		drawing = true;
+		drawing = false;
 		textAnswer = new JTextField();
 		textAnswer.setBounds((int)(132*Main.ratioX), (int)(646*Main.ratioY), 186, 20);
 		add(textAnswer);
 		textAnswer.setColumns(10);
 		textAnswer.addActionListener(this);
-
+		textAnswer.setEnabled(false);
+		
 		lblAnswer = new JLabel(Main.texts.getString("answer"));
 		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 46, 30);
 		add(lblAnswer);
@@ -95,6 +96,8 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		lblTimer = new JLabel();
 		lblTimer.setBounds((int)(50*Main.ratioX), (int)(20*Main.ratioY), 46, 14);
 		add(lblTimer);
+		
+		this.creator = creator;
 
 		if(creator){
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
@@ -106,7 +109,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 	public void enableStartButton(boolean enable)
 	{
-		if(btnStartGame != null)
+		if(btnStartGame != null && creator)
 		{
 
 			btnStartGame.setVisible(enable);
@@ -117,13 +120,14 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 		textAnswer.setBounds((int)(100*Main.ratioX), (int)(650*Main.ratioY), 178, 20);
+		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
 		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 100, 20);
 		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		textChat.repaint();
 		scrollPaneChat.repaint();
 		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		if(creator)
-			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(296*Main.ratioY), 89, 23);
+			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(50*Main.ratioY), 89, 23);
 
 		g.drawLine(0, 0, 0, this.getHeight());
 	}
@@ -162,7 +166,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		if(timer != null)
 			timer.cancel();
 		timer = new Timer();
-
+		lblTimer.setVisible(true);
 
 		lblTimer.setText(String.valueOf(time));
 		timer.schedule(new TimerTask() {
@@ -183,6 +187,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		time = 0;
 		timer.cancel();
 		timer = null;
+		lblTimer.setVisible(false);
 	}
 
 
@@ -227,6 +232,17 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 			chat.setCaretPosition(chat.getDocument().getLength());
 		}
+		else if(arg instanceof String)
+		{
+			if(((String) arg).equals("endgame"))
+			{
+				enableStartButton(true);
+			}
+			else if(((String) arg).equals("startgame"))
+			{
+				enableStartButton(false);
+			}
+		}
 		else{
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();
 			scores = new PlayerScore[temp.size()];
@@ -247,5 +263,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				list.setListData(scores);
 			}
 		}
+	}
+	
+	public void enableAnswer(boolean enable) {
+		if(!drawing)
+			textAnswer.setEnabled(enable);
 	}
 }

@@ -82,6 +82,6 @@ public class Main {
 	        unique = false;
 	    }
 
-	    return unique;
+	    return true;
 	}
 }

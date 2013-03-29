@@ -64,6 +64,18 @@ public class Model extends Observable{
 		{
 			Main.getView().endTurn();
 		}
+		else if(command.command.equals("endgame"))
+		{
+			setChanged();
+			this.notifyObservers(false);
+			setChanged();
+			this.notifyObservers("endgame");
+		}
+		else if(command.command.equals("startgame"))
+		{
+			setChanged();
+			this.notifyObservers("startgame");
+		}
 		else if(command.command.equals("startdraw"))
 		{
 			setChanged();

@@ -66,7 +66,7 @@ public class Game extends Thread{
 		else
 			this.pMax = Server.MAX_PLAYER;
 
-		if(turns > 1 && turns <= 10)
+		if(turns >= 1 && turns <= 10)
 			this.turns = turns;
 		else
 			this.turns = Server.TURNS;
@@ -97,13 +97,15 @@ public class Game extends Thread{
 
 			while(started)
 			{
+				sendCommandTo(new Command("startgame"), players.get(0));
 				currentTurn = 0;
 				drawingPlayer = null;
 				podium.clear();
-				while(currentTurn <= turns)
+				
+				sendScoresToAll(null);
+				while(currentTurn < turns)
 				{
 					currentTurn++;
-					startTurn();
 
 					for(int i = 0; i < players.size(); i++)
 					{
@@ -134,8 +136,6 @@ public class Game extends Thread{
 
 						}
 					}
-
-					endTurn();
 				}
 
 				started = false;
@@ -147,6 +147,8 @@ public class Game extends Thread{
 					if(player.isGhost())
 						player.setGhost(false);
 				}
+				
+				sendCommand(new Command("endgame"));
 			}
 
 			try {
@@ -300,17 +302,7 @@ public class Game extends Thread{
 	public void sendChatMsg(ChatCommand msg)
 	{
 		for(int i = 0; i < players.size(); i++){
-			//if(!msg.author.equals(players.get(i).getLogin())){
-			ObjectOutputStream out = players.get(i).getOutput();
-			try {
-				out.writeObject(msg);
-				out.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			//}
+			sendCommandTo(msg, players.get(i));
 		}
 	}
 
@@ -318,19 +310,24 @@ public class Game extends Thread{
 	{
 		for(int i = 0; i < players.size(); i++){
 			if(sender == null || sender != players.get(i)){
-				ObjectOutputStream out = players.get(i).getOutput();
-				try {
-					out.writeObject(cmd);
-					out.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+				sendCommandTo(cmd, players.get(i));
 			}
 		}
 	}
 
+	public void sendCommandTo(Command cmd, Player player)
+	{
+		ObjectOutputStream out = player.getOutput();
+		try {
+			out.writeObject(cmd);
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public void sendCommand(Command cmd)
 	{
 		sendCommand(cmd, null);
@@ -422,16 +419,6 @@ public class Game extends Thread{
 		return choices;
 	}
 
-
-	private void startTurn()
-	{
-		//TODO startTurn
-	}
-
-	private void endTurn()
-	{
-		//TODO endTurn
-	}
 
 	private void computeScores()
 	{
