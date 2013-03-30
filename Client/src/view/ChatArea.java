@@ -262,6 +262,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			{
 				list.setListData(scores);
 			}
+			if(scores.length > 1)
+			{
+				enableStartButton(true);
+			}
+			else
+				enableStartButton(false);
 		}
 	}
 	

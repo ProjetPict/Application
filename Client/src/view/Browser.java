@@ -167,7 +167,7 @@ public class Browser extends JPanel implements ActionListener{
 		    public void windowLostFocus(WindowEvent e) {
 		    	newGameOptions.setVisible(false);
 		    	toFade = false;
-		    	callEventRepaint();
+		    	repaint();
 		    }
 		});
 		newGameOptions.setUndecorated(true);
@@ -183,7 +183,9 @@ public class Browser extends JPanel implements ActionListener{
 	
 	public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
+        
 		scrlPane.setBounds(50, 150, (int)Main.gameWidth-375, (int)Main.gameHeight-230);
+		table.revalidate();
 		btnJoin.setBounds((int)Main.gameWidth-310, 150, 250, 30);
 		btnPnlCreate.setBounds((int)Main.gameWidth-310, 190, 250, 30);
 		btnRefresh.setBounds((int)Main.gameWidth-310, 230, 250, 30);
@@ -212,7 +214,7 @@ public class Browser extends JPanel implements ActionListener{
 			newGameOptions.setLocationRelativeTo(this);
 			newGameOptions.setVisible(true);
 			toFade = true;
-			callEventRepaint();
+			repaint();
 		} 
 		else if(arg0.getSource() == btnCreate) {
 			createGame();
@@ -223,7 +225,7 @@ public class Browser extends JPanel implements ActionListener{
 		else if(arg0.getSource() == btnCreateClose) {
 			newGameOptions.setVisible(false);
 			toFade = false;
-			callEventRepaint();
+			repaint();
 		}
 	}
 
@@ -270,12 +272,19 @@ public class Browser extends JPanel implements ActionListener{
 				password = null;
 			//TODO ajouter choix difficulté
 			res = Main.getModel().createGame(name, password, pmax, turns, 1);
-			JOptionPane.showMessageDialog(this,res);
+			
 			if(res.equals("success"))
+			{
 				Main.getView().setPanel("GameScreen", true);
+				toFade = false;
+				fadeEffect.setVisible(false);
+				this.repaint();
+			}
+			else
+				JOptionPane.showMessageDialog(this, Main.texts.getString("fail"));
 		}
 		else {
-			JOptionPane.showMessageDialog(this,Main.texts.getString("name_short"));
+			JOptionPane.showMessageDialog(this, Main.texts.getString("name_short"));
 		}
 
 	}
@@ -284,9 +293,4 @@ public class Browser extends JPanel implements ActionListener{
 		gl = Main.getModel().getGameList();
 		table.setModel(new GameTableModel(gl));
 	}
-	
-	private void callEventRepaint() {
-		this.repaint();
-	}
-
 }

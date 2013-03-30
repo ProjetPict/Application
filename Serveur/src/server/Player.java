@@ -211,7 +211,7 @@ public class Player extends Thread {
 			Server.removePlayer(this);
 
 		} catch (IOException e1) {
-			System.out.println("Connexion ï¿½ " + login + " perdue.");
+			System.out.println("Connexion à " + login + " perdue.");
 			connected = false;
 			Server.removePlayer(this);
 		} catch (ClassNotFoundException e) {
@@ -262,7 +262,7 @@ public class Player extends Thread {
 
 
 	/**
-	 * Cette mï¿½thode dï¿½termine le type du message passï¿½ en paramï¿½tre, et appelle la fonction
+	 * Cette méthode détermine le type du message passé en paramètre, et appelle la fonction
 	 * de traitement correspondante.
 	 * @param message
 	 */
@@ -304,7 +304,7 @@ public class Player extends Thread {
 
 
 	private void processWordCommand(WordCommand message) {
-		if(drawing && game != null)
+		if(game != null)
 		{
 			if(!message.command.equals("") && choices != null)
 			{

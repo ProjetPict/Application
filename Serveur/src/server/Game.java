@@ -114,8 +114,10 @@ public class Game extends Thread{
 						{
 
 							setupNextPlayer();
-
+							
 							sendCommand(new Command("startturn"));
+							
+							drawingPlayer.setDrawing(true);
 
 							launchTimer(60);
 							
@@ -369,8 +371,7 @@ public class Game extends Thread{
 		word = "";
 		nbAnswer = 0;
 		currentDrawing.clear();
-		drawingPlayer.setDrawing(true);
-
+		
 		//TODO integrer le tirage de mots al�atoire
 		String[] words = chooseNextWords();
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], 1);
@@ -539,6 +540,7 @@ public class Game extends Thread{
 
 	public void setWord(String word)
 	{
+		System.out.println("Test");
 		if(timer != null)
 			timer.cancel();
 		time = 0;
