@@ -18,6 +18,7 @@ import javax.swing.ScrollPaneConstants;
 import socketData.ChatCommand;
 import socketData.PlayerScore;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JList;
@@ -42,69 +43,76 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private JTextField textChat;
 	private JLabel lblAnswer;
 	private JButton btnStartGame;
+	private JButton btnQuitGame;
 	private boolean creator;
 	private JLabel lblTimer;
+	private JLabel lblScore;
+	private JLabel lblChat;
 	private Timer timer;
 	private int time;
 	private boolean drawing;
 	private StyledDocument chatDoc;
 	private MutableAttributeSet chatMAS;
+	private Font titleFont = new Font("Arial", Font.PLAIN, 26);
 
 	public ChatArea(boolean creator) {
-
+		
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
 		setLayout(null);
 		drawing = false;
 		textAnswer = new JTextField();
-		textAnswer.setBounds((int)(132*Main.ratioX), (int)(646*Main.ratioY), 186, 20);
 		add(textAnswer);
 		textAnswer.setColumns(10);
 		textAnswer.addActionListener(this);
 		textAnswer.setEnabled(false);
 		
 		lblAnswer = new JLabel(Main.texts.getString("answer"));
-		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 46, 30);
 		add(lblAnswer);
+		lblAnswer.setFont(titleFont);
 
 		Main.getModel().addObserver(this);
 
 		list = new JList();
-		list.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY), (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		scrollPaneScore = new JScrollPane(list);
-		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
 		add(scrollPaneScore);
 
 		chat = new JTextPane();
 		chat.setEditable(false);
-		chat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		chatDoc = chat.getStyledDocument();
 		chatMAS = chat.getInputAttributes();
 
 
 		scrollPaneChat = new JScrollPane(chat);
 		scrollPaneChat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
 		add(scrollPaneChat);
 
 		textChat = new JTextField();
 		textChat.addActionListener(this);
-		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
 		add(textChat);
 
 
 		lblTimer = new JLabel();
-		lblTimer.setBounds((int)(50*Main.ratioX), (int)(20*Main.ratioY), 46, 14);
 		add(lblTimer);
 		
 		this.creator = creator;
 
+		lblScore = new JLabel(Main.texts.getString("scores"));
+		add(lblScore);
+		lblScore.setFont(titleFont);
+		lblChat = new JLabel(Main.texts.getString("chat"));
+		add(lblChat);
+		lblChat.setFont(titleFont);
+		
+		btnQuitGame = new JButton("Quitter la partie");
+		add(btnQuitGame);
+
 		if(creator){
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
-			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(50*Main.ratioY), 89, 23);
 			btnStartGame.addActionListener(this);
 			add(btnStartGame);
 		}
+		
 	}
 
 	public void enableStartButton(boolean enable)
@@ -119,16 +127,21 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	@Override
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
-		textAnswer.setBounds((int)(100*Main.ratioX), (int)(650*Main.ratioY), 178, 20);
-		textChat.setBounds((int)(42*Main.ratioX), (int)(600*Main.ratioY), (int)(200*Main.ratioX), 20);
-		lblAnswer.setBounds((int)(42*Main.ratioX), (int)(650*Main.ratioY), 100, 20);
-		scrollPaneChat.setBounds((int)(42*Main.ratioX), (int)(300*Main.ratioY), (int)(200*Main.ratioX), (int)(300*Main.ratioY));
+		btnQuitGame.setBounds(10, 10, 380, 30);
+		if(creator)
+			btnStartGame.setBounds(10, 45, 380, 30);
+		lblTimer.setBounds(10, 45, 380, 30);
+		lblScore.setBounds(10, 85, 380, 30);
+		scrollPaneScore.setBounds(10, 120, 380, 300);
+		lblAnswer.setBounds(10, 430, 380, 30);
+		textAnswer.setBounds(10, 465, 380, 30);
+		lblChat.setBounds(10, 505, 380, 30);
+		scrollPaneChat.setBounds(10, 540, 380, 140);
+		textChat.setBounds(10, 685, 380, 30);
+		scrollPaneScore.setBackground(Color.white);
+		scrollPaneChat.setBackground(Color.white);
 		textChat.repaint();
 		scrollPaneChat.repaint();
-		scrollPaneScore.setBounds((int)(42*Main.ratioX), (int)(84*Main.ratioY),  (int)(200*Main.ratioX), (int)(150*Main.ratioY));
-		if(creator)
-			btnStartGame.setBounds((int)(83*Main.ratioX), (int)(50*Main.ratioY), 89, 23);
-
 		g.drawLine(0, 0, 0, this.getHeight());
 	}
 

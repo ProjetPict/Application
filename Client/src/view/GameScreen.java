@@ -36,8 +36,8 @@ public class GameScreen extends JPanel{
 		drawingArea = new DrawingArea(gameObs);
 		chatArea = new ChatArea(creator);
 		this.setLayout(null);
-		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
-		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
+		drawingArea.setBounds(0, 0, (int)(this.getWidth()-400), this.getHeight());
+		chatArea.setBounds((int)(this.getWidth()-400), 0, 400, this.getHeight());
 		this.add(drawingArea);
 		this.add(chatArea);
 		gameObs.start();
@@ -47,13 +47,10 @@ public class GameScreen extends JPanel{
 	
 	@Override
 	protected void paintComponent(Graphics g){
-		drawingArea.setBounds(0, 0, (int)(this.getWidth()*0.7), this.getHeight());
-		chatArea.setBounds((int)(this.getWidth()*0.7), 0, (int)(this.getWidth() - this.getWidth()*0.7), this.getHeight());
-		
+		drawingArea.setBounds(0, 0, (int)(this.getWidth()-400), this.getHeight());
+		chatArea.setBounds((int)(this.getWidth()-400), 0, 400, this.getHeight());
 		drawingArea.validate();
 		g.fillRect(0, 0, (int)(Main.gameWidth), (int)(Main.gameHeight));
-		
-		
 	}
 	
 	public void startTurn()
