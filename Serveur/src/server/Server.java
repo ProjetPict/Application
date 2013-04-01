@@ -38,13 +38,15 @@ public class Server extends Thread{
 	private static Map<String, Game> games;
 	private ServerSocket serverSocket;
 	private Socket socket;
-	private Fenetre fenetre;
+	private static Fenetre fenetre;
 	private Runtime runtime;
 	private static DbConnection servDbConnec;
 	private static ServerDatabase servDbLocale;
 	private long launchTimeCalc;
+	private static boolean launchState;
 
-	public Server() throws Exception{
+	public Server(boolean state) throws Exception{
+		launchState = state;
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();
 		servDbConnec = new DbConnection();
@@ -53,35 +55,37 @@ public class Server extends Thread{
 		int tentatives = 1;
 		boolean success = false;
 		
-		fenetre = new Fenetre(this);
-		fenetre.setVisible(true);
-		fenetre.writeAnnonce("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
-		fenetre.writeAnnonce("> Connexion à la base de données...");
+		if(launchState) {
+			fenetre = new Fenetre(this);
+			fenetre.setVisible(true);
+		}
+		writeIn("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
+		writeIn("> Connexion à la base de données...");
 		while(tentatives<5 && !success) {
 			if(servDbConnec.connectDatabase())
 				success=true;
 			else
-				fenetre.writeAnnonce("Echec ("+tentatives+"/5)\n> Nouvelle tentative de connexion à la base de données...");
+				writeIn("Echec ("+tentatives+"/5)\n> Nouvelle tentative de connexion à la base de données...");
 			tentatives++;
 		}
 		if(!success) {
-			fenetre.writeAnnonce("Echec (5/5)\n> Veuillez vérifier les paramètres de connexion avant de relancer le serveur.\n");
+			writeIn("Echec (5/5)\n> Veuillez vérifier les paramètres de connexion avant de relancer le serveur.\n");
 			//throw new Exception("Echec lors de la connexion à la base de données");
 		} else {
 			tentatives = 0;
 			success = false;
-			fenetre.writeAnnonce("Terminé !\n> Préparation de la base de données...");
+			writeIn("Terminé !\n> Préparation de la base de données...");
 			while(tentatives<5 && !success) {
 				if(servDbLocale.loadDatabase())
 					success=true;
 				else
-					fenetre.writeAnnonce("Echec ("+tentatives+"/5)\n> Nouvelle tentative de récupération de la base de données...");
+					writeIn("Echec ("+tentatives+"/5)\n> Nouvelle tentative de récupération de la base de données...");
 				tentatives++;
 			}
 			if(success)
-				fenetre.writeAnnonce("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
+				writeIn("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
 			else {
-				fenetre.writeAnnonce("Echec (5/5)\n> Veuillez vérifier l'état de la base de données avant de relancer le serveur.\n");
+				writeIn("Echec (5/5)\n> Veuillez vérifier l'état de la base de données avant de relancer le serveur.\n");
 				//throw new Exception("Echec lors de la récupération de la base de données");
 			}
 		}
@@ -107,25 +111,26 @@ public class Server extends Thread{
 		timer.schedule(new TimerTask() {
 			public void run() {
 				runtime = Runtime.getRuntime();
-				fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
+				if(launchState)
+					fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
 			}
 		}, 0, 1000);
 		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
 		autoSave.schedule(new TimerTask() {
 			public void run() {
-				fenetre.writeAnnonce("\n# Sauvegarde automatique de l'historique dans la base de données...");
+				writeIn("\n# Sauvegarde automatique de l'historique dans la base de données...");
 				servDbLocale.saveDatabase();
-				fenetre.writeAnnonce("Terminé !");
+				writeIn("Terminé !");
 			}
 		}, 600000, 600000);
 		launchTime.schedule(new TimerTask() {
-			
 			Date current;
 			public void run() {
 				launchTimeCalc++;
 				current = new Date();
 				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss" );
-				fenetre.setTimes(launchTimeCalc,dateFormat.format(current));
+				if(launchState)
+					fenetre.setTimes(launchTimeCalc,dateFormat.format(current));
 			}
 		},0,1000);
 		
@@ -286,6 +291,13 @@ public class Server extends Thread{
 	
 	public static DbConnection getDbConnInfos() {
 		return servDbConnec;
+	}
+	
+	public static void writeIn(String s) {
+		if(launchState)
+			fenetre.writeAnnonce(s);
+		else
+			System.out.println(s);
 	}
 	
 	
