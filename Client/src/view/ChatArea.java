@@ -132,12 +132,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			btnStartGame.setBounds(10, 45, 380, 30);
 		lblTimer.setBounds(10, 45, 380, 30);
 		lblScore.setBounds(10, 85, 380, 30);
-		scrollPaneScore.setBounds(10, 120, 380, 300);
-		lblAnswer.setBounds(10, 430, 380, 30);
-		textAnswer.setBounds(10, 465, 380, 30);
-		lblChat.setBounds(10, 505, 380, 30);
-		scrollPaneChat.setBounds(10, 540, 380, 140);
-		textChat.setBounds(10, 685, 380, 30);
+		scrollPaneScore.setBounds(10, 120, 380, 220);
+		lblAnswer.setBounds(10, 350, 380, 30);
+		textAnswer.setBounds(10, 385, 380, 30);
+		lblChat.setBounds(10, 425, 380, 30);
+		scrollPaneChat.setBounds(10, 460, 380, 120);
+		textChat.setBounds(10, 585, 380, 30);
 		scrollPaneScore.setBackground(Color.white);
 		scrollPaneChat.setBackground(Color.white);
 		textChat.repaint();
