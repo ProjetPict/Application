@@ -85,7 +85,14 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		chat.setEditable(false);
 		chatDoc = chat.getStyledDocument();
 		chatMAS = chat.getInputAttributes();
-
+		try {
+			StyleConstants.setItalic(chatMAS, true);
+			chatDoc.insertString(0, "Bienvenue dans le chat. Ne communiquez aucune information personnelle ici (mot de passe, adresse, nom).", chatMAS);
+			StyleConstants.setItalic(chatMAS, false);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		scrollPaneChat = new JScrollPane(chat);
 		scrollPaneChat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
