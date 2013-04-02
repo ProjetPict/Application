@@ -142,4 +142,9 @@ public class Console extends JPanel {
 	public JTextPane getConsole() {
 		return serverAnswer;
 	}
+	
+	public void setLockElements(boolean b) {
+		serverCommand.setEnabled(b);
+		sendCommand.setEnabled(b);
+	}
 }
