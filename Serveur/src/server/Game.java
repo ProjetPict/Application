@@ -377,7 +377,7 @@ public class Game extends Thread{
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], 1);
 		drawingPlayer.setChoices(choices);
 
-		launchTimer(30);
+		launchTimer(15);
 
 		if(word.equals(""))
 		{

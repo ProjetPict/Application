@@ -75,7 +75,7 @@ public class GameScreen extends JPanel{
 	         JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, 
 	         null, options, null);
 		
-		time = 30;
+		time = 15;
 		Timer timer = new Timer();
 		
 		

@@ -300,7 +300,6 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		if(!drawing)
 		{
 			textAnswer.setEditable(enable);
-			//textAnswer.setText("");
 		}
 	}
 }
