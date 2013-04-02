@@ -1,8 +1,12 @@
 package view;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -22,6 +26,7 @@ public class Main {
 	private static Model model;
 	private static View view;
 	private static String host;
+	private static String fileHostAddress;
 	public static String player;
 	public static ResourceBundle texts;
 	public static final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -35,6 +40,7 @@ public class Main {
 	public static Properties settingsProp;
 	
 	public static void main(String[] argc) {
+		boolean launchOk = false;
 		if(isUnique()) {
 			gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
 			gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
@@ -44,19 +50,21 @@ public class Main {
 			texts = ResourceBundle.getBundle("TextBundle", Locale.getDefault());
 			//Get the host from the property file
 			settingsProp = new Properties();
-			
 			try {
 				settingsProp.load(new FileInputStream("files/settings.conf"));
-				host = settingsProp.getProperty("host");
+				fileHostAddress = settingsProp.getProperty("fileHostAddress");
+				readFromUrl(fileHostAddress);
+				model = new Model(host);
+				view = new View();
+				view.setPanel("Login", false);
+				launchOk = false;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			model = new Model(host);
-			view = new View();
-			view.setPanel("Login", false);
-		} else {
+		}
+		if(!isUnique() || !launchOk) {
 			JOptionPane.showMessageDialog(null,"Une instance de DrawVS semble être déjà lancée. Merci de fermer la précédente avant d'en lancer une nouvelle.","DrawVS est déjà lancé", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -81,7 +89,19 @@ public class Main {
 	    } catch(IOException ie) {
 	        unique = false;
 	    }
-
 	    return true;
+	}
+	
+	public static void readFromUrl(String s) {
+		try {
+			InputStream ips = new URL(s).openStream();
+			InputStreamReader ipsr=new InputStreamReader(ips);
+			BufferedReader br=new BufferedReader(ipsr);
+			String ligne;
+			while ((ligne=br.readLine())!=null){
+				host = ligne;
+			}
+			br.close(); 
+		} catch(Exception e) {}
 	}
 }

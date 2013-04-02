@@ -20,18 +20,13 @@ public class ConnecToServer{
 	private String host;
 	
 	
-	public ConnecToServer(String host)
-	{
+	public ConnecToServer(String host) {
 		connected = false;
-		this.host = host;
-		
+		this.host = host;	
 	}
 	
 	
-	public boolean connect(String login, String password)
-	{
-		
-		
+	public boolean connect(String login, String password) {
 		Command log = new Command(login);
 		Command pass = new Command(password);
 		
