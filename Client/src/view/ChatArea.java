@@ -277,7 +277,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			else if(((String) arg).equals("goodword"))
 			{
 				textAnswer.setEditable(false);
-				textAnswer.setText(Main.texts.getString("goodanwser"));
+				textAnswer.setText(Main.texts.getString("goodanswer"));
 				lblAnswer.setForeground(Color.GREEN);
 			}
 			else if(((String) arg).equals("wrongword"))
