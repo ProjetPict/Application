@@ -19,6 +19,7 @@ public class ColorBoard extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
+	private JRadioButton btnWhite;
 	private JRadioButton btnBlack;
 	private JRadioButton btnBlue;
 	private JRadioButton btnGreen;
@@ -39,6 +40,7 @@ public class ColorBoard extends JPanel{
 		btnGreen = new JRadioButton(Main.texts.getString("green"));
 		btnYellow = new JRadioButton(Main.texts.getString("yellow"));
 		btnRed = new JRadioButton(Main.texts.getString("red"));
+		btnWhite = new JRadioButton(Main.texts.getString("white"));
 		btnSmall = new JRadioButton(Main.texts.getString("small"));
 		btnMedium = new JRadioButton(Main.texts.getString("medium"));
 		btnBig = new JRadioButton(Main.texts.getString("big"));
@@ -49,18 +51,20 @@ public class ColorBoard extends JPanel{
 		btnGroup.add(btnGreen);
 		btnGroup.add(btnYellow);
 		btnGroup.add(btnRed);
+		btnGroup.add(btnWhite);
 		
 		btnGroupSizes = new ButtonGroup();
 		btnGroupSizes.add(btnSmall);
 		btnGroupSizes.add(btnMedium);
 		btnGroupSizes.add(btnBig);
 		
-		this.setLayout(new GridLayout(1,7));
+		this.setLayout(new GridLayout(1,8));
 		this.add(btnBlack);
 		this.add(btnBlue);
 		this.add(btnGreen);
 		this.add(btnYellow);
 		this.add(btnRed);
+		this.add(btnWhite);
 		
 		separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
@@ -90,6 +94,8 @@ public class ColorBoard extends JPanel{
 			res = Color.yellow;
 		else if(btnRed.isSelected())
 			res = Color.red;
+		else if(btnWhite.isSelected())
+			res = Color.white;
 		
 		return res;
 	}
@@ -105,10 +111,10 @@ public class ColorBoard extends JPanel{
 			res = 3;
 			break;
 		case 1:
-			res = 6;
+			res = 15;
 			break;
 		case 2:
-			res = 10;
+			res = 45;
 			break;
 		}
 		
