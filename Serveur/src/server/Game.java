@@ -382,11 +382,12 @@ public class Game extends Thread{
 		if(word.equals(""))
 		{
 			ObjectOutputStream out = drawingPlayer.getOutput();
+			int random = (int)(Math.random() * 3);
 			choices = new WordCommand("", "", "", 1);
 
 			//TODO choix aleatoire entre les trois mots
-			choices.command = "default";
-			word = "default";
+			choices.command = words[random];
+			word = words[random];
 			try {
 				out.writeObject(choices);
 				out.flush();

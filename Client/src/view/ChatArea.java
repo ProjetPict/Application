@@ -51,11 +51,15 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private Timer timer;
 	private int time;
 	private boolean drawing;
+	private boolean running;
 	private StyledDocument chatDoc;
 	private MutableAttributeSet chatMAS;
 	private Font titleFont = new Font("Arial", Font.PLAIN, 26);
-
+	
 	public ChatArea(boolean creator) {
+		
+		running = false;
+		
 		
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
@@ -65,7 +69,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		add(textAnswer);
 		textAnswer.setColumns(10);
 		textAnswer.addActionListener(this);
-		textAnswer.setEnabled(false);
+		textAnswer.setEditable(false);
 		
 		lblAnswer = new JLabel(Main.texts.getString("answer"));
 		add(lblAnswer);
@@ -213,9 +217,15 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			drawing = (Boolean) arg;
 
 			if(drawing == true)
-				textAnswer.setEnabled(false);
+			{
+				textAnswer.setEditable(false);
+				textAnswer.setText(Main.getModel().getWord());
+			}
 			else
-				textAnswer.setEnabled(true);
+			{
+				textAnswer.setEditable(true);
+				textAnswer.setText("");
+			}
 
 		}
 		else if(arg instanceof ChatCommand){
@@ -249,10 +259,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		{
 			if(((String) arg).equals("endgame"))
 			{
+				running = false;
 				enableStartButton(true);
 			}
 			else if(((String) arg).equals("startgame"))
 			{
+				running = true;
 				enableStartButton(false);
 			}
 		}
@@ -275,7 +287,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			{
 				list.setListData(scores);
 			}
-			if(scores.length > 1)
+			if(scores.length > 1 && !running)
 			{
 				enableStartButton(true);
 			}
@@ -286,6 +298,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	
 	public void enableAnswer(boolean enable) {
 		if(!drawing)
-			textAnswer.setEnabled(enable);
+		{
+			textAnswer.setEditable(enable);
+			//textAnswer.setText("");
+		}
 	}
 }

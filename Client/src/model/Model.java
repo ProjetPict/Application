@@ -120,6 +120,11 @@ public class Model extends Observable{
 	
 	public void sendCommand(Command command)
 	{
+		if(command instanceof WordCommand)
+		{
+			word = command.command;
+		}
+		
 		try {
 			out.writeObject(command);
 			out.flush();
