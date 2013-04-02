@@ -45,7 +45,15 @@ public class Server extends Thread{
 	private long launchTimeCalc;
 	private static boolean launchState;
 
-	public Server(boolean state) throws Exception{
+	public Server(boolean state) throws Exception {
+		startServer(state,false);
+	}
+
+	public void startServer(boolean state, boolean restart) throws Exception {
+		if(restart) {
+			fenetre.dispose();
+			socket.close();
+		}
 		launchState = state;
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();
@@ -299,7 +307,10 @@ public class Server extends Thread{
 			fenetre.writeAnnonce(s);
 		else
 			System.out.println(s);
-	}
+	}	
 	
+	public boolean getLaunchState() {
+		return launchState;
+	}
 	
 }

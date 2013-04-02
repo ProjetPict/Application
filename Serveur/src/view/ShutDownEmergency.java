@@ -16,7 +16,10 @@ public class ShutDownEmergency extends Thread {
 	private Server serverInfos;
 	private boolean shutDown;
 	private Fenetre window;
+	private JPanel pan;
 	private JPanel fadeEffect;
+	private JLabel saveLbl = new JLabel("Sauvegarde du serveur en cours...");
+	private JLabel countDownLbl = new JLabel();
 
 	public ShutDownEmergency(int i, Console c, Server s, boolean b, Fenetre f) {
 		max_count = i;
@@ -24,6 +27,7 @@ public class ShutDownEmergency extends Thread {
 		serverInfos = s;
 		shutDown = b;
 		window = f;
+		countDownLbl.setText("Merci de patienter.");
 	}
 	
 	@Override
@@ -42,22 +46,27 @@ public class ShutDownEmergency extends Thread {
 		JFrame frame = new JFrame();
 		if(!shutDown) {
 			fadeEffect.setOpaque(false);
+			pan = new JPanel();
 			window.setGlassPane(fadeEffect);
         	fadeEffect.setVisible(true);
-        	JPanel pan = new JPanel();
 			frame.setUndecorated(true);
-			frame.setSize(350,50);
+			frame.setSize(350,75);
 			frame.setLocationRelativeTo(window);
 			pan.add(new JLabel("Le serveur est en train de s'éteindre."));
-			pan.add(new JLabel("Merci de patienter le temps de la sauvegarde..."));
+			pan.add(saveLbl);
+			pan.add(countDownLbl);
 			frame.add(pan);
 			frame.setVisible(true);
 		}
 		console.writeAnnonce("\n> Préparation à l'extinction du serveur. Veuillez patienter...\n> Sauvegarde dans la base de données...");
 		serverInfos.getDbInfos().saveDatabase();
+		saveLbl.setText("Sauvegarde du serveur effectuée !");
 		console.writeAnnonce("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
 		console.writeAnnonce("Terminé !\n> Arrêt du serveur dans 9 secondes...");
 		while(count>0) {
+			if(!shutDown) {
+				countDownLbl.setText("Arrêt du serveur dans "+count+" seconde(s).");
+			}
 			try {
 				this.sleep(TIMER_PERIOD);
 			} catch (InterruptedException e) {}

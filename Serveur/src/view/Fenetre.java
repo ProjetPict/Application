@@ -60,7 +60,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JPanel servDown;
 	private JLabel servDownLbl;
 
-	public Fenetre(Server servInfo){
+	public Fenetre(final Server servInfo){
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(100,100));
@@ -117,10 +117,9 @@ public class Fenetre extends JFrame implements WindowListener {
 		
 		start.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
-				stop.setEnabled(true);
-				start.setEnabled(false);
-				isDown = false;
-				switchPanel(servDown);
+				try {
+					servInfo.startServer(true,true);
+				} catch (Exception e1) {}
 			}
 		});
 		stop.addActionListener(new ActionListener() { 
