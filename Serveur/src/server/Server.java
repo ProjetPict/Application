@@ -241,7 +241,8 @@ public class Server extends Thread{
 			e = it.next();
 			g = e.getValue();
 
-			gl.games.add(new GameInfo(e.getKey().toString(), g.getNbPlayers(), g.getJMax(), g.isPrivate(), g.isStarted()));
+			gl.games.add(new GameInfo(e.getKey().toString(), g.getNbPlayers(), 
+					g.getJMax(), g.isPrivate(), g.isStarted(), g.getDifficulty()));
 		}
 
 		return gl;

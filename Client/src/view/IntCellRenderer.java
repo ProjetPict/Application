@@ -5,7 +5,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class BooleanCellRenderer extends DefaultTableCellRenderer {
+public class IntCellRenderer extends DefaultTableCellRenderer {
 
 	/**
 	 * 
@@ -15,27 +15,27 @@ public class BooleanCellRenderer extends DefaultTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, 
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		
+
 		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		boolean b = (Boolean) value;
+		int d = (Integer) value;
+
+		switch(d)
+		{
+		case 1:
+			setText(Main.texts.getString("easy"));
+			break;
+		case 2:
+			setText(Main.texts.getString("medium"));
+			break;
+		case 3:
+			setText(Main.texts.getString("hard"));
+			break;
+		default:
+			setText(Main.texts.getString("difficulty"));
+			break;
+		}
 		
-		if(column == 3)
-		{
-			
-			if(b)
-				setText(Main.texts.getString("yes"));
-			else
-				setText(Main.texts.getString("no"));
-		}
-		else if(column == 4)
-		{
-			if(b)
-				setText(Main.texts.getString("ongoing"));
-			else
-				setText(Main.texts.getString("waiting"));
-		}
-			
 		return this;
 	}
 }

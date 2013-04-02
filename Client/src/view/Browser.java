@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.table.TableCellRenderer;
 
 import socketData.*;
 
@@ -76,6 +77,8 @@ public class Browser extends JPanel implements ActionListener{
 	private JPanel crtPane;
 
 	private GameList gl;
+	private BooleanCellRenderer boolRenderer;
+	private IntCellRenderer intRenderer;
 
 
 	public Browser(Window win) {
@@ -95,7 +98,8 @@ public class Browser extends JPanel implements ActionListener{
 		lblTurn = new JLabel(Main.texts.getString("turns"));
 		txtTurn = new JTextField();
 		lblDifficulty = new JLabel(Main.texts.getString("difficulty_choice"));
-		String[] difficulties = { Main.texts.getString("difficulty_easy"), Main.texts.getString("difficulty_medium"), Main.texts.getString("difficulty_hard") };
+		String[] difficulties = { Main.texts.getString("easy"), 
+				Main.texts.getString("medium"), Main.texts.getString("hard") };
 		jcbDifficulty = new JComboBox(difficulties);
 		
 		lblFilter = new JLabel(Main.texts.getString("filter"));
@@ -113,11 +117,31 @@ public class Browser extends JPanel implements ActionListener{
 
 		crtPane = new JPanel();
 		crtPane.setVisible(false);
+		
+		boolRenderer = new BooleanCellRenderer();
+		intRenderer = new IntCellRenderer();
 
-		table = new JTable();
+		table = new JTable() {
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public TableCellRenderer getCellRenderer(int row, int column) {
+		        if (column == 3 || column == 4) {
+		            return boolRenderer;
+		        }
+		        else if(column == 2)
+		        {
+		        	return intRenderer;
+		        }
+		        
+		        return super.getCellRenderer(row, column);
+		    }
+		};
+		
 		table.setShowGrid(false);
 		table.setShowVerticalLines(true);
-		table.setDefaultRenderer(Boolean.class, new BooleanCellRenderer());
 		fillTable();
 		scrlPane = new JScrollPane(table);
 		
@@ -232,7 +256,7 @@ public class Browser extends JPanel implements ActionListener{
 	private void joinGame() {
 		String name = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
 		String password = null;
-		if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 2)) == true)
+		if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 3)) == true)
 		{
 			password = JOptionPane.showInputDialog(this,
 					Main.texts.getString("enter_pass"),
@@ -270,8 +294,9 @@ public class Browser extends JPanel implements ActionListener{
 		if(name.length() >= 4) {
 			if(password.equals(""))
 				password = null;
-			//TODO ajouter choix difficulté
-			res = Main.getModel().createGame(name, password, pmax, turns, 1);
+	
+			res = Main.getModel().createGame(name, password, pmax, turns, 
+					jcbDifficulty.getSelectedIndex()+1);
 			
 			if(res.equals("success"))
 			{

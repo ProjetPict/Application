@@ -201,6 +201,12 @@ public class Game extends Thread{
 	{
 		return players.size();
 	}
+	
+	
+	public int getDifficulty()
+	{
+		return difficulty;
+	}
 
 
 	/**
@@ -374,7 +380,7 @@ public class Game extends Thread{
 		
 		//TODO integrer le tirage de mots al�atoire
 		String[] words = chooseNextWords();
-		WordCommand choices = new WordCommand(words[0], words[1], words[2], 1);
+		WordCommand choices = new WordCommand(words[0], words[1], words[2], difficulty);
 		drawingPlayer.setChoices(choices);
 
 		launchTimer(15);

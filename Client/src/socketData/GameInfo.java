@@ -18,15 +18,18 @@ public class GameInfo implements Serializable{
 	public int nbPlayers;
 	public int maxPlayers;
 	public boolean started;
+	public int difficulty;
 	
 	
-	public GameInfo(String name, int nbPlayers, int maxPlayers, boolean password, boolean started)
+	public GameInfo(String name, int nbPlayers, int maxPlayers, boolean password, 
+			boolean started, int difficulty)
 	{
 		this.name = name;
 		this.nbPlayers = nbPlayers;
 		this.maxPlayers = maxPlayers;
 		this.password = password;
 		this.started = started;
+		this.difficulty = difficulty;
 	}
 
 }

@@ -20,7 +20,9 @@ public class GameTableModel extends AbstractTableModel{
 	public GameTableModel(GameList gl)
 	{
 		this.gl = gl.games;
-		columns = new String[]{Main.texts.getString("name"), Main.texts.getString("players"), Main.texts.getString("password"), Main.texts.getString("status")};
+		columns = new String[]{Main.texts.getString("name"), Main.texts.getString("players"), 
+				Main.texts.getString("difficulty"), Main.texts.getString("password"), 
+				Main.texts.getString("status")};
 	}
 
 	@Override
@@ -49,8 +51,10 @@ public class GameTableModel extends AbstractTableModel{
 		case 1:
 			return gl.get(rowIndex).nbPlayers +"/"+gl.get(rowIndex).maxPlayers;
 		case 2:
-			return gl.get(rowIndex).password;
+			return gl.get(rowIndex).difficulty;
 		case 3:
+			return gl.get(rowIndex).password;
+		case 4:
 			return gl.get(rowIndex).started;
 		default:
 			throw new IllegalArgumentException();
@@ -64,7 +68,9 @@ public class GameTableModel extends AbstractTableModel{
 			case 1:
 				return String.class;
 			case 2:
+				return Integer.class;
 			case 3:
+			case 4:
 				return Boolean.class;
 	
 			default:
