@@ -25,7 +25,7 @@ public class Game extends Thread{
 
 
 	private ArrayList<Player> podium; //Les trois premiers joueurs en terme de score
-	private ArrayList<Player> firstAnswers; //Les trois premiers joueurs ï¿½ avoir rï¿½pondu
+	private ArrayList<Player> firstAnswers; //Les trois premiers joueurs à avoir répondu
 	private ArrayList<Player> players;
 	private Player drawingPlayer;
 	private String name;
@@ -34,7 +34,7 @@ public class Game extends Thread{
 	private int turns;
 	private int currentTurn;
 	private boolean running;
-	private boolean started; //True si la partie a demarrï¿½
+	private boolean started; //True si la partie a demarré
 	private String word;
 	private int difficulty;
 	private int nbAnswer;
@@ -424,12 +424,9 @@ public class Game extends Thread{
 
 	private void computeScores()
 	{
-		int nbFound = 0; //number of player who found the word
-
 		//Set score for "finding players"
 		for(Player p: players){
 			if(p.hasFound() && p != drawingPlayer){
-				nbFound++;
 
 				if(firstAnswers.contains(p)){
 					int rank = firstAnswers.indexOf(p);
@@ -445,18 +442,18 @@ public class Game extends Thread{
 		}
 
 		//Set score for the "drawing player"
-		int findingRatio = (nbFound/(players.size()-1))*100;
+		int findingRatio = (nbAnswer/(players.size()-1))*100;
 
 		if(findingRatio == 100){
-			drawingPlayer.setScore(drawingPlayer.getScore()+5);
+			drawingPlayer.setScore(drawingPlayer.getScore()+7);
 		}else if(findingRatio > 75){
-			drawingPlayer.setScore(drawingPlayer.getScore()+4);
+			drawingPlayer.setScore(drawingPlayer.getScore()+6);
 		}else if(findingRatio > 50){
-			drawingPlayer.setScore(drawingPlayer.getScore()+3);
+			drawingPlayer.setScore(drawingPlayer.getScore()+5);
 		}else if(findingRatio > 25){
+			drawingPlayer.setScore(drawingPlayer.getScore()+3);
+		}else if(nbAnswer > 0){
 			drawingPlayer.setScore(drawingPlayer.getScore()+2);
-		}else if(nbFound > 0){
-			drawingPlayer.setScore(drawingPlayer.getScore()+1);
 		}
 
 	}
@@ -497,7 +494,15 @@ public class Game extends Thread{
 				firstAnswers.add(player);
 
 		}
-
+		
+		String command;
+		if(res)
+			command = "goodword";
+		else
+			command = "wrongword";
+		
+		sendCommandTo(new Command(command), player);
+		
 		return res;
 	}
 

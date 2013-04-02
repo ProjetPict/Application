@@ -81,7 +81,7 @@ public class Browser extends JPanel implements ActionListener{
 	public Browser(Window win) {
 		mainWindow = win;
 		
-		btnJoin = new JButton(Main.texts.getString("connection"));
+		btnJoin = new JButton(Main.texts.getString("join"));
 		btnPnlCreate = new JButton(Main.texts.getString("g_create"));
 		btnCreate = new JButton(Main.texts.getString("send"));
 		btnCreateClose = new JButton(Main.texts.getString("cancel"));

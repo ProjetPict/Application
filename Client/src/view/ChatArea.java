@@ -267,6 +267,17 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				running = true;
 				enableStartButton(false);
 			}
+			else if(((String) arg).equals("goodword"))
+			{
+				textAnswer.setEditable(false);
+				textAnswer.setText(Main.texts.getString("goodanwser"));
+				lblAnswer.setForeground(Color.GREEN);
+			}
+			else if(((String) arg).equals("wrongword"))
+			{
+				lblAnswer.setForeground(Color.RED);
+			}
+			
 		}
 		else{
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();
@@ -297,6 +308,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	}
 	
 	public void enableAnswer(boolean enable) {
+		lblAnswer.setForeground(Color.BLACK);
 		if(!drawing)
 		{
 			textAnswer.setEditable(enable);

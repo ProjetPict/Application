@@ -86,6 +86,16 @@ public class Model extends Observable{
 			setChanged();
 			this.notifyObservers(false);
 		}
+		else if(command.command.equals("goodword"))
+		{
+			setChanged();
+			this.notifyObservers("goodword");
+		}
+		else if(command.command.equals("wrongword"))
+		{
+			setChanged();
+			this.notifyObservers("wrongword");
+		}
 	}
 	
 	public void processChatMsg(ChatCommand msg){
