@@ -27,6 +27,11 @@ public class View {
 		if(panelType.equals("Browser")){
 			browser = new Browser(window);
 			window.setPanel(browser);
+			if(Main.settingsProp.getProperty("nbLaunch").equals("0")) {
+				Tutorial t = new Tutorial();
+				t.setVisible(true);
+				Main.settingsProp.setProperty("nbLaunch", "1");
+			}
 		}
 		else if (panelType.equals("Login")){
 			login = new Login();
