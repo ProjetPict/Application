@@ -29,7 +29,6 @@ public class Fenetre extends JFrame implements WindowListener {
 	private Server serverInfos;
 	private Console console;
 	private Monitor monitor = new Monitor();
-	private ClipboardManager clipManage = new ClipboardManager();
 	private boolean isDown;
 	
 	private JMenuBar menuBar = new JMenuBar();

@@ -65,7 +65,7 @@ public class Connection extends Thread {
 
 		try {
 
-			System.out.println("Quelqu'un s'est connecté");
+			Server.writeIn("Quelqu'un s'est connecté");
 
 			Object login;
 			Object password;
@@ -81,7 +81,7 @@ public class Connection extends Thread {
 					Server.createPlayer(((Command)login).command, socket, this);
 					out.writeObject(new Command("success"));
 					out.flush();
-					System.out.println(login +" vient de se connecter ");
+					Server.writeIn(login +" vient de se connecter ");
 					
 				}	
 

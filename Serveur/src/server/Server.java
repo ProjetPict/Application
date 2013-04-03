@@ -44,6 +44,7 @@ public class Server extends Thread{
 	private static ServerDatabase servDbLocale;
 	private long launchTimeCalc;
 	private static boolean launchState;
+	private static boolean importantProcess;
 
 	public Server(boolean state) throws Exception {
 		startServer(state,false);
@@ -67,6 +68,7 @@ public class Server extends Thread{
 			fenetre = new Fenetre(this);
 			fenetre.setVisible(true);
 		}
+		importantProcess = true;
 		writeIn("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
 		writeIn("> Connexion à la base de données...");
 		while(tentatives<5 && !success) {
@@ -102,6 +104,7 @@ public class Server extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		importantProcess = false;
 	}
 
 
@@ -126,9 +129,11 @@ public class Server extends Thread{
 		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
 		autoSave.schedule(new TimerTask() {
 			public void run() {
+				importantProcess = true;
 				writeIn("\n# Sauvegarde automatique de l'historique dans la base de données...");
 				servDbLocale.saveDatabase();
 				writeIn("Terminé !");
+				importantProcess = false;
 			}
 		}, 600000, 600000);
 		launchTime.schedule(new TimerTask() {
@@ -218,7 +223,7 @@ public class Server extends Thread{
 		}
 		
 		players.remove(player);
-		System.out.println(player.getLogin() + " s'est deconnecté.");
+		writeIn(player.getLogin() + " s'est deconnecté.");
 	}
 
 
@@ -228,7 +233,7 @@ public class Server extends Thread{
 	 */
 	public static void removeGame(Game game)
 	{
-		System.out.println(game.getGameName() + " a été stoppée.");
+		writeIn(game.getGameName() + " a été stoppée.");
 		game.stopGame();
 		games.remove(game.getGameName());
 	}
@@ -275,7 +280,7 @@ public class Server extends Thread{
 				if(game.getPassword() == null || password.equals(game.getPassword()))
 				{
 					result = game.addPlayer(player);
-					System.out.println(player.getLogin() + " a rejoint la partie " + game.getGameName());
+					writeIn(player.getLogin() + " a rejoint la partie " + game.getGameName());
 					if(result)
 						player.setGame(game);
 					else
@@ -303,10 +308,14 @@ public class Server extends Thread{
 	}
 	
 	public static void writeIn(String s) {
-		if(launchState)
-			fenetre.writeAnnonce(s);
-		else
+		if(launchState) {
+			if(importantProcess)
+				fenetre.writeAnnonce(s);
+			else
+				fenetre.writeAnnonce("\n"+s);
+		} else {
 			System.out.println(s);
+		}
 	}	
 	
 	public boolean getLaunchState() {

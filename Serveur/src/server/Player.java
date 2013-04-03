@@ -17,7 +17,7 @@ import socketData.WordCommand;
 
 /**
  * Cette classe est un thread qui permet de maintenir la connexion avec un joueur et d'intercepter
- * les donnï¿½es qu'il envoie depuis son socket.
+ * les donneees qu'il envoie depuis son socket.
  * @author Jerome
  *
  */
@@ -211,7 +211,7 @@ public class Player extends Thread {
 			Server.removePlayer(this);
 
 		} catch (IOException e1) {
-			System.out.println("Connexion à " + login + " perdue.");
+			Server.writeIn("Connexion à " + login + " perdue.");
 			connected = false;
 			Server.removePlayer(this);
 		} catch (ClassNotFoundException e) {
