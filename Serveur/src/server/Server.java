@@ -322,4 +322,7 @@ public class Server extends Thread{
 		return launchState;
 	}
 	
+	public Fenetre getWindow() {
+		return fenetre;
+	}
 }

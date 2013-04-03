@@ -48,6 +48,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private JLabel lblTimer;
 	private JLabel lblScore;
 	private JLabel lblChat;
+	private JLabel lblTurns;
 	private Timer timer;
 	private int time;
 	private boolean drawing;
@@ -57,9 +58,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private Font titleFont = new Font("Arial", Font.PLAIN, 26);
 	
 	public ChatArea(boolean creator) {
-		
 		running = false;
-		
 		
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
@@ -103,8 +102,14 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		add(textChat);
 
 
-		lblTimer = new JLabel();
+		lblTimer = new JLabel("En attente...");
+		lblTimer.setFont(titleFont);
 		add(lblTimer);
+		
+		lblTurns = new JLabel("Tour : En attente");
+		Font italic = new Font("Arial",Font.ITALIC,14);
+		lblTurns.setFont(italic);
+		add(lblTurns);
 		
 		this.creator = creator;
 
@@ -126,12 +131,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		
 	}
 
-	public void enableStartButton(boolean enable)
-	{
-		if(btnStartGame != null && creator)
-		{
-
+	public void enableStartButton(boolean enable) {
+		if(btnStartGame != null && creator) {
 			btnStartGame.setVisible(enable);
+			lblTimer.setVisible(!enable);
 		}
 	}
 
@@ -139,10 +142,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
 		btnQuitGame.setBounds(10, 10, 380, 30);
+		lblTimer.setBounds(10, 45, 380, 30);
+		lblTimer.setAlignmentX(CENTER_ALIGNMENT);
 		if(creator)
 			btnStartGame.setBounds(10, 45, 380, 30);
-		lblTimer.setBounds(10, 45, 380, 30);
 		lblScore.setBounds(10, 85, 380, 30);
+		lblTurns.setBounds(280, 88, 380, 30);
 		scrollPaneScore.setBounds(10, 120, 380, 220);
 		lblAnswer.setBounds(10, 350, 380, 30);
 		textAnswer.setBounds(10, 385, 380, 30);
@@ -158,45 +163,35 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == textAnswer)
-		{
-			if(!textAnswer.getText().equals("") && getParent() instanceof GameScreen && textAnswer.getText().length() > 2)
-			{
+		if(e.getSource() == textAnswer) {
+			if(!textAnswer.getText().equals("") && getParent() instanceof GameScreen && textAnswer.getText().length() > 2) {
 				Main.getModel().sendAnswer(textAnswer.getText(), ((GameScreen)getParent()).getNbPixels());
 				textAnswer.setText("");
 			}
 		}
-		else if(e.getSource() == textChat)
-		{
-			if(!textChat.getText().equals("") && getParent() instanceof GameScreen && textChat.getText().length() > 0)
-			{
+		else if(e.getSource() == textChat) {
+			if(!textChat.getText().equals("") && getParent() instanceof GameScreen && textChat.getText().length() > 0) {
 				Main.getModel().sendChatMessage(textChat.getText());
 				textChat.setText("");
 			}
 		}
-		else if(e.getSource() == btnStartGame)
-		{
-			if(scores.length>1)
-			{
+		else if(e.getSource() == btnStartGame) {
+			if(scores.length>1) {
 				Main.getModel().sendCommand("startgame");
 			}
 		}
 
 	}
 
-	public void launchTimer()
-	{
+	public void launchTimer() {
 		this.time = 60;
 		if(timer != null)
 			timer.cancel();
 		timer = new Timer();
-		lblTimer.setVisible(true);
-
 		lblTimer.setText(String.valueOf(time));
 		timer.schedule(new TimerTask() {
 			public void run() {
 				time--;
-
 				lblTimer.setText(String.valueOf(time));
 				if(time <= 0)
 					this.cancel();
@@ -205,50 +200,34 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 	}
 
-
-	public void cancelTimer()
-	{
+	public void cancelTimer() {
 		time = 0;
 		timer.cancel();
 		timer = null;
-		lblTimer.setVisible(false);
+		lblTimer.setText("En attente...");
 	}
-
-
 
 	@Override
 	public void update(Observable o, Object arg) {
-
-		if(arg instanceof Boolean)
-		{
+		if(arg instanceof Boolean) {
 			drawing = (Boolean) arg;
-
-			if(drawing == true)
-			{
+			if(drawing == true) {
 				textAnswer.setEditable(false);
 				textAnswer.setText(Main.getModel().getWord());
-			}
-			else
-			{
+			} else {
 				textAnswer.setEditable(true);
 				textAnswer.setText("");
 			}
-
 		}
-		else if(arg instanceof ChatCommand){
-
+		else if(arg instanceof ChatCommand) {
 			ChatCommand cmd = (ChatCommand)arg;
 			try {
-
-				if(cmd.author == null || cmd.author.equals(""))
-				{
+				if(cmd.author == null || cmd.author.equals("")) {
 					StyleConstants.setItalic(chatMAS, true);
 					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.command, chatMAS);
 					StyleConstants.setItalic(chatMAS, false);
 					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), "\n", chatMAS);
-					
-				}
-				else{
+				} else {
 					StyleConstants.setItalic(chatMAS, false);
 					StyleConstants.setBold(chatMAS, true);
 					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), cmd.author, chatMAS);
@@ -259,65 +238,52 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			chat.setCaretPosition(chat.getDocument().getLength());
 		}
-		else if(arg instanceof String)
-		{
-			if(((String) arg).equals("endgame"))
-			{
+		else if(arg instanceof String) {
+			if(((String) arg).equals("endgame")) {
 				running = false;
 				enableStartButton(true);
 			}
-			else if(((String) arg).equals("startgame"))
-			{
+			else if(((String) arg).equals("startgame")) {
 				running = true;
 				enableStartButton(false);
 			}
-			else if(((String) arg).equals("goodword"))
-			{
+			else if(((String) arg).equals("goodword")) {
 				textAnswer.setEditable(false);
 				textAnswer.setText(Main.texts.getString("goodanswer"));
 				lblAnswer.setForeground(Color.GREEN);
 			}
-			else if(((String) arg).equals("wrongword"))
-			{
+			else if(((String) arg).equals("wrongword")) {
 				lblAnswer.setForeground(Color.RED);
 			}
-			
-		}
-		else{
+		} else {
 			Collection<PlayerScore> temp = Main.getModel().getScores().values();
 			scores = new PlayerScore[temp.size()];
 			//scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
-
 			Iterator<PlayerScore> it = temp.iterator();
-
 			int i = 0;
-			while(it.hasNext())
-			{
+			while(it.hasNext()) {
 				PlayerScore ps = it.next();
 				scores[i] = ps;
 				i++;
 			}
 
-			if(scores.length > 0)
-			{
+			if(scores.length > 0) {
 				list.setListData(scores);
 			}
-			if(scores.length > 1 && !running)
-			{
+			
+			if(scores.length > 1 && !running) {
 				enableStartButton(true);
-			}
-			else
+			} else {
 				enableStartButton(false);
+			}
 		}
 	}
 	
 	public void enableAnswer(boolean enable) {
 		lblAnswer.setForeground(Color.BLACK);
-		if(!drawing)
-		{
+		if(!drawing) {
 			textAnswer.setEditable(enable);
 		}
 	}

@@ -40,7 +40,6 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JMenuItem stop = new JMenuItem("Arrêter le serveur");
 	private JMenuItem close = new JMenuItem("Fermer");
 
-	private JMenuItem annonce = new JMenuItem("Créer une annonce");
 	private JMenuItem save = new JMenuItem("Sauvegarder vers MySQL");
 	private JMenuItem savelogs = new JMenuItem("Exporter le journal de logs");
 	private JMenuItem seelogs = new JMenuItem("Voir le journal de logs");
@@ -50,11 +49,14 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JSplitPane pan;
 	private JPanel servDown;
 	private JLabel servDownLbl;
+	
+	public final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+	public final int SCREEN_HEIGHT = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
 	public Fenetre(final Server servInfo){
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
-		this.setLocation(new Point(100,100));
+		this.setLocation(new Point(SCREEN_WIDTH/2-450,SCREEN_HEIGHT/2-350));
 		this.setResizable(false);
 		this.setSize(900, 700);
 		this.setJMenuBar(menuBar);
@@ -72,8 +74,6 @@ public class Fenetre extends JFrame implements WindowListener {
 		fichier.add(close);
 		start.setEnabled(false);
 
-		maintenance.add(annonce);
-		maintenance.addSeparator();
 		maintenance.add(save);
 		maintenance.add(savelogs);
 		maintenance.addSeparator();
@@ -142,6 +142,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	
 	public void writeAnnonce(String s) {
 		console.writeAnnonce(s);
+		console.getConsole().selectAll();
 	}
 	
 	public void stopOrClose(boolean b) throws InterruptedException {

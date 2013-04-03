@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import server.Server;
+import view.ShutDownEmergency;
 
 public class Main {
 	
@@ -30,6 +31,16 @@ public class Main {
 		try {
 			server = new Server(state);
 			server.start();
+			if(!state) {
+				System.out.println("> Rentrez la commande \"Quitter\" afin d'éteindre le serveur.");
+				do {
+					try {
+						param = input.readLine();
+					} catch (IOException e) {}
+				} while(param.equals("Quitter"));
+				ShutDownEmergency cdTime = new ShutDownEmergency(10,server);
+				cdTime.start();
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

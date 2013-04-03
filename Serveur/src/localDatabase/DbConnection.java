@@ -16,7 +16,7 @@ public class DbConnection extends Thread {
 	private String db_link_url = "http://drawvs.free.fr/core/dbw.php";
 	private String db_hostname = "sql.free.fr";
 	private String db_username = "drawvs";
-	private String db_password = "";
+	private String db_password = "shazbotvgs";
 	private String db_basename = "drawvs";
 	private DbwConnection db_connection;
 	
