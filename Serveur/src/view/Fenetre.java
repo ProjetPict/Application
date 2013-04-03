@@ -34,7 +34,6 @@ public class Fenetre extends JFrame implements WindowListener {
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
-	private JMenu edition = new JMenu("Edition");
 	private JMenu maintenance = new JMenu("Maintenance");
 	private JMenu aide = new JMenu("Aide");
 	 
@@ -42,19 +41,12 @@ public class Fenetre extends JFrame implements WindowListener {
 	private JMenuItem stop = new JMenuItem("Arrêter le serveur");
 	private JMenuItem close = new JMenuItem("Fermer");
 
-	private JMenuItem history = new JMenuItem("Historique des commandes");
-	private JMenuItem copy = new JMenuItem("Copier le contenu de la ligne de commande");
-	private JMenuItem paste = new JMenuItem("Coller dans la ligne de commande");
-	private JMenuItem cut = new JMenuItem("Couper le contenu de la ligne de commande");
-
 	private JMenuItem annonce = new JMenuItem("Créer une annonce");
 	private JMenuItem save = new JMenuItem("Sauvegarder vers MySQL");
 	private JMenuItem savelogs = new JMenuItem("Exporter le journal de logs");
 	private JMenuItem seelogs = new JMenuItem("Voir le journal de logs");
 	
 	private JMenuItem about = new JMenuItem("A propos");
-	private JMenuItem commands = new JMenuItem("Liste des commandes disponibles");
-	private JMenuItem infos = new JMenuItem("Obtenir les informations du serveur");
 	
 	private JSplitPane pan;
 	private JPanel servDown;
@@ -68,11 +60,10 @@ public class Fenetre extends JFrame implements WindowListener {
 		this.setSize(900, 700);
 		this.setJMenuBar(menuBar);
 		this.serverInfos = servInfo;
-		console = new Console(servInfo);
+		console = new Console();
 		isDown = false;
 		
 		menuBar.add(fichier);
-		menuBar.add(edition);
 		menuBar.add(maintenance);
 		menuBar.add(aide);
 		
@@ -82,15 +73,6 @@ public class Fenetre extends JFrame implements WindowListener {
 		fichier.add(close);
 		start.setEnabled(false);
 
-		edition.add(history);
-		edition.addSeparator();
-		edition.add(copy);
-		edition.add(cut);
-		edition.add(paste);
-		clipManage = new ClipboardManager();
-		/*if(clipManage.getClipboardContents().length()==0)
-			paste.setEnabled(false);*/
-
 		maintenance.add(annonce);
 		maintenance.addSeparator();
 		maintenance.add(save);
@@ -99,9 +81,6 @@ public class Fenetre extends JFrame implements WindowListener {
 		maintenance.add(seelogs);
 		
 		aide.add(about);
-		aide.addSeparator();
-		aide.add(commands);
-		aide.add(infos);
 		
 		pan = new JSplitPane();
 		pan.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -138,44 +117,6 @@ public class Fenetre extends JFrame implements WindowListener {
 				try {
 					stopOrClose(true);
 				} catch (InterruptedException e1) {}
-			}
-		});
-		history.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				console.directAsk("historique");
-			}
-		});
-		copy.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				clipManage.setClipboardContents(console.getTextField());
-				paste.setEnabled(true);
-			}
-		});
-		cut.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				clipManage.setClipboardContents(console.getTextField());
-				console.setTextField("");
-				paste.setEnabled(true);
-			}
-		});
-		paste.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				console.setTextField(clipManage.getClipboardContents());
-			}
-		});
-		annonce.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				console.setTextField("annonce \"Annonce a transmettre aux clients\"");
-			}
-		});
-		save.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				console.directAsk("save mysql");
-			}
-		});
-		savelogs.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				console.directAsk("save logs");
 			}
 		});
 		seelogs.addActionListener(new ActionListener() { 
@@ -264,9 +205,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	
 	public void setLockElements(boolean b) {
 		fichier.setEnabled(b);
-		edition.setEnabled(b);
 		maintenance.setEnabled(b);
 		aide.setEnabled(b);
-		console.setLockElements(b);
 	}
 }
