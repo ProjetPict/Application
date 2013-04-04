@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+
 import socketData.ChatCommand;
 import socketData.PlayerScore;
 import java.awt.Color;
@@ -102,7 +104,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		add(textChat);
 
 
-		lblTimer = new JLabel("En attente...");
+		lblTimer = new JLabel("En attente du lancement.",SwingConstants.CENTER);
+		if(creator)
+			lblTimer.setText("En attente de joueur.");
 		lblTimer.setFont(titleFont);
 		add(lblTimer);
 		
@@ -204,7 +208,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		time = 0;
 		timer.cancel();
 		timer = null;
-		lblTimer.setText("En attente...");
+		lblTimer.setText("En attente du dessinateur.");
 	}
 
 	@Override

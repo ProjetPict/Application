@@ -39,6 +39,7 @@ public class Bonus implements KeyListener {
 			bonusFrame.setSize(400,400);
 			bonusFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
 			bonusFrame.setLocation(Main.SCREEN_WIDTH/2-200, Main.SCREEN_HEIGHT/2-200);
+			bonusFrame.setResizable(false);
 			bonusFrame.setVisible(true);
 			bonusPanel = (JPanel) bonusFrame.getContentPane();
             ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/bonus.gif")));
@@ -51,15 +52,9 @@ public class Bonus implements KeyListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(KeyEvent e) {}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent e) {}
 
 }
