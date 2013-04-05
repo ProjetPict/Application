@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,18 +39,12 @@ public class Tutorial extends JFrame {
 		stepImage = new ArrayList<Image>();
 		stepLbl = new ArrayList<JLabel>();
 		
-		stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png")));
-		stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png")));
-		stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png")));
-		stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png")));
+		for(int j=1; j<7; j++)
+			stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/rules/slide_"+j+"_fr.png")));
 		int size = stepImage.size();
 		
 		for(i=0; i<size; i++) {
-			stepPan.add(new JPanel(new BorderLayout()) {
-				public void paintComponents(Graphics g) {
-					g.drawImage(getImage(),0,0,this);
-				}
-			});
+			stepPan.add(new JPanel(new BorderLayout()));
 			JPanel tmpPan = new JPanel(new BorderLayout());
 			stepLbl.add(new JLabel(Main.texts.getString("step")+" : "+(i+1)+"/"+size,SwingConstants.CENTER));
 			tmpPan.add(stepLbl.get(i),BorderLayout.CENTER);
@@ -77,6 +72,10 @@ public class Tutorial extends JFrame {
 			}
 			tmpPan.add(stepPrevToPan.get(i),BorderLayout.WEST);
 			tmpPan.add(stepNextToPan.get(i),BorderLayout.EAST);
+            ImageIcon tmpImg = new ImageIcon(stepImage.get(i));
+            JLabel tmpImgLbl = new JLabel();
+            tmpImgLbl.setIcon(tmpImg);
+            stepPan.get(i).add(tmpImgLbl,BorderLayout.CENTER);
 			stepPan.get(i).add(tmpPan,BorderLayout.SOUTH);
 		}
 		setContentPane(stepPan.get(0));
@@ -87,10 +86,6 @@ public class Tutorial extends JFrame {
 		setContentPane(stepPan.get(i));
 		repaint();
 		validate();
-	}
-	
-	public Image getImage() {
-		return stepImage.get(i);
 	}
 	
 }
