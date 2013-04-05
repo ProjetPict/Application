@@ -1,5 +1,9 @@
 package view;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import socketData.Picture;
 import socketData.WordCommand;
 import model.GameObserver;
@@ -27,10 +31,19 @@ public class View {
 		if(panelType.equals("Browser")){
 			browser = new Browser(window);
 			window.setPanel(browser);
-			if(Main.settingsProp.getProperty("nbLaunch").equals("0")) {
+			if(Main.settingsProp.getProperty("firstLaunch").equals("0")) {
 				Tutorial t = new Tutorial();
 				t.setVisible(true);
-				Main.settingsProp.setProperty("nbLaunch", "1");
+				Main.settingsProp.setProperty("firstLaunch", "1");
+				try {
+					Main.settingsProp.store(new FileOutputStream("files/settings.conf"), null);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		else if (panelType.equals("Login")){

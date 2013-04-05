@@ -41,7 +41,9 @@ public class Main {
 	
 	public static void main(String[] argc) {
 		boolean launchOk = false;
-		if(isUnique()) {
+		boolean unique = isUnique();
+		
+		if(unique) {
 			gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
 			gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
 			ratioX = gameWidth/1024.0;
@@ -57,15 +59,15 @@ public class Main {
 				model = new Model(host);
 				view = new View();
 				view.setPanel("Login", false);
-				launchOk = false;
+				launchOk = true;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if(!isUnique() || !launchOk) {
-			JOptionPane.showMessageDialog(null,"Une instance de DrawVS semble être déjà lancée. Merci de fermer la précédente avant d'en lancer une nouvelle.","DrawVS est déjà lancé", JOptionPane.ERROR_MESSAGE);
+		if(!unique || !launchOk) {
+			JOptionPane.showMessageDialog(null, texts.getString("instance_error"), texts.getString("launch_error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -89,6 +91,8 @@ public class Main {
 	    } catch(IOException ie) {
 	        unique = false;
 	    }
+	    
+	    //TODO remplacer par unique
 	    return true;
 	}
 	
