@@ -22,7 +22,7 @@ import localDatabase.ServerDatabase;
 
 import socketData.GameInfo;
 import socketData.GameList;
-import view.Fenetre;
+import view.Window;
 
 /**
  * Cette classe gère les nouvelles connexions, ainsi que
@@ -38,7 +38,7 @@ public class Server extends Thread{
 	private static Map<String, Game> games;
 	private ServerSocket serverSocket;
 	private Socket socket;
-	private static Fenetre fenetre;
+	private static Window windowServer;
 	private Runtime runtime;
 	private static DbConnection servDbConnec;
 	private static ServerDatabase servDbLocale;
@@ -52,7 +52,7 @@ public class Server extends Thread{
 
 	public void startServer(boolean state, boolean restart) throws Exception {
 		if(restart) {
-			fenetre.dispose();
+			windowServer.dispose();
 			socket.close();
 		}
 		launchState = state;
@@ -65,8 +65,8 @@ public class Server extends Thread{
 		boolean success = false;
 		
 		if(launchState) {
-			fenetre = new Fenetre(this);
-			fenetre.setVisible(true);
+			windowServer = new Window(this);
+			windowServer.setVisible(true);
 		}
 		importantProcess = true;
 		writeIn("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
@@ -123,7 +123,7 @@ public class Server extends Thread{
 			public void run() {
 				runtime = Runtime.getRuntime();
 				if(launchState)
-					fenetre.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
+					windowServer.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
 			}
 		}, 0, 1000);
 		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
@@ -143,7 +143,7 @@ public class Server extends Thread{
 				current = new Date();
 				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss" );
 				if(launchState)
-					fenetre.setTimes(launchTimeCalc,dateFormat.format(current));
+					windowServer.setTimes(launchTimeCalc,dateFormat.format(current));
 			}
 		},0,1000);
 		
@@ -310,9 +310,9 @@ public class Server extends Thread{
 	public static void writeIn(String s) {
 		if(launchState) {
 			if(importantProcess)
-				fenetre.writeAnnonce(s);
+				windowServer.writeAnnonce(s);
 			else
-				fenetre.writeAnnonce("\n"+s);
+				windowServer.writeAnnonce("\n"+s);
 		} else {
 			System.out.println(s);
 		}
@@ -322,7 +322,7 @@ public class Server extends Thread{
 		return launchState;
 	}
 	
-	public Fenetre getWindow() {
-		return fenetre;
+	public Window getWindow() {
+		return windowServer;
 	}
 }

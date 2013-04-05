@@ -21,7 +21,7 @@ import server.Server;
  * @author Matthieu
  *
  */
-public class Fenetre extends JFrame implements WindowListener {
+public class Window extends JFrame implements WindowListener {
 	/**
 	 * 
 	 */
@@ -53,7 +53,7 @@ public class Fenetre extends JFrame implements WindowListener {
 	public final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 	public final int SCREEN_HEIGHT = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
-	public Fenetre(final Server servInfo){
+	public Window(final Server servInfo){
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(SCREEN_WIDTH/2-450,SCREEN_HEIGHT/2-350));

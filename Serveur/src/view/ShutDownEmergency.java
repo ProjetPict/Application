@@ -15,14 +15,14 @@ public class ShutDownEmergency extends Thread {
 	private Console console;
 	private Server serverInfos;
 	private boolean shutDown;
-	private Fenetre window;
+	private Window window;
 	private JFrame frame;
 	private JPanel pan;
 	private JPanel fadeEffect;
 	private JLabel saveLbl = new JLabel("Sauvegarde du serveur en cours...");
 	private JLabel countDownLbl = new JLabel();
 
-	public ShutDownEmergency(int i, Console c, Server s, boolean b, Fenetre f) {
+	public ShutDownEmergency(int i, Console c, Server s, boolean b, Window f) {
 		max_count = i;
 		console = c;
 		serverInfos = s;
