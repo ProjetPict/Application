@@ -1,7 +1,6 @@
 package view;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,8 +15,6 @@ public class Bonus implements KeyListener {
 	
 	private JFrame bonusFrame;
 	private JPanel bonusPanel;
-	private Image imgBonus;
-	
 	private int[] konamiCode = {38,38,40,40,37,39,37,39,66,65};
 	private ArrayList<Integer> enterCode;
 	
@@ -35,7 +32,7 @@ public class Bonus implements KeyListener {
 			enterCode.clear();
 		}
 		if(enterCode.size()==10) {
-			bonusFrame = new JFrame("Pourquoi saisis-tu le konami code ? Tu espères tricher ?!");
+			bonusFrame = new JFrame("Bonus");
 			bonusFrame.setSize(400,400);
 			bonusFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
 			bonusFrame.setLocation(Main.SCREEN_WIDTH/2-200, Main.SCREEN_HEIGHT/2-200);
@@ -45,6 +42,11 @@ public class Bonus implements KeyListener {
             ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/bonus.gif")));
             JLabel iLbl = new JLabel();
             iLbl.setIcon(ii);
+            
+            JLabel lblBonus = new JLabel(Main.texts.getString("konami"));
+           
+            bonusPanel.setLayout(new FlowLayout());
+            bonusPanel.add(lblBonus);
             bonusPanel.add(iLbl);
 			bonusFrame.validate();
 			enterCode.clear();

@@ -21,9 +21,11 @@ public class View {
 	private Browser browser;
 	private GameScreen gmScreen;
 	private GameObserver go;
+	private Bonus bonus = new Bonus();
 
 	public View(){
 		window = new Window();
+		window.addKeyListener(bonus);
 	}
 
 	public void setPanel(String panelType, boolean gameCreator){
@@ -48,6 +50,7 @@ public class View {
 		}
 		else if (panelType.equals("Login")){
 			login = new Login();
+			login.addKeyListener(bonus);
 			window.setPanel(login);
 		}
 		else if (panelType.equals("GameScreen")){

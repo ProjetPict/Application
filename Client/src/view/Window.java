@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 public class Window extends JFrame implements WindowListener, ComponentListener{
 
 	private static final long serialVersionUID = 5314555994004764198L;
-	private Bonus bonus = new Bonus();
 
 	public Window(){
 		//On initialise la JFrame		
@@ -31,7 +30,6 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 	    int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
 	    this.setLocation(x, y);
 	    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
-	    this.addKeyListener(bonus);
 	}
 	
 	public void setPanel(JPanel panel){
