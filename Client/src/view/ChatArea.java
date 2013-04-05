@@ -19,6 +19,8 @@ import javax.swing.SwingConstants;
 
 import socketData.ChatCommand;
 import socketData.PlayerScore;
+import socketData.ValueCommand;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -58,9 +60,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private StyledDocument chatDoc;
 	private MutableAttributeSet chatMAS;
 	private Font titleFont = new Font("Arial", Font.PLAIN, 26);
+	private int turn;
+	private int maxTurn;
 	
 	public ChatArea(boolean creator) {
 		running = false;
+		turn = 0;
+		maxTurn = 0;
 		
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
@@ -222,6 +228,17 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				textAnswer.setEditable(true);
 				textAnswer.setText("");
 			}
+		}
+		else if(arg instanceof ValueCommand)
+		{
+			ValueCommand cmd = (ValueCommand) arg;
+			
+			if(cmd.command.equals("turn"))
+				turn = cmd.value;
+			else
+				maxTurn = cmd.value;
+			
+			lblTurns.setText(Main.texts.getString("turns") + turn + "/" + maxTurn);
 		}
 		else if(arg instanceof ChatCommand) {
 			ChatCommand cmd = (ChatCommand)arg;

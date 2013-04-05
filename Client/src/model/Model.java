@@ -12,6 +12,7 @@ import socketData.Command;
 import socketData.ChatCommand;
 import socketData.GameList;
 import socketData.PlayerScore;
+import socketData.ValueCommand;
 import socketData.WordCommand;
 import view.Main;
 
@@ -27,13 +28,13 @@ public class Model extends Observable{
 	private GameObserver go;
 	private Map<String, PlayerScore> scores;
 	private String word;
-	
-	
+
+
 	public Model(String host){
 		connec = new ConnecToServer(host);
 		go = null;
 	}
-	
+
 	public boolean connect(String login, String password){
 		boolean res = connec.connect(login, password);
 		if(res)
@@ -44,16 +45,16 @@ public class Model extends Observable{
 		}
 		return res; 
 	}
-	
+
 	public void disconnect(){
 		connec.disconnect();
 	}
-	
+
 	public String getWord()
 	{
 		return word;
 	}
-	
+
 	public void processCommand(Command command)
 	{
 		if(command.command.equals("startturn"))
@@ -97,12 +98,12 @@ public class Model extends Observable{
 			this.notifyObservers("wrongword");
 		}
 	}
-	
+
 	public void processChatMsg(ChatCommand msg){
 		setChanged();
 		this.notifyObservers(msg);
 	}
-	
+
 	public void processWordCommand(WordCommand command)
 	{
 		if(command.command.equals(""))
@@ -114,27 +115,27 @@ public class Model extends Observable{
 			Main.getView().closeDialog();
 		}
 	}
-	
+
 	public void sendAnswer(String answer, long nbPixels)
 	{
 		AnswerCommand ans = new AnswerCommand(answer, nbPixels);
-		
+
 		sendCommand(ans);
-		
+
 	}
-	
+
 	public void sendCommand(String command)
 	{
 		sendCommand(new Command(command));
 	}
-	
+
 	public void sendCommand(Command command)
 	{
 		if(command instanceof WordCommand)
 		{
 			word = command.command;
 		}
-		
+
 		try {
 			out.writeObject(command);
 			out.flush();
@@ -142,29 +143,29 @@ public class Model extends Observable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sendChatMessage(String msg)
 	{
 		sendCommand(new ChatCommand(msg, Main.player));
 	}
-	
-	
+
+
 	public GameList getGameList(){
 		return connec.getGameList();
 	}
-	
+
 	public void addPlayerScore(PlayerScore ps)
 	{
 		scores.put(ps.login, ps);
 		setChanged();
 		notifyObservers();
 	}
-	
+
 	public Map<String, PlayerScore> getScores()
 	{
 		return scores;
 	}
-	
+
 	public String createGame(String name, String password, int pMax, 
 			int turns, int difficulty){
 		String res = connec.createGame(name, password, pMax, turns, difficulty);
@@ -172,7 +173,7 @@ public class Model extends Observable{
 			scores = new Hashtable<String, PlayerScore>();
 		return res;
 	}
-	
+
 	public String joinGame(String name, String password)
 	{
 		String res = connec.joinGame(name, password);
@@ -180,18 +181,23 @@ public class Model extends Observable{
 			scores = new Hashtable<String, PlayerScore>();
 		return res;
 	}
-	
+
 	public ObjectOutputStream getOutput(){
 		return out;
 	}
-	
+
 	public ObjectInputStream getInput(){
 		return in;
 	}
-	
+
 	public GameObserver getGameObserver()
 	{
 		return go;
 	}
-	
+
+	public void processValueCommand(ValueCommand obj) {
+		setChanged();
+		this.notifyObservers(obj);
+	}
+
 }

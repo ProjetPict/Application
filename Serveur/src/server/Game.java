@@ -14,6 +14,7 @@ import socketData.ChatCommand;
 import socketData.Line;
 import socketData.Picture;
 import socketData.PlayerScore;
+import socketData.ValueCommand;
 import socketData.WordCommand;
 
 /**
@@ -103,10 +104,14 @@ public class Game extends Thread{
 				podium.clear();
 				
 				sendScoresToAll(null);
+				sendCommand(new ValueCommand("turns", turns));
+				
 				while(currentTurn < turns)
 				{
 					currentTurn++;
-
+					
+					sendCommand(new ValueCommand("turn", currentTurn));
+					
 					for(int i = 0; i < players.size(); i++)
 					{
 						drawingPlayer = players.get(i);
