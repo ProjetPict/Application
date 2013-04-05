@@ -35,7 +35,7 @@ public class Bonus implements KeyListener {
 			enterCode.clear();
 		}
 		if(enterCode.size()==10) {
-			bonusFrame = new JFrame("Konami Code saisi !");
+			bonusFrame = new JFrame("Pourquoi saisis-tu le konami code ? Tu espères tricher ?!");
 			bonusFrame.setSize(400,400);
 			bonusFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
 			bonusFrame.setLocation(Main.SCREEN_WIDTH/2-200, Main.SCREEN_HEIGHT/2-200);

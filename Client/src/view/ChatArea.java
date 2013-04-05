@@ -88,7 +88,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		chatMAS = chat.getInputAttributes();
 		try {
 			StyleConstants.setItalic(chatMAS, true);
-			chatDoc.insertString(0, "Bienvenue dans le chat. Ne communiquez aucune information personnelle ici (mot de passe, adresse, nom).", chatMAS);
+			chatDoc.insertString(0, Main.texts.getString("welcome_chat"), chatMAS);
 			StyleConstants.setItalic(chatMAS, false);
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
@@ -104,13 +104,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		add(textChat);
 
 
-		lblTimer = new JLabel("En attente du lancement.",SwingConstants.CENTER);
+		lblTimer = new JLabel(Main.texts.getString("waiting_launch"),SwingConstants.CENTER);
 		if(creator)
-			lblTimer.setText("En attente de joueur.");
+			lblTimer.setText(Main.texts.getString("waiting_players"));
 		lblTimer.setFont(titleFont);
 		add(lblTimer);
 		
-		lblTurns = new JLabel("Tour : En attente");
+		lblTurns = new JLabel(Main.texts.getString("waiting_turns"));
 		Font italic = new Font("Arial",Font.ITALIC,14);
 		lblTurns.setFont(italic);
 		add(lblTurns);
@@ -124,7 +124,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		add(lblChat);
 		lblChat.setFont(titleFont);
 		
-		btnQuitGame = new JButton("Quitter la partie");
+		btnQuitGame = new JButton(Main.texts.getString("quit_game"));
 		add(btnQuitGame);
 
 		if(creator){
@@ -208,7 +208,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		time = 0;
 		timer.cancel();
 		timer = null;
-		lblTimer.setText("En attente du dessinateur.");
+		lblTimer.setText(Main.texts.getString("waiting_drawer"));
 	}
 
 	@Override

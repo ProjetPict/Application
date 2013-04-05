@@ -27,7 +27,7 @@ public class Tutorial extends JFrame {
 	
 	public Tutorial() {
 		this.setSize(600, 600);
-		this.setTitle("Bienvenue sur DrawVS - Aide aux débutants");
+		this.setTitle(Main.texts.getString("welcome"));
 		this.setLocation(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width/2-300, java.awt.Toolkit.getDefaultToolkit().getScreenSize().height/2-300);
 	    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
 		this.setResizable(false);
@@ -51,7 +51,7 @@ public class Tutorial extends JFrame {
 				}
 			});
 			JPanel tmpPan = new JPanel(new BorderLayout());
-			stepLbl.add(new JLabel("Etape : "+(i+1)+"/"+size,SwingConstants.CENTER));
+			stepLbl.add(new JLabel(Main.texts.getString("step")+" : "+(i+1)+"/"+size,SwingConstants.CENTER));
 			tmpPan.add(stepLbl.get(i),BorderLayout.CENTER);
 			stepPrevToPan.add(new JButton("< "+Main.texts.getString("previous")));
 			stepNextToPan.add(new JButton(Main.texts.getString("next")+" >"));
