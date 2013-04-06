@@ -200,4 +200,10 @@ public class Model extends Observable{
 		this.notifyObservers(obj);
 	}
 
+	public void quitGame() {
+		sendCommand(new Command("quitgame"));
+		scores = null;
+		word = "";
+		this.deleteObservers();
+	}
 }

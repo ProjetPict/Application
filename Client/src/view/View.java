@@ -29,7 +29,7 @@ public class View {
 	}
 
 	public void setPanel(String panelType, boolean gameCreator){
-		window.setVisible(true);
+		
 		if(panelType.equals("Browser")){
 			browser = new Browser(window);
 			window.setPanel(browser);
@@ -58,6 +58,7 @@ public class View {
 			window.setPanel(gmScreen);
 		}
 		
+		window.setVisible(true);
 		window.validate();
 		
 	}
@@ -101,5 +102,11 @@ public class View {
 	public void endTurn() {
 		gmScreen.endTurn();
 		
+	}
+
+	public void quitGame() {
+		Main.getModel().quitGame();
+		setPanel("Browser", false);
+		gmScreen = null;
 	}
 }

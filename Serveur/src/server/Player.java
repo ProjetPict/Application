@@ -340,6 +340,13 @@ public class Player extends Thread {
 				e.printStackTrace();
 			}
 		}
+		else if(message.command.equals("quitgame"))
+		{
+			if(game!=null)
+			{
+				game.removePlayer(this);
+			}
+		}
 		else if(message.command.equals("startgame"))
 		{
 			if(game!=null)

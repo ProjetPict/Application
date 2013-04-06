@@ -37,16 +37,16 @@ public class Browser extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	private Window mainWindow;
-	
-    private Image imgBlank = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/blank.png"));
-    private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo_small.png"));
-    private Image imgTop = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/top.png"));
 
-    private JDialog newGameOptions;
-    private JPanel createPane;
-    private boolean toFade = false;
-    private JPanel fadeEffect;
-    
+	private Image imgBlank = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/blank.png"));
+	private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo_small.png"));
+	private Image imgTop = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/top.png"));
+
+	private JDialog newGameOptions;
+	private JPanel createPane;
+	private boolean toFade = false;
+	private JPanel fadeEffect;
+
 	private JButton btnJoin;
 	private JButton btnPnlCreate;
 	private JButton btnCreate;
@@ -63,7 +63,7 @@ public class Browser extends JPanel implements ActionListener{
 	private JTextField txtTurn;
 	private JLabel lblDifficulty;
 	private JComboBox jcbDifficulty;
-	
+
 	private JLabel lblFilter;
 	private JCheckBox cbShowFull;
 	private JCheckBox cbShowPrivate;
@@ -83,7 +83,7 @@ public class Browser extends JPanel implements ActionListener{
 
 	public Browser(Window win) {
 		mainWindow = win;
-		
+
 		btnJoin = new JButton(Main.texts.getString("join"));
 		btnPnlCreate = new JButton(Main.texts.getString("g_create"));
 		btnCreate = new JButton(Main.texts.getString("send"));
@@ -101,7 +101,7 @@ public class Browser extends JPanel implements ActionListener{
 		String[] difficulties = { Main.texts.getString("easy"), 
 				Main.texts.getString("medium"), Main.texts.getString("hard") };
 		jcbDifficulty = new JComboBox(difficulties);
-		
+
 		lblFilter = new JLabel(Main.texts.getString("filter"));
 		lblFilter.setFont(new Font("Arial", Font.PLAIN, 26));
 		cbShowFull = new JCheckBox(Main.texts.getString("show_full"),true);
@@ -117,34 +117,34 @@ public class Browser extends JPanel implements ActionListener{
 
 		crtPane = new JPanel();
 		crtPane.setVisible(false);
-		
+
 		boolRenderer = new BooleanCellRenderer();
 		intRenderer = new IntCellRenderer();
 
 		table = new JTable() {
-		    /**
+			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 
 			public TableCellRenderer getCellRenderer(int row, int column) {
-		        if (column == 3 || column == 4) {
-		            return boolRenderer;
-		        }
-		        else if(column == 2)
-		        {
-		        	return intRenderer;
-		        }
-		        
-		        return super.getCellRenderer(row, column);
-		    }
+				if (column == 3 || column == 4) {
+					return boolRenderer;
+				}
+				else if(column == 2)
+				{
+					return intRenderer;
+				}
+
+				return super.getCellRenderer(row, column);
+			}
 		};
-		
+
 		table.setShowGrid(false);
 		table.setShowVerticalLines(true);
 		fillTable();
 		scrlPane = new JScrollPane(table);
-		
+
 		fadeEffect = new JPanel() {
 			private static final long serialVersionUID = 1L;
 			public void paintComponent(Graphics g) {  
@@ -154,7 +154,7 @@ public class Browser extends JPanel implements ActionListener{
 		};
 		fadeEffect.setOpaque(false);
 		mainWindow.setGlassPane(fadeEffect);
-		
+
 		this.add(btnPnlCreate);
 		this.add(btnJoin);
 		this.add(btnRefresh);
@@ -185,14 +185,14 @@ public class Browser extends JPanel implements ActionListener{
 		newGameOptions = new JDialog();
 		newGameOptions.setSize(400, 200);
 		newGameOptions.addWindowFocusListener(new WindowFocusListener() {
-		    public void windowGainedFocus(WindowEvent e) {
-		    }
-		 
-		    public void windowLostFocus(WindowEvent e) {
-		    	newGameOptions.setVisible(false);
-		    	toFade = false;
-		    	repaint();
-		    }
+			public void windowGainedFocus(WindowEvent e) {
+			}
+
+			public void windowLostFocus(WindowEvent e) {
+				newGameOptions.setVisible(false);
+				toFade = false;
+				repaint();
+			}
 		});
 		newGameOptions.setUndecorated(true);
 		newGameOptions.add(createPane);
@@ -204,10 +204,10 @@ public class Browser extends JPanel implements ActionListener{
 		btnCreateClose.addActionListener(this);
 		btnRefresh.addActionListener(this);
 	}
-	
+
 	public void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D)g;
-        
+		Graphics2D g2d = (Graphics2D)g;
+
 		scrlPane.setBounds(50, 150, (int)Main.gameWidth-375, (int)Main.gameHeight-230);
 		table.revalidate();
 		btnJoin.setBounds((int)Main.gameWidth-310, 150, 250, 30);
@@ -220,16 +220,16 @@ public class Browser extends JPanel implements ActionListener{
 		lblSearch.setLocation((int)Main.gameWidth-310, 410);
 		txtSearch.setBounds((int)Main.gameWidth-310, 440, 250, 30);
 		btnApply.setBounds((int)Main.gameWidth-310, 475, 250, 30);
-        g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
-        g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
-        g2d.drawImage(imgLogo, 15, 8, 259, 87, this);
-        if(toFade) {
-        	fadeEffect.setVisible(true);
-        } else {
-        	fadeEffect.setVisible(false);
-        }
+		g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
+		g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
+		g2d.drawImage(imgLogo, 15, 8, 259, 87, this);
+		if(toFade) {
+			fadeEffect.setVisible(true);
+		} else {
+			fadeEffect.setVisible(false);
+		}
 	}
-	
+
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == btnJoin) {
 			joinGame();
@@ -254,22 +254,26 @@ public class Browser extends JPanel implements ActionListener{
 	}
 
 	private void joinGame() {
-		String name = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
-		String password = null;
-		if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 3)) == true)
+
+		if(table.getSelectedRow() >= 0)
 		{
-			password = JOptionPane.showInputDialog(this,
-					Main.texts.getString("enter_pass"),
-					Main.texts.getString("password"),
-					JOptionPane.QUESTION_MESSAGE);
+			String name = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
+			String password = null;
+			if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 3)) == true)
+			{
+				password = JOptionPane.showInputDialog(this,
+						Main.texts.getString("enter_pass"),
+						Main.texts.getString("password"),
+						JOptionPane.QUESTION_MESSAGE);
+			}
+			String result = Main.getModel().joinGame(name, password);
+			if(result.equals("wrongpassword"))
+				JOptionPane.showMessageDialog(this,Main.texts.getString("wrong_pass"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
+			else if(result.equals("gamefull"))
+				JOptionPane.showMessageDialog(this,Main.texts.getString("game_full"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
+			else
+				Main.getView().setPanel("GameScreen", false);
 		}
-		String result = Main.getModel().joinGame(name, password);
-		if(result.equals("wrongpassword"))
-			JOptionPane.showMessageDialog(this,Main.texts.getString("wrong_pass"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
-		else if(result.equals("gamefull"))
-			JOptionPane.showMessageDialog(this,Main.texts.getString("game_full"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
-		else
-			Main.getView().setPanel("GameScreen", false);
 	}
 
 	private void createGame() {
@@ -294,10 +298,10 @@ public class Browser extends JPanel implements ActionListener{
 		if(name.length() >= 4) {
 			if(password.equals(""))
 				password = null;
-	
+
 			res = Main.getModel().createGame(name, password, pmax, turns, 
 					jcbDifficulty.getSelectedIndex()+1);
-			
+
 			if(res.equals("success"))
 			{
 				Main.getView().setPanel("GameScreen", true);

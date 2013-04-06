@@ -269,6 +269,7 @@ public class Game extends Thread{
 		}
 		else
 			sendCommand(new ChatCommand(player.getLogin() + " a quitté la partie.", null));
+		sendCommandTo(new Command("quitgame"), player);
 	}
 
 

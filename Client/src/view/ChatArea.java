@@ -131,6 +131,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		lblChat.setFont(titleFont);
 		
 		btnQuitGame = new JButton(Main.texts.getString("quit_game"));
+		btnQuitGame.addActionListener(this);
 		add(btnQuitGame);
 
 		if(creator){
@@ -188,6 +189,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		else if(e.getSource() == btnStartGame) {
 			if(scores.length>1) {
 				Main.getModel().sendCommand("startgame");
+			}
+		}
+		else if(e.getSource() == btnQuitGame) {
+			if(scores.length>1) {
+				Main.getView().quitGame();
 			}
 		}
 
