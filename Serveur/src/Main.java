@@ -22,9 +22,9 @@ public class Main {
 				param = input.readLine();
 			} catch (IOException e) {}
 		} while(!param.equals("console") && !param.equals("fenetre") && !param.equals("quitter"));
-		if(param.equals("Quitter"))
+		if(param.equals("quitter"))
 			System.exit(0);
-		else if(param.equals("Fenetre"))
+		else if(param.equals("fenetre"))
 			state = true;
 		else
 			state = false;
@@ -37,7 +37,7 @@ public class Main {
 					try {
 						param = input.readLine();
 					} catch (IOException e) {}
-				} while(param.equals("Quitter"));
+				} while(param.equals("quitter"));
 				ShutDownEmergency cdTime = new ShutDownEmergency(10,server);
 				cdTime.start();
 			}
