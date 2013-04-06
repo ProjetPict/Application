@@ -3,6 +3,7 @@ package model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Observable;
@@ -12,6 +13,7 @@ import socketData.Command;
 import socketData.ChatCommand;
 import socketData.GameList;
 import socketData.PlayerScore;
+import socketData.Scores;
 import socketData.ValueCommand;
 import socketData.WordCommand;
 import view.Main;
@@ -26,7 +28,7 @@ public class Model extends Observable{
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 	private GameObserver go;
-	private Map<String, PlayerScore> scores;
+	private ArrayList<PlayerScore> scores;
 	private String word;
 
 
@@ -41,7 +43,6 @@ public class Model extends Observable{
 		{
 			out = connec.getOutput();
 			in = connec.getInput();
-			go = new GameObserver(in, out);
 		}
 		return res; 
 	}
@@ -154,14 +155,14 @@ public class Model extends Observable{
 		return connec.getGameList();
 	}
 
-	public void addPlayerScore(PlayerScore ps)
+	public void processScores(Scores s)
 	{
-		scores.put(ps.login, ps);
+		scores = s.scores;
 		setChanged();
 		notifyObservers();
 	}
 
-	public Map<String, PlayerScore> getScores()
+	public ArrayList<PlayerScore> getScores()
 	{
 		return scores;
 	}
@@ -170,7 +171,10 @@ public class Model extends Observable{
 			int turns, int difficulty){
 		String res = connec.createGame(name, password, pMax, turns, difficulty);
 		if(res.equals("success"))
-			scores = new Hashtable<String, PlayerScore>();
+		{
+			scores = new ArrayList<PlayerScore>();
+			go = new GameObserver(in, out);
+		}
 		return res;
 	}
 
@@ -178,7 +182,10 @@ public class Model extends Observable{
 	{
 		String res = connec.joinGame(name, password);
 		if(res.equals("success"))
-			scores = new Hashtable<String, PlayerScore>();
+		{
+			scores = new ArrayList<PlayerScore>();
+			go = new GameObserver(in, out);
+		}
 		return res;
 	}
 
@@ -205,5 +212,6 @@ public class Model extends Observable{
 		scores = null;
 		word = "";
 		this.deleteObservers();
+		go = null;
 	}
 }

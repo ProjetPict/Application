@@ -40,7 +40,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private static final long serialVersionUID = 1L;
 	private JTextField textAnswer;
 	private PlayerScore[] scores;
-	private JList list;
+	private JList<PlayerScore> list;
 	private JTextPane chat;
 	private JScrollPane scrollPaneChat;
 	private JScrollPane scrollPaneScore;
@@ -84,7 +84,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 		Main.getModel().addObserver(this);
 
-		list = new JList();
+		list = new JList<PlayerScore>();
 		scrollPaneScore = new JScrollPane(list);
 		add(scrollPaneScore);
 
@@ -192,9 +192,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			}
 		}
 		else if(e.getSource() == btnQuitGame) {
-			if(scores.length>1) {
-				Main.getView().quitGame();
-			}
+			Main.getView().quitGame();
 		}
 
 	}
@@ -285,16 +283,18 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				lblAnswer.setForeground(Color.RED);
 			}
 		} else {
-			Collection<PlayerScore> temp = Main.getModel().getScores().values();
-			scores = new PlayerScore[temp.size()];
+			//TODO delete si plus besoin
+			//Collection<PlayerScore> temp = Main.getModel().getScores();
+			//scores = new PlayerScore[temp.size()];
+			scores = Main.getModel().getScores().toArray(new PlayerScore[Main.getModel().getScores().size()]);
 			//scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
-			Iterator<PlayerScore> it = temp.iterator();
+			/*Iterator<PlayerScore> it = temp.iterator();
 			int i = 0;
 			while(it.hasNext()) {
 				PlayerScore ps = it.next();
 				scores[i] = ps;
 				i++;
-			}
+			}*/
 
 			if(scores.length > 0) {
 				list.setListData(scores);

@@ -345,6 +345,7 @@ public class Player extends Thread {
 			if(game!=null)
 			{
 				game.removePlayer(this);
+				game = null;
 			}
 		}
 		else if(message.command.equals("startgame"))
@@ -379,7 +380,7 @@ public class Player extends Thread {
 		}
 		else if(message.command.equals("getscores"))
 		{
-			game.sendScores(this);
+			game.sendScores(this, false);
 		}
 		else
 		{
@@ -419,7 +420,7 @@ public class Player extends Thread {
 
 			if(game != null)
 			{
-				game.sendScores(this);
+				game.sendScores(this, false);
 			}
 		}
 		else if(message.command.equals("joingame"))

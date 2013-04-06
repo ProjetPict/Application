@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,6 +16,7 @@ import socketData.ChatCommand;
 import socketData.Line;
 import socketData.Picture;
 import socketData.PlayerScore;
+import socketData.Scores;
 import socketData.ValueCommand;
 import socketData.WordCommand;
 
@@ -88,7 +91,7 @@ public class Game extends Thread{
 
 
 	/**
-	 * Surcharge de la mï¿½thode run() de Thread. Inutile pour l'instant mais elle devrait servir ï¿½ faire
+	 * Surcharge de la méthode run() de Thread. Elle sert à faire
 	 * "tourner" la partie (changement de joueurs, de tour, etc...)
 	 */
 	public void run() {
@@ -103,7 +106,7 @@ public class Game extends Thread{
 				drawingPlayer = null;
 				podium.clear();
 
-				sendScoresToAll(null);
+				sendScores();
 				sendCommand(new ValueCommand("turns", turns));
 
 				while(currentTurn < turns)
@@ -128,10 +131,7 @@ public class Game extends Thread{
 
 							computeScores();
 
-							for(int j = 0; j < players.size(); j++)
-							{
-								sendScores(players.get(j));
-							}
+							sendScores();
 
 							sendCommand(new Command("endturn"));
 
@@ -170,7 +170,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return True si la partie est privï¿½e, false sinon.
+	 * @return True si la partie est privée, false sinon.
 	 */
 	public boolean isPrivate(){
 		if(password != null)
@@ -182,7 +182,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return True si la partie a demarrï¿½, false sinon
+	 * @return True si la partie a demarré, false sinon
 	 */
 	public boolean isStarted()
 	{
@@ -192,7 +192,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return Le mot de passe de la partie (peut ï¿½tre null).
+	 * @return Le mot de passe de la partie (peut être null).
 	 */
 	public String getPassword(){
 		return password;
@@ -216,7 +216,7 @@ public class Game extends Thread{
 
 	/**
 	 * 
-	 * @return Retourne le nombre de joueurs maximum autorisï¿½s dans la partie.
+	 * @return Retourne le nombre de joueurs maximum autorisés dans la partie.
 	 */
 	public int getJMax(){
 		return pMax;
@@ -226,7 +226,7 @@ public class Game extends Thread{
 	/**
 	 * Ajoute un joueur dans la partie.
 	 * @param p
-	 * @return True si l'ajout est un succï¿½s, false sinon
+	 * @return True si l'ajout est un succès, false sinon
 	 */
 	public boolean addPlayer(Player p){
 		if(players.size() < pMax && !players.contains(p)){
@@ -234,7 +234,7 @@ public class Game extends Thread{
 				p.setGhost(true);
 			players.add(p);
 			p.sendResult(true);
-			sendScoresToAll(p);
+			sendScores(p, true);
 			sendCommand(new ChatCommand(p.getLogin() + " a rejoint la partie.", null));
 			return true;
 		}
@@ -270,6 +270,7 @@ public class Game extends Thread{
 		else
 			sendCommand(new ChatCommand(player.getLogin() + " a quitté la partie.", null));
 		sendCommandTo(new Command("quitgame"), player);
+		sendScores();
 	}
 
 
@@ -284,30 +285,32 @@ public class Game extends Thread{
 
 
 	/**
-	 * Envoie data ï¿½ tout les joueurs de la partie, ï¿½ l'exception du joueur d'origine
+	 * Envoie data à tout les joueurs de la partie, à l'exception du joueur d'origine
 	 * @param p
 	 * @param sender
 	 */
 	public void sendData(Object data, Player sender)
 	{
-		//TODO test : if sender == drawingplayer
+		if(sender == drawingPlayer)
+		{
 
-		if(data instanceof Point)
-			currentDrawing.addPoint((Point) data);
-		else
-			currentDrawing.addLine((Line) data);
+			if(data instanceof Point)
+				currentDrawing.addPoint((Point) data);
+			else
+				currentDrawing.addLine((Line) data);
 
-		for(int i = 0; i < players.size(); i++){
-			if(sender != players.get(i)){
-				ObjectOutputStream out = players.get(i).getOutput();
-				try {
-					out.writeObject(data);
-					out.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			for(int i = 0; i < players.size(); i++){
+				if(sender != players.get(i)){
+					ObjectOutputStream out = players.get(i).getOutput();
+					try {
+						out.writeObject(data);
+						out.flush();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
-
 			}
 		}
 	}
@@ -325,7 +328,7 @@ public class Game extends Thread{
 				msg.command = msg.command.substring(0, ind) + "****" + msg.command.substring(ind+word.length(), msg.command.length());
 			}
 		}
-		
+
 		for(int i = 0; i < players.size(); i++){
 			sendCommandTo(msg, players.get(i));
 		}
@@ -395,7 +398,6 @@ public class Game extends Thread{
 		nbAnswer = 0;
 		currentDrawing.clear();
 
-		//TODO integrer le tirage de mots alï¿½atoire
 		String[] words = chooseNextWords();
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], difficulty);
 		drawingPlayer.setChoices(choices);
@@ -408,10 +410,10 @@ public class Game extends Thread{
 			int random = (int)(Math.random() * 3);
 			choices = new WordCommand("", "", "", 1);
 
-			//TODO choix aleatoire entre les trois mots
 			choices.command = words[random];
 			word = words[random];
 			word = convertToAnswerStringFormat(word);
+
 			try {
 				out.writeObject(choices);
 				out.flush();
@@ -421,8 +423,6 @@ public class Game extends Thread{
 			}
 
 		}
-
-		//TODO setupNextPlayer
 	}
 
 	private String[] chooseNextWords() {
@@ -532,30 +532,56 @@ public class Game extends Thread{
 		return res;
 	}
 
-	public void sendScores(Player player)
+	public void sendScores(Player p, boolean except)
 	{
-		ObjectOutputStream out = player.getOutput();
-		PlayerScore ps;
-		for(int i = 0; i < players.size(); i++){
+		Scores scores = new Scores();
 
-			ps = new PlayerScore(players.get(i).getLogin(), players.get(i).getScore(), 
-					players.get(i).hasFound());
+		for(int i = 0; i < players.size(); i++)
+		{
+			scores.scores.add(new PlayerScore(players.get(i).getLogin(), players.get(i).getScore(), 
+					players.get(i).hasFound(), players.get(i).isGhost()));
+		}
+		
+		Collections.sort(scores.scores, new Comparator<PlayerScore>() {
+			@Override
+			public int compare(PlayerScore p1, PlayerScore p2) {
+				return Integer.signum(p2.score - p1.score);
+			}
+		});
+
+		if(!except)
+		{
+			ObjectOutputStream out = p.getOutput();
+
 			try {
-				out.writeObject(ps);
+				out.writeObject(scores);
 				out.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		else
+		{
+			for(int i = 0; i < players.size(); i++)
+			{
+				if(p != players.get(i))
+				{
+					ObjectOutputStream out = players.get(i).getOutput();
+
+					try {
+						out.writeObject(scores);
+						out.flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
-	public void sendScoresToAll(Player p)
+	public void sendScores()
 	{
-		for(int i = 0; i < players.size(); i++)
-		{
-			if(p != null && players.get(i) != p) 
-				sendScores(players.get(i));
-		}
+		sendScores(null, true);
 	}
 
 
