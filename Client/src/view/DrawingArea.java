@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -38,6 +39,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	private Graphics2D buffer;
 	// image mémoire correspondante au buffer
 	private Image image; 
+	private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png"));
 
 	public DrawingArea(GameObserver gameObs){
 		setBackground(Color.WHITE);
@@ -110,7 +112,7 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 				buffer.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
 		}
-
+		g.drawImage(imgLogo, this.getSize().width/2-173, this.getSize().height/2-58, this);
 		g.drawImage(image, 0, 0, this);
 
 	}
