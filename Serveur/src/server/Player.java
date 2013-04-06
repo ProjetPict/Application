@@ -121,8 +121,8 @@ public class Player extends Thread {
 		return hasFound;
 	}
 
-	public void resetHasFound(){
-		hasFound = false;
+	public void setFound(boolean found){
+		hasFound = found;
 	}
 
 	public void setScore(int score)
@@ -283,7 +283,7 @@ public class Player extends Thread {
 		}
 		else if(message instanceof AnswerCommand)
 		{
-			processAnswerMessage((AnswerCommand) message);
+			game.checkAnswer((AnswerCommand)message, this);
 		}
 		else if(message instanceof WordCommand)
 		{
@@ -388,23 +388,6 @@ public class Player extends Thread {
 		}
 
 	}
-
-
-
-	/**
-	 * Analyse un message de reponse
-	 * @param message
-	 */
-	private void processAnswerMessage(AnswerCommand message) {
-		// TODO Auto-generated method stub
-		if(game.checkAnswer(message, this)){
-			hasFound = true;
-		}
-
-
-	}
-
-
 
 	/**
 	 * Analyse une commande de type creategame ou joingame

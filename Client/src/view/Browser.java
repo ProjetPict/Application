@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
@@ -62,7 +64,7 @@ public class Browser extends JPanel implements ActionListener{
 	private JLabel lblTurn;
 	private JTextField txtTurn;
 	private JLabel lblDifficulty;
-	private JComboBox jcbDifficulty;
+	private JComboBox<String> jcbDifficulty;
 
 	private JLabel lblFilter;
 	private JCheckBox cbShowFull;
@@ -100,7 +102,7 @@ public class Browser extends JPanel implements ActionListener{
 		lblDifficulty = new JLabel(Main.texts.getString("difficulty_choice"));
 		String[] difficulties = { Main.texts.getString("easy"), 
 				Main.texts.getString("medium"), Main.texts.getString("hard") };
-		jcbDifficulty = new JComboBox(difficulties);
+		jcbDifficulty = new JComboBox<String>(difficulties);
 
 		lblFilter = new JLabel(Main.texts.getString("filter"));
 		lblFilter.setFont(new Font("Arial", Font.PLAIN, 26));
@@ -142,6 +144,13 @@ public class Browser extends JPanel implements ActionListener{
 
 		table.setShowGrid(false);
 		table.setShowVerticalLines(true);
+		table.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				   if(e.getClickCount() == 2){
+					   joinGame();
+				     }
+				   }
+		});
 		fillTable();
 		scrlPane = new JScrollPane(table);
 

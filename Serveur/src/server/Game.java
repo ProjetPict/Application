@@ -126,20 +126,21 @@ public class Game extends Thread{
 							sendCommand(new Command("startturn"));
 
 							drawingPlayer.setDrawing(true);
+							sendScores();
 
 							launchTimer(60);
 
 							computeScores();
-
-							sendScores();
-
+							
 							sendCommand(new Command("endturn"));
 
 							drawingPlayer.setDrawing(false);
 
 							for(Player p: players){
-								p.resetHasFound();
+								p.setFound(false);
 							}
+							
+							sendScores();
 
 						}
 					}
@@ -518,7 +519,8 @@ public class Game extends Thread{
 
 			if(!inserted)
 				firstAnswers.add(player);
-
+			player.setFound(true);
+			sendScores();
 		}
 
 		String command;
@@ -539,7 +541,7 @@ public class Game extends Thread{
 		for(int i = 0; i < players.size(); i++)
 		{
 			scores.scores.add(new PlayerScore(players.get(i).getLogin(), players.get(i).getScore(), 
-					players.get(i).hasFound(), players.get(i).isGhost()));
+					players.get(i).hasFound(), players.get(i).isGhost(), players.get(i).getDrawing()));
 		}
 		
 		Collections.sort(scores.scores, new Comparator<PlayerScore>() {

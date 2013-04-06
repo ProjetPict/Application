@@ -9,7 +9,6 @@ import socketData.ChatCommand;
 import socketData.Command;
 import socketData.Line;
 import socketData.Picture;
-import socketData.PlayerScore;
 import socketData.Scores;
 import socketData.ValueCommand;
 import socketData.WordCommand;

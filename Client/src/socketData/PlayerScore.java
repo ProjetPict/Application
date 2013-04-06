@@ -13,17 +13,19 @@ public class PlayerScore implements Serializable {
 	public int score;
 	public boolean hasFound;
 	public boolean isGhost;
+	public boolean drawing;
 	
-	public PlayerScore(String login, int score, boolean hasFound, boolean ghost)
+	public PlayerScore(String login, int score, boolean hasFound, boolean ghost, boolean drawing)
 	{
 		this.login = login;
 		this.score = score;
 		this.hasFound = hasFound;
 		this.isGhost = ghost;
+		this.drawing = drawing;
 	}
 
 	public String toString()
 	{
-		return login + " : " + score;
+		return login + " : " + score + " pts";
 	}
 }

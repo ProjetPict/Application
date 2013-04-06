@@ -2,13 +2,12 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -22,6 +21,7 @@ import socketData.PlayerScore;
 import socketData.ValueCommand;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -62,12 +62,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private Font titleFont = new Font("Arial", Font.PLAIN, 26);
 	private int turn;
 	private int maxTurn;
-	
+
 	public ChatArea(boolean creator) {
 		running = false;
 		turn = 0;
 		maxTurn = 0;
-		
+
 		setBackground(Color.WHITE);
 		scores = new PlayerScore[]{};
 		setLayout(null);
@@ -77,7 +77,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		textAnswer.setColumns(10);
 		textAnswer.addActionListener(this);
 		textAnswer.setEditable(false);
-		
+
 		lblAnswer = new JLabel(Main.texts.getString("answer"));
 		add(lblAnswer);
 		lblAnswer.setFont(titleFont);
@@ -85,6 +85,50 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		Main.getModel().addObserver(this);
 
 		list = new JList<PlayerScore>();
+
+		list.setCellRenderer(new DefaultListCellRenderer(){
+			
+			private static final long serialVersionUID = 1L;
+
+			public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean isSelected,boolean cellHasFocus)
+			{
+				if (value instanceof PlayerScore) 
+				{
+					PlayerScore player = (PlayerScore)value;
+					String pos;
+					
+					switch(index)
+					{
+					case 0:
+						pos = index+1+Main.texts.getString("first");
+						break;
+					case 1:
+						pos = index+1+Main.texts.getString("second");
+						break;
+					case 2:
+						pos = index+1+Main.texts.getString("third");
+						break;
+					default:
+						pos = index+1+Main.texts.getString("no_podium");
+						break;
+					}
+					
+					setText(pos + " - " + player.toString());
+					
+					if(player.drawing)
+						setForeground(new Color(51, 51, 255));
+					else if(player.hasFound)
+						setForeground(new Color(0, 153, 0));
+					else if(player.isGhost)
+						setForeground(Color.GRAY);
+					else
+						setForeground(Color.BLACK);
+					
+					setBackground(Color.WHITE);
+				}     
+				return this;
+			}
+		});
 		scrollPaneScore = new JScrollPane(list);
 		add(scrollPaneScore);
 
@@ -115,12 +159,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			lblTimer.setText(Main.texts.getString("waiting_players"));
 		lblTimer.setFont(titleFont);
 		add(lblTimer);
-		
+
 		lblTurns = new JLabel(Main.texts.getString("waiting_turns"));
 		Font italic = new Font("Arial",Font.ITALIC,14);
 		lblTurns.setFont(italic);
 		add(lblTurns);
-		
+
 		this.creator = creator;
 
 		lblScore = new JLabel(Main.texts.getString("scores"));
@@ -129,7 +173,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		lblChat = new JLabel(Main.texts.getString("chat"));
 		add(lblChat);
 		lblChat.setFont(titleFont);
-		
+
 		btnQuitGame = new JButton(Main.texts.getString("quit_game"));
 		btnQuitGame.addActionListener(this);
 		add(btnQuitGame);
@@ -139,7 +183,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			btnStartGame.addActionListener(this);
 			add(btnStartGame);
 		}
-		
+
 	}
 
 	public void enableStartButton(boolean enable) {
@@ -236,12 +280,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		else if(arg instanceof ValueCommand)
 		{
 			ValueCommand cmd = (ValueCommand) arg;
-			
+
 			if(cmd.command.equals("turn"))
 				turn = cmd.value;
 			else
 				maxTurn = cmd.value;
-			
+
 			lblTurns.setText(Main.texts.getString("turns") + turn + "/" + maxTurn);
 		}
 		else if(arg instanceof ChatCommand) {
@@ -277,10 +321,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			else if(((String) arg).equals("goodword")) {
 				textAnswer.setEditable(false);
 				textAnswer.setText(Main.texts.getString("goodanswer"));
-				lblAnswer.setForeground(Color.GREEN);
+				lblAnswer.setForeground(new Color(0, 153, 0));
 			}
 			else if(((String) arg).equals("wrongword")) {
-				lblAnswer.setForeground(Color.RED);
+				lblAnswer.setForeground(new Color(204, 0, 0));
 			}
 		} else {
 			//TODO delete si plus besoin
@@ -299,7 +343,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			if(scores.length > 0) {
 				list.setListData(scores);
 			}
-			
+
 			if(scores.length > 1 && !running) {
 				enableStartButton(true);
 			} else {
@@ -307,7 +351,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			}
 		}
 	}
-	
+
 	public void enableAnswer(boolean enable) {
 		lblAnswer.setForeground(Color.BLACK);
 		if(!drawing) {
