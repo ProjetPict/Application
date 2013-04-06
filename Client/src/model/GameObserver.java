@@ -59,7 +59,12 @@ public class GameObserver extends Thread{
 					Main.getModel().processChatMsg((ChatCommand) obj);
 				}
 				else if(obj instanceof Command){
-					Main.getModel().processCommand((Command) obj);
+					
+					if(((Command) obj).command.equals("quitgame")){
+						running = false;
+					}
+					else
+						Main.getModel().processCommand((Command) obj);
 				}
 				else if(obj instanceof Picture)
 				{
