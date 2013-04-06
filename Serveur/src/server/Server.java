@@ -80,7 +80,7 @@ public class Server extends Thread{
 		}
 		if(!success) {
 			writeIn("Echec (5/5)\n> Veuillez vérifier les paramètres de connexion avant de relancer le serveur.\n");
-			//throw new Exception("Echec lors de la connexion à la base de données");
+			throw new Exception("Echec lors de la connexion à la base de données");
 		} else {
 			tentatives = 0;
 			success = false;

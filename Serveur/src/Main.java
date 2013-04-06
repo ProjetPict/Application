@@ -18,10 +18,10 @@ public class Main {
 		boolean state = false;
 		do {
 			try {
-				System.out.println("Voulez-vous le lancer en mode console ou fenetre ? [Console/Fenetre/Quitter]");
+				System.out.println("Voulez-vous le lancer en mode console ou fenetre ? [console/fenetre/quitter]");
 				param = input.readLine();
 			} catch (IOException e) {}
-		} while(!param.equals("Console") && !param.equals("Fenetre") && !param.equals("Quitter"));
+		} while(!param.equals("console") && !param.equals("fenetre") && !param.equals("quitter"));
 		if(param.equals("Quitter"))
 			System.exit(0);
 		else if(param.equals("Fenetre"))
@@ -42,8 +42,7 @@ public class Main {
 				cdTime.start();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage()+".\nArret du serveur.");
 		}
 		
 	}
