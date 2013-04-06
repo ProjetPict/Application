@@ -39,7 +39,7 @@ public class Game extends Thread{
 	private String word;
 	private int difficulty;
 	private int nbAnswer;
-	
+
 	private Picture currentDrawing;
 
 	private int time;
@@ -71,7 +71,7 @@ public class Game extends Thread{
 			this.turns = turns;
 		else
 			this.turns = Server.TURNS;
-		
+
 		if(difficulty >= 0 && difficulty <= 3)
 		{
 			this.difficulty = difficulty;
@@ -102,16 +102,16 @@ public class Game extends Thread{
 				currentTurn = 0;
 				drawingPlayer = null;
 				podium.clear();
-				
+
 				sendScoresToAll(null);
 				sendCommand(new ValueCommand("turns", turns));
-				
+
 				while(currentTurn < turns)
 				{
 					currentTurn++;
-					
+
 					sendCommand(new ValueCommand("turn", currentTurn));
-					
+
 					for(int i = 0; i < players.size(); i++)
 					{
 						drawingPlayer = players.get(i);
@@ -119,20 +119,20 @@ public class Game extends Thread{
 						{
 
 							setupNextPlayer();
-							
+
 							sendCommand(new Command("startturn"));
-							
+
 							drawingPlayer.setDrawing(true);
 
 							launchTimer(60);
-							
+
 							computeScores();
 
 							for(int j = 0; j < players.size(); j++)
 							{
 								sendScores(players.get(j));
 							}
-							
+
 							sendCommand(new Command("endturn"));
 
 							drawingPlayer.setDrawing(false);
@@ -154,7 +154,7 @@ public class Game extends Thread{
 					if(player.isGhost())
 						player.setGhost(false);
 				}
-				
+
 				sendCommand(new Command("endgame"));
 			}
 
@@ -206,8 +206,8 @@ public class Game extends Thread{
 	{
 		return players.size();
 	}
-	
-	
+
+
 	public int getDifficulty()
 	{
 		return difficulty;
@@ -290,12 +290,12 @@ public class Game extends Thread{
 	public void sendData(Object data, Player sender)
 	{
 		//TODO test : if sender == drawingplayer
-		
+
 		if(data instanceof Point)
 			currentDrawing.addPoint((Point) data);
 		else
 			currentDrawing.addLine((Line) data);
-		
+
 		for(int i = 0; i < players.size(); i++){
 			if(sender != players.get(i)){
 				ObjectOutputStream out = players.get(i).getOutput();
@@ -311,9 +311,17 @@ public class Game extends Thread{
 		}
 	}
 
-	
+
 	public void sendChatMsg(ChatCommand msg)
 	{
+		String temp = convertToAnswerStringFormat(msg.command);
+		int ind = temp.indexOf(word);
+		
+		if(ind >= 0)
+		{
+			msg.command = msg.command.substring(0, ind) + "****" + msg.command.substring(ind+word.length(), msg.command.length());
+		}
+		
 		for(int i = 0; i < players.size(); i++){
 			sendCommandTo(msg, players.get(i));
 		}
@@ -339,8 +347,8 @@ public class Game extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	public void sendCommand(Command cmd)
 	{
 		sendCommand(cmd, null);
@@ -382,7 +390,7 @@ public class Game extends Thread{
 		word = "";
 		nbAnswer = 0;
 		currentDrawing.clear();
-		
+
 		//TODO integrer le tirage de mots alï¿½atoire
 		String[] words = chooseNextWords();
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], difficulty);
@@ -399,6 +407,7 @@ public class Game extends Thread{
 			//TODO choix aleatoire entre les trois mots
 			choices.command = words[random];
 			word = words[random];
+			word = convertToAnswerStringFormat(word);
 			try {
 				out.writeObject(choices);
 				out.flush();
@@ -418,7 +427,7 @@ public class Game extends Thread{
 
 		String random;
 		int randomIndex;
-		
+
 		for(int i = 0; i < 3; i++)
 		{
 			do{
@@ -473,17 +482,19 @@ public class Game extends Thread{
 	public boolean checkAnswer(AnswerCommand answer, Player player)
 	{
 		boolean res = false;
+		
+		String ans = convertToAnswerStringFormat(answer.command);
 
-		if(answer.command.equals(word))
+		if(ans.equals(word))
 		{
 			res = true;
 			nbAnswer++;
-			
+
 			if(nbAnswer >= players.size()-1)
 			{
 				time = 0;
 			}
-			
+
 			player.setNbPixels(answer.nbPixels);
 
 			Player p;
@@ -505,15 +516,15 @@ public class Game extends Thread{
 				firstAnswers.add(player);
 
 		}
-		
+
 		String command;
 		if(res)
 			command = "goodword";
 		else
 			command = "wrongword";
-		
+
 		sendCommandTo(new Command(command), player);
-		
+
 		return res;
 	}
 
@@ -561,7 +572,7 @@ public class Game extends Thread{
 		if(timer != null)
 			timer.cancel();
 		time = 0;
-		this.word = word;
+		this.word = convertToAnswerStringFormat(word);;
 	}
 
 
@@ -577,6 +588,18 @@ public class Game extends Thread{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private String convertToAnswerStringFormat(String s) {
+		
+		String withAccents = "âäàçéêëèîïôöûüù";
+		String withoutAccents = "aaaceeeeiioouuu";
+
+		for (int i = 0 ; i < withAccents.length () ; i++) {
+			s = s.replace(withAccents.charAt(i), withoutAccents.charAt(i));
+		}
+		s = s.toLowerCase();
+		return s;
 	}
 
 }

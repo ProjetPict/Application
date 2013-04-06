@@ -292,7 +292,6 @@ public class Player extends Thread {
 		else if(message instanceof ChatCommand)
 		{
 			game.sendChatMsg((ChatCommand) message);
-			//System.out.print(((ChatCommand) message).author + " envoie un message sur le chat\n");
 		}
 		else if(message instanceof Command)
 		{
