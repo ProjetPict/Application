@@ -315,12 +315,15 @@ public class Game extends Thread{
 
 	public void sendChatMsg(ChatCommand msg)
 	{
-		String temp = convertToAnswerStringFormat(msg.command);
-		int ind = temp.indexOf(word);
-		
-		if(ind >= 0)
+		if(!word.equals(""))
 		{
-			msg.command = msg.command.substring(0, ind) + "****" + msg.command.substring(ind+word.length(), msg.command.length());
+			String temp = convertToAnswerStringFormat(msg.command);
+			int ind = temp.indexOf(word);
+
+			if(ind >= 0)
+			{
+				msg.command = msg.command.substring(0, ind) + "****" + msg.command.substring(ind+word.length(), msg.command.length());
+			}
 		}
 		
 		for(int i = 0; i < players.size(); i++){
@@ -483,7 +486,7 @@ public class Game extends Thread{
 	public boolean checkAnswer(AnswerCommand answer, Player player)
 	{
 		boolean res = false;
-		
+
 		String ans = convertToAnswerStringFormat(answer.command);
 
 		if(ans.equals(word))
@@ -592,7 +595,7 @@ public class Game extends Thread{
 	}
 
 	private String convertToAnswerStringFormat(String s) {
-		
+
 		String withAccents = "âäàçéêëèîïôöûüù";
 		String withoutAccents = "aaaceeeeiioouuu";
 
