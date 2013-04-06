@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import socketData.*;
 
@@ -18,22 +20,49 @@ public class ConnecToServer{
 	private ObjectInputStream in;
 	private boolean connected;
 	private String host;
-	
-	
+
+
 	public ConnecToServer(String host) {
 		connected = false;
 		this.host = host;	
 	}
-	
-	
+
+
 	public boolean connect(String login, String password) {
-		Command log = new Command(login);
-		Command pass = new Command(password);
+
+		Command log = null;
+		Command pass = null;
 		
+		try {
+
+			byte[] hash = MessageDigest.getInstance("SHA1").digest(password.getBytes());
+			StringBuilder hashString = new StringBuilder();
+	        for (int i = 0; i < hash.length; i++)
+	        {
+	            String hex = Integer.toHexString(hash[i]);
+	            if (hex.length() == 1)
+	            {
+	                hashString.append('0');
+	                hashString.append(hex.charAt(hex.length() - 1));
+	            }
+	            else
+	                hashString.append(hex.substring(hex.length() - 2));
+	        }
+			
+	        log = new Command(login);
+			pass = new Command(hashString.toString());
+			
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		
+
 		if(connected){
 			return false;
 		}
-		
+
 		try{
 			drawSocket = new Socket(host ,8448);
 			out = new ObjectOutputStream(drawSocket.getOutputStream());
@@ -41,10 +70,10 @@ public class ConnecToServer{
 		}catch (IOException e) {
 			return false;
 		}
-		
+
 		try{
 			//attente du signal d'envoi et envoi du login
-			
+
 			out.writeObject(log);
 			out.flush();
 			out.writeObject(pass);
@@ -58,7 +87,7 @@ public class ConnecToServer{
 			Object conf = in.readObject();
 			if(!(conf instanceof Command))
 				throw new ClassNotFoundException(); 
-	
+
 			if(((Command)conf).command.equals("success")){
 				connected = true;
 				return true;
@@ -72,11 +101,11 @@ public class ConnecToServer{
 		}
 		return false;
 	}
-	
+
 	public String joinGame(String name, String password)
 	{
 		CreateJoinCommand com = new CreateJoinCommand(name, password);
-		
+
 		Command result = null;
 		try{
 			out.writeObject(com);
@@ -87,31 +116,31 @@ public class ConnecToServer{
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return result.command;
 	}
-	
-	
+
+
 	public String disconnect(){
-		
+
 		Command com = new Command("quit");
 		if(!connected)
 			return "fail";
-		
-		
+
+
 		try{
 			out.writeObject(com);
 			out.flush();
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 		connected = false;
-		
+
 		return "success";
 	}
-	
+
 	/**
 	 * Renvoie la liste des parties en cours
 	 * @return
@@ -126,7 +155,7 @@ public class ConnecToServer{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		try {
 			res = in.readObject();
 		} catch (IOException e) {
@@ -138,11 +167,11 @@ public class ConnecToServer{
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		return (GameList)res;
-		
+
 	}
-	
+
 	/**
 	 * Demande la création d'une partie au serveur
 	 * 
@@ -151,14 +180,14 @@ public class ConnecToServer{
 			int turns, int difficulty){
 		CreateJoinCommand com = new CreateJoinCommand(name, password, pMax, turns, difficulty);
 		Object conf=null;
-		
+
 		try{
 			out.writeObject(com);
 			out.flush();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		
+
 		try {
 			conf = in.readObject();
 		} catch (IOException e) {
@@ -166,11 +195,11 @@ public class ConnecToServer{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		return ((Command)conf).command;
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * @return L'input stream de la connexion.
@@ -180,7 +209,7 @@ public class ConnecToServer{
 		return in;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return L'output stream de la connexion.

@@ -209,6 +209,10 @@ public class Server extends Thread{
 		player.start();
 	}
 
+	
+	public static ServerDatabase getDB(){
+		return servDbLocale;
+	}
 
 	/**
 	 * Supprime un joueur

@@ -36,7 +36,7 @@ public class Connection extends Thread {
 		}
 	}
 
-	
+
 	/**
 	 * 
 	 * @return L'input stream de la connexion.
@@ -46,7 +46,7 @@ public class Connection extends Thread {
 		return in;
 	}
 
-	
+
 	/**
 	 * 
 	 * @return L'output stream de la connexion.
@@ -55,7 +55,7 @@ public class Connection extends Thread {
 		return out;
 	}
 
-	
+
 	/**
 	 * Surcharge de la fonction run() de Thread. Incomplète.
 	 * Elle servira à gérer l'authentification du joueur.
@@ -76,13 +76,24 @@ public class Connection extends Thread {
 				{
 					Command l = (Command) login;
 					Command p = (Command) password;
-					
+
 					//TODO verifier le login et le password
-					Server.createPlayer(((Command)login).command, socket, this);
-					out.writeObject(new Command("success"));
-					out.flush();
-					Server.writeIn(login +" vient de se connecter ");
-					
+
+					boolean res = Server.getDbInfos().testAuthentification(l.command, p.command);
+
+					if(res)
+					{
+						Server.createPlayer(((Command)login).command, socket, this);
+						out.writeObject(new Command("success"));
+						out.flush();
+						Server.writeIn(login +" vient de se connecter.");
+					}
+					else{
+						out.writeObject(new Command("fail"));
+						out.flush();
+					}
+						
+
 				}	
 
 			} catch (ClassNotFoundException e) {

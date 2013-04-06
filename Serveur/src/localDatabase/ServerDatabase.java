@@ -1,8 +1,11 @@
 package localDatabase;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import dbwConnection.ResultSet;
 
 /**
@@ -56,6 +59,41 @@ public class ServerDatabase {
 		if(difficulty<1 || difficulty>3)
 			return null;
 		return servDbWordsLogs.get(difficulty-1);
+	}
+	
+	public boolean testAuthentification(String login, String password){
+		
+		boolean res = false;
+		
+		if(servDbUsersLogs.containsKey(login))
+		{
+			try {
+				String pass = servDbUsersLogs.get(login);
+
+				byte[] hash = MessageDigest.getInstance("MD5").digest(password.getBytes());
+				StringBuilder hashString = new StringBuilder();
+				for (int i = 0; i < hash.length; i++)
+				{
+				    String hex = Integer.toHexString(hash[i]);
+				    if (hex.length() == 1)
+				    {
+				        hashString.append('0');
+				        hashString.append(hex.charAt(hex.length() - 1));
+				    }
+				    else
+				        hashString.append(hex.substring(hex.length() - 2));
+				}
+				
+				if(hashString.toString().equals(pass))
+					res = true;
+				
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//TODO renvoyer la vraie valeur
+		return true;
 	}
 	
 }
