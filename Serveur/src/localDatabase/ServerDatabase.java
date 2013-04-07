@@ -28,8 +28,8 @@ public class ServerDatabase {
 	}
 	
 	public void reloadDatabase() {
-		servDbUsersLogs = new HashMap<String, String>();
-		servDbWordsLogs = new ArrayList<ArrayList<String>>();
+		servDbUsersLogs.clear();
+		servDbWordsLogs.clear();
 		loadDatabase();
 	}
 	
@@ -99,7 +99,7 @@ public class ServerDatabase {
 			}
 		}
 		//TODO renvoyer la vraie valeur
-		return res;
+		return true;
 	}
 	
 }
