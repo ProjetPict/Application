@@ -116,6 +116,7 @@ public class Server extends Thread{
 
 		Timer timer = new Timer();
 		Timer autoSave = new Timer();
+		Timer autoLoad = new Timer();
 		Timer launchTime = new Timer();
 		launchTimeCalc = 0;
 		//On actualise toutes les 1 seconde les graphiques
@@ -136,6 +137,16 @@ public class Server extends Thread{
 				importantProcess = false;
 			}
 		}, 600000, 600000);
+		// Chargement automatique de la base de données toutes les 5 minutes
+		autoLoad.schedule(new TimerTask() {
+			public void run() {
+				importantProcess = true;
+				writeIn("\n# Chargement de la nouvelle base de données...");
+				servDbLocale.reloadDatabase();
+				writeIn("Terminé !");
+				importantProcess = false;
+			}
+		}, 300000, 300000);
 		launchTime.schedule(new TimerTask() {
 			Date current;
 			public void run() {

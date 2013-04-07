@@ -27,6 +27,12 @@ public class ServerDatabase {
 		dbLink = db;
 	}
 	
+	public void reloadDatabase() {
+		servDbUsersLogs = new HashMap<String, String>();
+		servDbWordsLogs = new ArrayList<ArrayList<String>>();
+		loadDatabase();
+	}
+	
 	public boolean loadDatabase() {
 		try {
 			ResultSet rs = dbLink.executeQuery("SELECT login,password FROM users;");
@@ -93,7 +99,7 @@ public class ServerDatabase {
 			}
 		}
 		//TODO renvoyer la vraie valeur
-		return true;
+		return res;
 	}
 	
 }
