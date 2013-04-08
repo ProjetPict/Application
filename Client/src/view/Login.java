@@ -28,7 +28,7 @@ import javax.swing.JTextField;
  * Ecran de Login
  *
  */
-public class Login extends JPanel implements ActionListener{
+public class Login extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,25 +44,31 @@ public class Login extends JPanel implements ActionListener{
 	private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
 	private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
 
+	/**
+	 * Constructeur de Login
+	 */
 	public Login() {
+
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				requestFocus();
 			}
 		});
+
 		this.setLayout(null);
+
 		btnConnec = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/btn_login.png"))));
 		String strLogin = Main.settingsProp.getProperty("username");
 
-		if(strLogin!= null)
+		if(!strLogin.equals(""))
 			login = new JTextField(strLogin);
 		else
 			login = new JTextField(Main.texts.getString("login"));
 		login.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if(login.getText().equals(Main.texts.getString("login"))){
+				if(login.getText().equals(Main.texts.getString("login"))) {
 					login.setText("");
 				}
 			}
@@ -75,11 +81,11 @@ public class Login extends JPanel implements ActionListener{
 			}
 		});
 
-		if(strLogin!= null)
+		if(!strLogin.equals(""))
 			password = new JPasswordField("");
 		else
 			password = new JPasswordField("**********");
-		
+
 		newAccount = new JLabel(Main.texts.getString("new_account"));
 		passwordForget = new JLabel(Main.texts.getString("password_forget"));
 
@@ -116,7 +122,6 @@ public class Login extends JPanel implements ActionListener{
 		btnConnec.addActionListener(this);
 		login.addActionListener(this);
 		password.addActionListener(this);
-
 	}
 
 	public void paintComponent(Graphics g) {
@@ -135,9 +140,10 @@ public class Login extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login){
+		if(arg0.getSource() == btnConnec || arg0.getSource() == password || arg0.getSource() == login) {
 			boolean res = Main.getModel().connect(login.getText(), new String(password.getPassword()));
-			if(res){
+
+			if(res) {
 				Main.settingsProp.setProperty("username", login.getText());
 				try {
 					Main.settingsProp.store(new FileOutputStream("files/settings.conf"), null);
@@ -148,8 +154,7 @@ public class Login extends JPanel implements ActionListener{
 				}
 				Main.player = login.getText();
 				Main.getView().setPanel("Browser", false);
-			}
-			else
+			} else
 				javax.swing.JOptionPane.showMessageDialog(this,Main.texts.getString("co_fail"));
 		} 
 	}

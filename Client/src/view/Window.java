@@ -12,9 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class Window extends JFrame implements WindowListener, ComponentListener{
+/**
+ * JFrame customisé qui ouvre la fenêtre principale du client
+ *
+ */
+public class Window extends JFrame implements WindowListener, ComponentListener {
 
-	private static final long serialVersionUID = 5314555994004764198L;
+	private static final long serialVersionUID = 1L;
 
 	public Window() {
 		//On initialise la JFrame		
@@ -26,17 +30,18 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 		this.setResizable(true);
 		this.setSize((int)Main.gameWidth, (int)Main.gameHeight);
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-	    int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
-	    int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
-	    this.setLocation(x, y);
-	    this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/icon.png")));
+		int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+		int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+		this.setLocation(x, y);
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass()
+				.getResource("/ressources/images/icon.png")));
 	}
-	
-	public void setPanel(JPanel panel){
+
+	public void setPanel(JPanel panel) {
 		this.setContentPane(panel);
 	}
 
-	private void onClose(){
+	private void onClose() {
 		Main.getModel().disconnect();
 		this.dispose();
 	}
@@ -46,41 +51,23 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 	}
 
 
-	public void windowClosed(WindowEvent e) {
+	public void windowClosed(WindowEvent e) {}
 
-	}
+	public void windowOpened(WindowEvent e) {}
 
-	public void windowOpened(WindowEvent e) {
-		
-	}
+	public void windowIconified(WindowEvent e) {}
 
-	public void windowIconified(WindowEvent e) {
-		
-	}
+	public void windowDeiconified(WindowEvent e) {}
 
-	public void windowDeiconified(WindowEvent e) {
-		
-	}
+	public void windowActivated(WindowEvent e) {}
 
-	public void windowActivated(WindowEvent e) {
-		
-	}
+	public void windowDeactivated(WindowEvent e) {}
 
-	public void windowDeactivated(WindowEvent e) {
-		
-	}
+	public void windowGainedFocus(WindowEvent e) {}
 
-	public void windowGainedFocus(WindowEvent e) {
-		
-	}
+	public void windowLostFocus(WindowEvent e) {}
 
-	public void windowLostFocus(WindowEvent e) {
-		
-	}
-
-	public void windowStateChanged(WindowEvent e) {
-		
-	}
+	public void windowStateChanged(WindowEvent e) {}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
@@ -90,21 +77,14 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 		Main.ratioY = this.getHeight()/768.0;
 		Main.offsetX = Main.gameWidth - 1024;
 		this.getContentPane().repaint();
-		
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void componentMoved(ComponentEvent e) {}
 
 	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void componentShown(ComponentEvent e) {}
 
 	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void componentHidden(ComponentEvent e) {}
 }

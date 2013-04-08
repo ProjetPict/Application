@@ -9,11 +9,10 @@ import socketData.WordCommand;
 import model.GameObserver;
 
 /**
- * Transmet les différents écrans à la fenêtre principale.
+ * Classe principale qui gère la fenêtre et ses panels principaux
  *
  */
 public class View {
-
 
 	private static Window window;
 	private Login login;
@@ -22,17 +21,21 @@ public class View {
 	private GameObserver go;
 	private Bonus bonus = new Bonus();
 
-	public View(){
+	/**
+	 * Constructeur de View
+	 */
+	public View() {
 		window = new Window();
 		window.addKeyListener(bonus);
 	}
 
 	public void setPanel(String panelType, boolean gameCreator) {
 		window.setVisible(true);
-		
+
 		if(panelType.equals("Browser")) {
 			browser = new Browser(window);
 			window.setPanel(browser);
+
 			if(Main.settingsProp.getProperty("firstLaunch").equals("0")) {
 				Tutorial t = new Tutorial();
 				t.setVisible(true);
@@ -47,39 +50,34 @@ public class View {
 					e.printStackTrace();
 				}
 			}
-		}
-		else if (panelType.equals("Login")) {
+		} else if (panelType.equals("Login")) {
 			login = new Login();
 			login.addKeyListener(bonus);
 			window.setPanel(login);
-		}
-		else if (panelType.equals("GameScreen")) {
+		} else if (panelType.equals("GameScreen")) {
 			gmScreen = new GameScreen(gameCreator);
 			window.setPanel(gmScreen);
 		}
-		
-		
+
 		window.validate();
-		
 	}
-	
+
 	public GameObserver getGameObserver() {
 		return go;
 	}
-	
+
 	public void setGameObserver(GameObserver go) {
 		this.go = go;
 	}
 
 	public void startTurn() {
 		gmScreen.startTurn();
-		
 	}
 
 	public void chooseWord(WordCommand command) {
 		gmScreen.chooseWord(command);
 	}
-	
+
 	public Window getWindow() {
 		return window;
 	}

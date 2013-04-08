@@ -32,11 +32,13 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-public class ChatArea extends JPanel implements ActionListener, Observer{
+/**
+ * JPanel customisé qui est utilisé pour afficher le chat, la zone de réponse
+ * et les différentes informations de partie
+ *
+ */
+public class ChatArea extends JPanel implements ActionListener, Observer {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textAnswer;
 	private PlayerScore[] scores;
@@ -63,7 +65,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private int turn;
 	private int maxTurn;
 
+
+	/**
+	 * Constructeur de ChatArea
+	 * @param creator True si le joueur est le créateur de la partie, false sinon
+	 */
 	public ChatArea(boolean creator) {
+
 		running = false;
 		turn = 0;
 		maxTurn = 0;
@@ -88,12 +96,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 		listScores.setCellRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
-			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus) 
+			public Component getListCellRendererComponent(JList list,Object value,int index,
+					boolean isSelected,boolean cellHasFocus) {
 
-			{
 				if (value instanceof PlayerScore) {
 					PlayerScore player = (PlayerScore)value;
 					String pos;
+
 					switch(index) {
 					case 0:
 						pos = index+1+Main.texts.getString("first");
@@ -122,6 +131,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 					setBackground(Color.WHITE);
 				}     
+
 				return this;
 			}
 		});
@@ -133,12 +143,12 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		chat.setEditable(false);
 		chatDoc = chat.getStyledDocument();
 		chatMAS = chat.getInputAttributes();
+
 		try {
 			StyleConstants.setItalic(chatMAS, true);
 			chatDoc.insertString(0, Main.texts.getString("welcome_chat"), chatMAS);
 			StyleConstants.setItalic(chatMAS, false);
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -152,8 +162,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 
 		lblTimer = new JLabel(Main.texts.getString("waiting_launch"),SwingConstants.CENTER);
+
 		if(creator)
 			lblTimer.setText(Main.texts.getString("waiting_players"));
+
 		lblTimer.setFont(titleFont);
 		add(lblTimer);
 
@@ -178,6 +190,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		createStartButton();
 	}
 
+	/**
+	 * Si le bouton n'existe pas et si le joueur est le créateur de la partie, 
+	 * alors on créé le bouton et on l'ajoute au panel
+	 */
 	public void createStartButton() {
 		if(creator && btnStartGame == null) {
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
@@ -186,6 +202,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		}
 	}
 
+
+	/**
+	 * On active/désactive le bouton pour lancer la partie (seulement si creator == true)
+	 * @param enable
+	 */
 	public void enableStartButton(boolean enable) {
 		if(btnStartGame != null && creator) {
 			btnStartGame.setVisible(enable);
@@ -194,7 +215,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	}
 
 	@Override
-	protected void paintComponent(Graphics g){
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		btnQuitGame.setBounds(10, 10, 380, 30);
 		lblTimer.setBounds(10, 45, 380, 30);
@@ -216,6 +237,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		g.drawLine(0, 0, 0, this.getHeight());
 	}
 
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == textAnswer) {
@@ -223,30 +245,30 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				Main.getModel().sendAnswer(textAnswer.getText(), ((GameScreen)getParent()).getNbPixels());
 				textAnswer.setText("");
 			}
-		}
-		else if(e.getSource() == textChat) {
-			if(!textChat.getText().equals("") && getParent() instanceof GameScreen && textChat.getText().length() > 0) {
+		} else if(e.getSource() == textChat) {
+			if(!textChat.getText().equals("") && getParent() instanceof GameScreen 
+					&& textChat.getText().length() > 0) {
 				Main.getModel().sendChatMessage(textChat.getText());
 				textChat.setText("");
 			}
-		}
-		else if(e.getSource() == btnStartGame) {
+		} else if(e.getSource() == btnStartGame) {
 			if(scores.length>1) {
 				Main.getModel().sendCommand("startgame");
 			}
-		}
-		else if(e.getSource() == btnQuitGame) {
+		} else if(e.getSource() == btnQuitGame) {
 			Main.getView().quitGame();
 		}
-
 	}
 
 	public void launchTimer() {
 		this.time = 60;
+
 		if(timer != null)
 			timer.cancel();
+
 		timer = new Timer();
 		lblTimer.setText(String.valueOf(time));
+
 		timer.schedule(new TimerTask() {
 			public void run() {
 				time--;
@@ -255,7 +277,6 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 					this.cancel();
 			}
 		}, 0, 1000);
-
 	}
 
 	public void cancelTimer() {
@@ -264,11 +285,14 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			timer.cancel();
 			timer = null;
 		}
+
 		lblTimer.setText(Main.texts.getString("waiting_drawer"));
 	}
 
+
 	@Override
 	public void update(Observable o, Object arg) {
+
 		if(arg instanceof Boolean) {
 			drawing = (Boolean) arg;
 			if(drawing == true) {
@@ -278,8 +302,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				textAnswer.setEditable(true);
 				textAnswer.setText("");
 			}
-		}
-		else if(arg instanceof ValueCommand) {
+		} else if(arg instanceof ValueCommand) {
 			ValueCommand cmd = (ValueCommand) arg;
 
 			if(cmd.command.equals("turn"))
@@ -288,9 +311,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				maxTurn = cmd.value;
 
 			lblTurns.setText(Main.texts.getString("turns") + turn + "/" + maxTurn);
-		}
-		else if(arg instanceof ChatCommand) {
+		} else if(arg instanceof ChatCommand) {
 			ChatCommand cmd = (ChatCommand)arg;
+
 			try {
 				if(cmd.author == null || cmd.author.equals("")) {
 					StyleConstants.setItalic(chatMAS, true);
@@ -305,12 +328,11 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 					chatDoc.insertString(chatDoc.getEndPosition().getOffset(), " : " + cmd.command + "\n", chatMAS);
 				}
 			} catch (BadLocationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 			chat.setCaretPosition(chat.getDocument().getLength());
-		}
-		else if(arg instanceof String) {
+		} else if(arg instanceof String) {
 			if(((String) arg).equals("endgame")) {
 				enableAnswer(false);
 				running = false;
@@ -322,20 +344,16 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 					enableStartButton(false);
 					lblTimer.setText(Main.texts.getString("waiting_players"));
 				}
-			}
-			else if(((String) arg).equals("startgame")) {
+			} else if(((String) arg).equals("startgame")) {
 				running = true;
 				enableStartButton(false);
-			}
-			else if(((String) arg).equals("goodword")) {
+			} else if(((String) arg).equals("goodword")) {
 				textAnswer.setEditable(false);
 				textAnswer.setText(Main.texts.getString("goodanswer"));
 				lblAnswer.setForeground(new Color(0, 153, 0));
-			}
-			else if(((String) arg).equals("wrongword")) {
+			} else if(((String) arg).equals("wrongword")) {
 				lblAnswer.setForeground(new Color(204, 0, 0));
-			}
-			else if(((String) arg).equals("gameowner")) {
+			} else if(((String) arg).equals("gameowner")) {
 				creator = true;
 				createStartButton();
 				lblTimer.setText(Main.texts.getString("waiting_players"));

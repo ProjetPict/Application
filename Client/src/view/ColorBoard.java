@@ -11,10 +11,10 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 /**
- * Palette de couleurs
+ * JPanel customisé qui contient la palette de couleurs et la taille du trait
  *
  */
-public class ColorBoard extends JPanel{
+public class ColorBoard extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,12 +27,15 @@ public class ColorBoard extends JPanel{
 	private JRadioButton btnMedium;
 	private JRadioButton btnBig;
 	private JRadioButton btnRed;
-	
+
 	private ButtonGroup btnGroup;
 	private ButtonGroup btnGroupSizes;
 	private JSeparator separator;
 	private JComboBox sizeBox;
-	
+
+	/**
+	 * Constructeur de ColorBoard
+	 */
 	public ColorBoard() {
 		btnBlack = new JRadioButton(Main.texts.getString("black"));
 		btnBlue = new JRadioButton(Main.texts.getString("blue"));
@@ -43,7 +46,7 @@ public class ColorBoard extends JPanel{
 		btnSmall = new JRadioButton(Main.texts.getString("small"));
 		btnMedium = new JRadioButton(Main.texts.getString("medium"));
 		btnBig = new JRadioButton(Main.texts.getString("big"));
-		
+
 		btnGroup = new ButtonGroup();
 		btnGroup.add(btnBlack);
 		btnGroup.add(btnBlue);
@@ -51,12 +54,12 @@ public class ColorBoard extends JPanel{
 		btnGroup.add(btnYellow);
 		btnGroup.add(btnRed);
 		btnGroup.add(btnWhite);
-		
+
 		btnGroupSizes = new ButtonGroup();
 		btnGroupSizes.add(btnSmall);
 		btnGroupSizes.add(btnMedium);
 		btnGroupSizes.add(btnBig);
-		
+
 		this.setLayout(new GridLayout(1,8));
 		this.add(btnBlack);
 		this.add(btnBlue);
@@ -64,27 +67,30 @@ public class ColorBoard extends JPanel{
 		this.add(btnYellow);
 		this.add(btnRed);
 		this.add(btnWhite);
-		
+
 		separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
-	
+
 		add(separator);
-		
+
 		JLabel textSizes = new JLabel(Main.texts.getString("size"));
 		String[] strSizes = new String[] {Main.texts.getString("small"), 
 				Main.texts.getString("medium"), Main.texts.getString("big")};
 		sizeBox = new JComboBox(strSizes);
-		
+
 		this.add(textSizes);
 		this.add(sizeBox);
-		
+
 		btnBlack.setSelected(true);
-		
 	}
-	
+
+	/**
+	 * 
+	 * @return La couleur correspondante au radioButton coché
+	 */
 	public Color getSelectedColor() {
 		Color res = Color.black;
-		
+
 		if(btnBlue.isSelected())
 			res = Color.blue;
 		else if(btnGreen.isSelected())
@@ -95,13 +101,18 @@ public class ColorBoard extends JPanel{
 			res = Color.red;
 		else if(btnWhite.isSelected())
 			res = Color.white;
-		
+
 		return res;
 	}
-	
-	public int getSelectedSize(){
+
+	/**
+	 * 
+	 * @return La taille correspondante au comboBox selectionné
+	 */
+	public int getSelectedSize() {
 		int res = 3;
 		int index = sizeBox.getSelectedIndex();
+
 		switch(index) {
 		default:
 		case 0:
@@ -114,7 +125,7 @@ public class ColorBoard extends JPanel{
 			res = 45;
 			break;
 		}
-		
+
 		return res;
 	}
 }

@@ -37,11 +37,11 @@ public class Main {
 	public static double offsetX;
 	public static double offsetY;
 	public static Properties settingsProp;
-	
+
 	public static void main(String[] argc) {
 		boolean launchOk = false;
 		boolean unique = isUnique();
-		
+
 		if(unique) {
 			gameWidth = (int)(Main.SCREEN_WIDTH * 0.8);
 			gameHeight = (int)(Main.SCREEN_HEIGHT * 0.8);
@@ -69,33 +69,38 @@ public class Main {
 			JOptionPane.showMessageDialog(null, texts.getString("instance_error"), texts.getString("launch_error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
-	
+
+
 	public static Model getModel() {
 		return model;
 	}
-	
+
 	public static View getView() {
 		return view;
 	}
-	
+
 	public static GameObserver getGameObserver() {
 		return model.getGameObserver();
 	}
-	
+
+	/**
+	 * 
+	 * @return True si l'instance du jeu est unique, false sinon
+	 */
 	public static boolean isUnique() {
-	    boolean unique;
-	    try {
-	        unique = new FileOutputStream("files/lock.ini").getChannel().tryLock() != null;
-	    } catch(IOException ie) {
-	        unique = false;
-	    }
-	    
-	    //TODO remplacer par unique
-	    return true;
+		boolean unique;
+
+		try {
+			unique = new FileOutputStream("files/lock.ini").getChannel().tryLock() != null;
+		} catch(IOException ie) {
+			unique = false;
+		}
+
+		return unique;
 	}
-	
+
 	public static void readFromUrl(String s) {
+
 		try {
 			InputStream ips = new URL(s).openStream();
 			InputStreamReader ipsr=new InputStreamReader(ips);

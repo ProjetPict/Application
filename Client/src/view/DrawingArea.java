@@ -40,7 +40,12 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	private Image image; 
 	private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png"));
 
+	/**
+	 * Constructeur de DrawingArea
+	 * @param gameObs L'instance de GameObserver utilisée par le client
+	 */
 	public DrawingArea(GameObserver gameObs) {
+
 		setBackground(Color.WHITE);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -56,23 +61,29 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 		this.gameObs = gameObs;
 
 		this.gameObs.setPicture(bufPic);
-
 	}
 
+	/**
+	 * On "nettoie" la zone de dessin
+	 */
 	public void clearScreen() {
 		image = createImage((int)(Main.gameWidth),(int)(Main.gameHeight));
 		buffer = (Graphics2D) image.getGraphics();
 		buffer.setColor( Color.white );
 		buffer.fillRect( 0, 0, (int)(Main.gameWidth),(int)(Main.gameHeight));
 		bufPic.clear();
-
 	}
 
 
+	/**
+	 * 
+	 * @return Le nombre de pixels dans le dessin
+	 */
 	public long getNbPixels() {
 		return bufPic.getNbPixels();
 	}
-	
+
+
 	public void setPicture(Picture pict) {
 		bufPic.deleteObservers();
 		bufPic = pict;
@@ -95,10 +106,11 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 
 		buffer.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+
 		for (Line l : bufPic.getLines()) {
 			buffer.setColor(l.color);
-			buffer.setStroke(new BasicStroke(l.size,                     // Line width
-					BasicStroke.CAP_ROUND,    // End-cap style
+			buffer.setStroke(new BasicStroke(l.size,                    
+					BasicStroke.CAP_ROUND,   
 					BasicStroke.JOIN_ROUND));
 			for(int i=0; i < (l.getData().size()-2); i++) {
 				Point p1 = l.getData().get(i);
@@ -106,21 +118,19 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 				buffer.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
 		}
+
 		g.drawImage(imgLogo, this.getSize().width/2-173, this.getSize().height/2-58, this);
 		g.drawImage(image, 0, 0, this);
-
 	}
 
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
+	public void mouseReleased(MouseEvent arg0) {}
 
-	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		if(drawing) {
-			// TODO : Calculer dynamiquement l'Ã©paisseur du trait en fonction de la taille de la zone en pixels
 			Point p = new Point(arg0.getX(), arg0.getY());
 			bufPic.addPoint(p);
 			gameObs.sendDrawingData(p);
@@ -135,21 +145,13 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Changer la forme du curseur.
-	}
+	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Remettre le curseur en mode "normal"
-
-	}
-
+	public void mouseExited(MouseEvent arg0) {}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// DO NOTHING
-	}
+	public void mouseClicked(MouseEvent arg0) {}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
@@ -158,13 +160,8 @@ public class DrawingArea extends JPanel implements MouseListener, MouseMotionLis
 			bufPic.addLine(line);
 			gameObs.sendNewLine(line);
 		}
-
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// DO NOTHING
-
-	}
-
+	public void mouseMoved(MouseEvent arg0) {}
 }

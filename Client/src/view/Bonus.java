@@ -11,16 +11,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/*
+/**
  * Bonus frame, ouverture lors du Konami Code
  */
 public class Bonus implements KeyListener {
-	
+
 	private JFrame bonusFrame;
 	private JPanel bonusPanel;
 	private int[] konamiCode = {38,38,40,40,37,39,37,39,66,65};
 	private ArrayList<Integer> enterCode;
-	
+
 	public Bonus() {
 		enterCode = new ArrayList<Integer>();
 	}
@@ -42,13 +42,13 @@ public class Bonus implements KeyListener {
 			bonusFrame.setResizable(false);
 			bonusFrame.setVisible(true);
 			bonusPanel = (JPanel) bonusFrame.getContentPane();
-            ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/bonus.gif")));
-            JLabel iLbl = new JLabel();
-            iLbl.setIcon(ii);
-            JLabel lblBonus = new JLabel(Main.texts.getString("konami"));
-            bonusPanel.setLayout(new FlowLayout());
-            bonusPanel.add(lblBonus);
-            bonusPanel.add(iLbl);
+			ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/bonus.gif")));
+			JLabel iLbl = new JLabel();
+			iLbl.setIcon(ii);
+			JLabel lblBonus = new JLabel(Main.texts.getString("konami"));
+			bonusPanel.setLayout(new FlowLayout());
+			bonusPanel.add(lblBonus);
+			bonusPanel.add(iLbl);
 			bonusFrame.validate();
 			enterCode.clear();
 		}
@@ -59,5 +59,4 @@ public class Bonus implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
-
 }
