@@ -31,7 +31,7 @@ public class ColorBoard extends JPanel{
 	private ButtonGroup btnGroup;
 	private ButtonGroup btnGroupSizes;
 	private JSeparator separator;
-	private JComboBox<String> sizeBox;
+	private JComboBox sizeBox;
 	
 	public ColorBoard(){
 		btnBlack = new JRadioButton(Main.texts.getString("black"));
@@ -73,7 +73,7 @@ public class ColorBoard extends JPanel{
 		JLabel textSizes = new JLabel(Main.texts.getString("size"));
 		String[] strSizes = new String[] {Main.texts.getString("small"), 
 				Main.texts.getString("medium"), Main.texts.getString("big")};
-		sizeBox = new JComboBox<String>(strSizes);
+		sizeBox = new JComboBox(strSizes);
 		
 		this.add(textSizes);
 		this.add(sizeBox);

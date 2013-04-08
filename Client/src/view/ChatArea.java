@@ -40,7 +40,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 	private static final long serialVersionUID = 1L;
 	private JTextField textAnswer;
 	private PlayerScore[] scores;
-	private JList<PlayerScore> list;
+	private JList listScores;
 	private JTextPane chat;
 	private JScrollPane scrollPaneChat;
 	private JScrollPane scrollPaneScore;
@@ -84,13 +84,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 		Main.getModel().addObserver(this);
 
-		list = new JList<PlayerScore>();
+		listScores = new JList();
 
-		list.setCellRenderer(new DefaultListCellRenderer(){
+		listScores.setCellRenderer(new DefaultListCellRenderer(){
 			
 			private static final long serialVersionUID = 1L;
 
-			public Component getListCellRendererComponent(JList<?> list,Object value,int index,boolean isSelected,boolean cellHasFocus)
+			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus)
 			{
 				if (value instanceof PlayerScore) 
 				{
@@ -129,7 +129,8 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				return this;
 			}
 		});
-		scrollPaneScore = new JScrollPane(list);
+		
+		scrollPaneScore = new JScrollPane(listScores);
 		add(scrollPaneScore);
 
 		chat = new JTextPane();
@@ -341,7 +342,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			}*/
 
 			if(scores.length > 0) {
-				list.setListData(scores);
+				listScores.setListData(scores);
 			}
 
 			if(scores.length > 1 && !running) {
