@@ -63,7 +63,7 @@ public class Browser extends JPanel implements ActionListener{
 	private JLabel lblTurn;
 	private JTextField txtTurn;
 	private JLabel lblDifficulty;
-	private JComboBox<String> jcbDifficulty;
+	private JComboBox jcbDifficulty;
 
 	private JLabel lblFilter;
 	private JCheckBox cbShowFull;
@@ -108,7 +108,7 @@ public class Browser extends JPanel implements ActionListener{
 		lblDifficulty = new JLabel(Main.texts.getString("difficulty_choice"));
 		String[] difficulties = { Main.texts.getString("easy"), 
 				Main.texts.getString("medium"), Main.texts.getString("hard") };
-		jcbDifficulty = new JComboBox<String>(difficulties);
+		jcbDifficulty = new JComboBox(difficulties);
 
 		lblFilter = new JLabel(Main.texts.getString("filter"));
 		lblFilter.setFont(new Font("Arial", Font.PLAIN, 26));
