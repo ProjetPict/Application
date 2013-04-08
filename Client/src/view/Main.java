@@ -18,7 +18,6 @@ import model.Model;
 
 /**
  * Classe de démarrage : instancie le modèle et la vue
- * @author christopher
  *
  */
 public class Main {

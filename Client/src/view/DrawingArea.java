@@ -22,7 +22,6 @@ import socketData.*;
 
 /**
  * La zone où le joueur peut dessiner/voir le dessin se former.
- * @author christopher
  *
  */
 

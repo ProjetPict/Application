@@ -10,7 +10,6 @@ import model.GameObserver;
 
 /**
  * Transmet les différents écrans à la fenêtre principale.
- * @author christopher
  *
  */
 public class View {

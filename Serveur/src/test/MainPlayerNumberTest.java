@@ -3,7 +3,6 @@ package test;
 /**
  * Test de montée en charge du serveur. En cas de surcharge, le serveur print une exception.
  * monte à 2400 sur ma machine
- * @author Quentin
  * 
  */
 public class MainPlayerNumberTest {

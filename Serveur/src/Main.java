@@ -38,7 +38,7 @@ public class Main {
 						param = input.readLine();
 					} catch (IOException e) {}
 				} while(param.equals("quitter"));
-				ShutDownEmergency cdTime = new ShutDownEmergency(10,server);
+				ShutDownEmergency cdTime = new ShutDownEmergency(10);
 				cdTime.start();
 			}
 		} catch (Exception e) {

@@ -7,7 +7,6 @@ import java.util.Observable;
 
 /**
  * Une image est un ensemble de lignes (cf Class Line)
- * @author christopher
  *
  */
 public class Picture extends Observable implements Serializable{

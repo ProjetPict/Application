@@ -10,7 +10,6 @@ import socketData.Command;
 
 /**
  * Gère les nouvelles connexions dans un Thread à part du Server.
- * @author Jerome
  *
  */
 public class Connection extends Thread {

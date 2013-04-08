@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 /**
  * Cette classe contient un arraylist de GameInfo, elle ne sert qu'à éviter des problèmes de transfert d'Object.
- * @author Jerome Port
  *
  */
 public class GameList implements Serializable{
@@ -20,5 +19,10 @@ public class GameList implements Serializable{
 	public GameList()
 	{
 		games = new ArrayList<GameInfo>();
+	}
+	
+	public GameList(ArrayList<GameInfo> games)
+	{
+		this.games = games;
 	}
 }

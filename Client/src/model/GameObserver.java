@@ -16,8 +16,7 @@ import view.Main;
 
 
 /**
- * 
- * @author Nicolas Spagnulo
+ * Cette classe est un thread qui boucle pour recevoir les informations du serveur pendant une partie.
  *
  */
 

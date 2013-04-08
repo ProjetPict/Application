@@ -1,23 +1,14 @@
 package view;
 
-import java.awt.BorderLayout; 
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
-
-import server.Server;
 
 /**
  * Génère et gère une console
- * @author Matthieu
  *
  */
 public class Console extends JPanel {

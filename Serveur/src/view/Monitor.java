@@ -22,18 +22,20 @@ import org.jfree.data.time.TimeSeriesCollection;
 
 /**
  * Gère l'ensemble des graphes et du panel avec les onglets
- * @author Matthieu
  *
  */
 
 public class Monitor extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private TimeSeries tsConnect = new TimeSeries("Nombre de joueurs connectés", Millisecond.class);
 	private TimeSeries tsGames = new TimeSeries("Nombre de parties en cours", Millisecond.class);
 	private TimeSeries tsMemory = new TimeSeries("Mémoire utilisée par le serveur", Millisecond.class);
 	private ValueAxis axisM;
 	private ValueAxis axisC;
-	private ValueAxis axisB;
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JPanel memory;
     private JPanel connected;

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Observable;
 
 import socketData.AnswerCommand;
@@ -20,7 +18,6 @@ import view.Main;
 
 /**
  * Gere les connexions avec le serveur.
- * @author christopher cacciatore
  *
  */
 public class Model extends Observable{

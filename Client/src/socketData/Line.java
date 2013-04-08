@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 /**
  * Une ligne est représentée par un ensemble de DrawingData
- * @author christopher cacciatore
  *
  */
 public class Line implements Serializable {

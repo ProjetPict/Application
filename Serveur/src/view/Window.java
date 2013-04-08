@@ -17,8 +17,7 @@ import javax.swing.JSplitPane;
 import server.Server;
 
 /**
- * Gere l'interface, la fenetre et la communication entre cette interface et le serveur
- * @author Matthieu
+ * Gère l'interface, la fenetre et la communication entre cette interface et le serveur
  *
  */
 public class Window extends JFrame implements WindowListener {
@@ -26,7 +25,6 @@ public class Window extends JFrame implements WindowListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Server serverInfos;
 	private Console console;
 	private Monitor monitor = new Monitor();
 	private boolean isDown;
@@ -53,14 +51,13 @@ public class Window extends JFrame implements WindowListener {
 	public final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 	public final int SCREEN_HEIGHT = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
-	public Window(final Server servInfo){
+	public Window(final Server server){
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(SCREEN_WIDTH/2-450,SCREEN_HEIGHT/2-350));
 		this.setResizable(false);
 		this.setSize(900, 700);
 		this.setJMenuBar(menuBar);
-		this.serverInfos = servInfo;
 		console = new Console();
 		isDown = false;
 		
@@ -96,7 +93,7 @@ public class Window extends JFrame implements WindowListener {
 		start.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					servInfo.startServer(true,true);
+					server.startServer(true,true);
 				} catch (Exception e1) {}
 			}
 		});
@@ -147,7 +144,7 @@ public class Window extends JFrame implements WindowListener {
 	
 	public void stopOrClose(boolean b) throws InterruptedException {
 		if(!isDown) {
-			ShutDownEmergency cdTime = new ShutDownEmergency(10,console,serverInfos,b,this);
+			ShutDownEmergency cdTime = new ShutDownEmergency(10, console, b, this);
 			cdTime.start();
 		} else {
 			System.exit(0);

@@ -21,8 +21,7 @@ import socketData.ValueCommand;
 import socketData.WordCommand;
 
 /**
- * Gï¿½re une partie et ses joueurs.
- * @author Jerome
+ * Gère une partie et ses joueurs.
  *
  */
 public class Game extends Thread{

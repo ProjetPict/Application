@@ -1,14 +1,11 @@
 package localDatabase;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import dbwConnection.DbwConnection;
 import dbwConnection.ResultSet;
 
 /**
  * Cette classe permet la connexion du serveur avec la base de données ainsi que les requêtes basiques
- * @author Matthieu
  *
  */
 public class DbConnection extends Thread {

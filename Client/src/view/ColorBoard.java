@@ -12,7 +12,6 @@ import javax.swing.SwingConstants;
 
 /**
  * Palette de couleurs
- * @author christopher cacciatore
  *
  */
 public class ColorBoard extends JPanel{
@@ -32,7 +31,7 @@ public class ColorBoard extends JPanel{
 	private ButtonGroup btnGroup;
 	private ButtonGroup btnGroupSizes;
 	private JSeparator separator;
-	private JComboBox sizeBox;
+	private JComboBox<String> sizeBox;
 	
 	public ColorBoard(){
 		btnBlack = new JRadioButton(Main.texts.getString("black"));
@@ -74,7 +73,7 @@ public class ColorBoard extends JPanel{
 		JLabel textSizes = new JLabel(Main.texts.getString("size"));
 		String[] strSizes = new String[] {Main.texts.getString("small"), 
 				Main.texts.getString("medium"), Main.texts.getString("big")};
-		sizeBox = new JComboBox(strSizes);
+		sizeBox = new JComboBox<String>(strSizes);
 		
 		this.add(textSizes);
 		this.add(sizeBox);

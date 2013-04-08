@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 
 public class About extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public About(){
 		this.setTitle("DrawVS - A propos");
 		this.setLocation(new Point(100,100));

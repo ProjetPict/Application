@@ -9,14 +9,14 @@ import socketData.GameList;
 
 public class GameTableModel extends AbstractTableModel{
 
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<GameInfo> gl;
 	private String[] columns;
-	
+
 	public GameTableModel(GameList gl)
 	{
 		this.gl = gl.games;
@@ -27,16 +27,16 @@ public class GameTableModel extends AbstractTableModel{
 
 	@Override
 	public int getRowCount() {
-		
+
 		return gl.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		
+
 		return columns.length;
 	}
-	
+
 	@Override
 	public String getColumnName(int columnIndex) {
 		return columns[columnIndex];
@@ -44,7 +44,7 @@ public class GameTableModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		
+
 		switch (columnIndex) {
 		case 0:
 			return gl.get(rowIndex).name;
@@ -60,21 +60,21 @@ public class GameTableModel extends AbstractTableModel{
 			throw new IllegalArgumentException();
 		}
 	}
-	
+
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
-			case 0:
-			case 1:
-				return String.class;
-			case 2:
-				return Integer.class;
-			case 3:
-			case 4:
-				return Boolean.class;
-	
-			default:
-				return Object.class;
+		case 0:
+		case 1:
+			return String.class;
+		case 2:
+			return Integer.class;
+		case 3:
+		case 4:
+			return Boolean.class;
+
+		default:
+			return Object.class;
 		}
 	}
 

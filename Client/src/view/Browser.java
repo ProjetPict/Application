@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -26,12 +27,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.table.TableCellRenderer;
-
 import socketData.*;
 
 /**
- * Ecran de selection/creation de partie
- * @author Christopher Cacciatore, Matthieu Douris
+ * Ecran de séléction/création de partie
  *
  */
 public class Browser extends JPanel implements ActionListener{
@@ -72,7 +71,7 @@ public class Browser extends JPanel implements ActionListener{
 	private JCheckBox cbShowActive;
 	private JLabel lblSearch;
 	private JTextField txtSearch;
-	private JButton btnApply;
+	private JButton btnSearch;
 
 	private JScrollPane scrlPane;
 	private JTable table;
@@ -82,9 +81,16 @@ public class Browser extends JPanel implements ActionListener{
 	private BooleanCellRenderer boolRenderer;
 	private IntCellRenderer intRenderer;
 
+	private boolean displayFull;
+	private boolean displayPrivate;
+	private boolean displayActive;
 
 	public Browser(Window win) {
 		mainWindow = win;
+
+		displayFull = true;
+		displayPrivate = true;
+		displayActive = true;
 
 		btnJoin = new JButton(Main.texts.getString("join"));
 		btnPnlCreate = new JButton(Main.texts.getString("g_create"));
@@ -114,8 +120,8 @@ public class Browser extends JPanel implements ActionListener{
 		cbShowActive.setBackground(Color.white);
 		lblSearch = new JLabel(Main.texts.getString("search"));
 		lblSearch.setFont(new Font("Arial", Font.PLAIN, 26));
-		txtSearch = new JTextField();
-		btnApply = new JButton(Main.texts.getString("search"));
+		txtSearch = new JTextField("");
+		btnSearch = new JButton(Main.texts.getString("search"));
 
 		crtPane = new JPanel();
 		crtPane.setVisible(false);
@@ -146,12 +152,12 @@ public class Browser extends JPanel implements ActionListener{
 		table.setShowVerticalLines(true);
 		table.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
-				   if(e.getClickCount() == 2){
-					   joinGame();
-				     }
-				   }
+				if(e.getClickCount() == 2){
+					joinGame();
+				}
+			}
 		});
-		fillTable();
+		refreshTable();
 		scrlPane = new JScrollPane(table);
 
 		fadeEffect = new JPanel() {
@@ -174,7 +180,7 @@ public class Browser extends JPanel implements ActionListener{
 		this.add(cbShowActive);
 		this.add(lblSearch);
 		this.add(txtSearch);
-		this.add(btnApply);
+		this.add(btnSearch);
 
 		createPane = new JPanel(new SpringLayout());
 		createPane.add(lblGameName);
@@ -212,6 +218,11 @@ public class Browser extends JPanel implements ActionListener{
 		btnCreate.addActionListener(this);
 		btnCreateClose.addActionListener(this);
 		btnRefresh.addActionListener(this);
+		btnSearch.addActionListener(this);
+		txtSearch.addActionListener(this);
+		cbShowFull.addActionListener(this);
+		cbShowActive.addActionListener(this);
+		cbShowPrivate.addActionListener(this);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -228,7 +239,7 @@ public class Browser extends JPanel implements ActionListener{
 		cbShowActive.setLocation((int)Main.gameWidth-310, 360);
 		lblSearch.setLocation((int)Main.gameWidth-310, 410);
 		txtSearch.setBounds((int)Main.gameWidth-310, 440, 250, 30);
-		btnApply.setBounds((int)Main.gameWidth-310, 475, 250, 30);
+		btnSearch.setBounds((int)Main.gameWidth-310, 475, 250, 30);
 		g2d.drawImage(imgBlank, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
 		g2d.drawImage(imgTop, 0, 0, (int)Main.gameWidth, 120, this);
 		g2d.drawImage(imgLogo, 15, 8, 259, 87, this);
@@ -253,12 +264,62 @@ public class Browser extends JPanel implements ActionListener{
 			createGame();
 		}
 		else if(arg0.getSource() == btnRefresh) {
-			fillTable();
+			refreshTable();
 		}
 		else if(arg0.getSource() == btnCreateClose) {
 			newGameOptions.setVisible(false);
 			toFade = false;
 			repaint();
+		}
+		else if(arg0.getSource() == cbShowActive)
+		{
+			if(cbShowActive.isSelected())
+				displayActive = true;
+			else
+				displayActive = false;
+			applySearch(gl);
+		}
+		else if(arg0.getSource() == cbShowFull)
+		{
+			if(cbShowFull.isSelected())
+				displayFull = true;
+			else
+				displayFull = false;
+			applySearch(gl);
+		}
+		else if(arg0.getSource() == cbShowPrivate)
+		{
+			if(cbShowPrivate.isSelected())
+				displayPrivate = true;
+			else
+				displayPrivate = false;
+
+			applySearch(gl);
+		}
+		else if(arg0.getSource() == btnSearch || arg0.getSource() == txtSearch)
+		{	
+			applySearch(gl);
+		}
+	}
+
+	private void applySearch(GameList gl) {
+		if(gl != null)
+		{
+			ArrayList<GameInfo> games = new ArrayList<GameInfo>();
+
+			for(GameInfo gi : gl.games)
+			{
+				String name = gi.name.toLowerCase();
+				String search = txtSearch.getText().toLowerCase();
+
+				if(name.contains(search) || search.equals(""))
+				{
+					games.add(gi);	
+				}
+			}
+
+			GameList tempgl = new GameList(games);
+			applyFilter(tempgl);
 		}
 	}
 
@@ -327,8 +388,48 @@ public class Browser extends JPanel implements ActionListener{
 
 	}
 
-	private void fillTable() {
+	private void refreshTable() {
+
 		gl = Main.getModel().getGameList();
-		table.setModel(new GameTableModel(gl));
+		applySearch(gl);
+	}
+
+
+	private void applyFilter(GameList gl)
+	{
+		if(gl != null)
+		{
+			ArrayList<GameInfo> games = new ArrayList<GameInfo>();
+
+			for(GameInfo gi : gl.games)
+			{
+				boolean full = (gi.nbPlayers == gi.maxPlayers);
+				boolean password = gi.password;
+				boolean started = gi.started;
+				boolean add = true;
+
+				if(!displayPrivate && password)
+				{
+					add = false;
+				}
+
+				if(!displayFull && full)
+				{
+					add = false;
+				}
+
+				if(!displayActive && started)
+				{
+					add = false;
+				}
+
+				if(add)
+					games.add(gi);
+			}
+
+			GameList tempgl = new GameList(games);
+			GameTableModel gm = new GameTableModel(tempgl);
+			table.setModel(gm);
+		}
 	}
 }

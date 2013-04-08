@@ -13,7 +13,6 @@ public class ShutDownEmergency extends Thread {
 	private static final int TIMER_PERIOD = 1000;
 	private int max_count;
 	private Console console;
-	private Server serverInfos;
 	private boolean shutDown;
 	private Window window;
 	private JFrame frame;
@@ -22,19 +21,17 @@ public class ShutDownEmergency extends Thread {
 	private JLabel saveLbl = new JLabel("Sauvegarde du serveur en cours...");
 	private JLabel countDownLbl = new JLabel();
 
-	public ShutDownEmergency(int i, Console c, Server s, boolean b, Window f) {
+	public ShutDownEmergency(int i, Console c, boolean b, Window f) {
 		max_count = i;
 		console = c;
-		serverInfos = s;
 		shutDown = b;
 		window = f;
 		countDownLbl.setText("Merci de patienter.");
 	}
 	
-	public ShutDownEmergency(int i, Server s) {
+	public ShutDownEmergency(int i) {
 		max_count = i;
 		console = null;
-		serverInfos = s;
 		shutDown = true;
 	}
 	
@@ -67,7 +64,7 @@ public class ShutDownEmergency extends Thread {
 			}
 		}
 		writeIn("\n> Préparation à l'extinction du serveur. Veuillez patienter...\n> Sauvegarde dans la base de données...");
-		serverInfos.getDbInfos().saveDatabase();
+		Server.getDbInfos().saveDatabase();
 		saveLbl.setText("Sauvegarde du serveur effectuée !");
 		writeIn("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
 		writeIn("Terminé !\n> Arrêt du serveur dans 9 secondes...");
@@ -76,7 +73,7 @@ public class ShutDownEmergency extends Thread {
 				countDownLbl.setText("Arrêt du serveur dans "+count+" seconde(s).");
 			}
 			try {
-				this.sleep(TIMER_PERIOD);
+				sleep(TIMER_PERIOD);
 			} catch (InterruptedException e) {}
 			count--;
 		}

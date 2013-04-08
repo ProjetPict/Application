@@ -26,7 +26,6 @@ import javax.swing.JTextField;
 
 /**
  * Ecran de Login
- * @author Christopher Cacciatore, Matthieu Douris
  *
  */
 public class Login extends JPanel implements ActionListener{

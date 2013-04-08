@@ -11,7 +11,6 @@ import socketData.*;
 
 /**
  * Gère la connexion et l'envoi de requêtes (creategame, joingame, quit...) au serveur
- * @author christopher cacciatore
  *
  */
 public class ConnecToServer{

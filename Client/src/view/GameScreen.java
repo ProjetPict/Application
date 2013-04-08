@@ -17,7 +17,6 @@ import socketData.WordCommand;
 
 /**
  * Ecran de jeu
- * @author christopher cacciatore
  *
  */
 public class GameScreen extends JPanel{

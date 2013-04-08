@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,6 +16,10 @@ import javax.swing.SwingConstants;
 
 public class Tutorial extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<JPanel> stepPan;
 	private ArrayList<JButton> stepNextToPan;
 	private ArrayList<JButton> stepPrevToPan;

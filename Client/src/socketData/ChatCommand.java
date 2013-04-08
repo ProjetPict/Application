@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * Une commande contenant un message de Chat
- * @author christopher
  *
  */
 

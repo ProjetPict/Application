@@ -17,8 +17,7 @@ import socketData.WordCommand;
 
 /**
  * Cette classe est un thread qui permet de maintenir la connexion avec un joueur et d'intercepter
- * les donneees qu'il envoie depuis son socket.
- * @author Jerome
+ * les données qu'il envoie depuis son socket.
  *
  */
 public class Player extends Thread {

@@ -1,33 +1,30 @@
 package server;
 
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import localDatabase.DbConnection;
 import localDatabase.ServerDatabase;
-
 import socketData.GameInfo;
 import socketData.GameList;
 import view.Window;
 
+
 /**
  * Cette classe gère les nouvelles connexions, ainsi que
  * les joueurs et les parties
- * @author Jerome
  *
  */
 public class Server extends Thread{
