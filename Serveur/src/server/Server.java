@@ -135,7 +135,7 @@ public class Server extends Thread{
 					writeIn("Echec !");
 				importantProcess = false;
 			}
-		}, 600000, 600000);
+		}, 60000, 60000);
 		// Chargement automatique de la base de données toutes les 5 minutes
 		autoLoad.schedule(new TimerTask() {
 			public void run() {

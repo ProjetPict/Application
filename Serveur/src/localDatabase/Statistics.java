@@ -15,12 +15,12 @@ public class Statistics {
 
 	private ArrayList<StatsWordsRow> statsWords;
 	private DbConnection dbLink;
-	
+
 	public Statistics(DbConnection db) {
 		statsWords = new ArrayList<StatsWordsRow>();
 		dbLink = db;
 	}
-	
+
 	public void addNewStatsToWord(String word, boolean choose, int ... nbs) {
 		try {
 			int index = wordAlreadyInStats(word);
@@ -28,14 +28,19 @@ public class Statistics {
 				statsWords.add(new StatsWordsRow(word));
 				index = statsWords.size()-1;
 			}
-			if(nbs.length!=2)
-				throw new Exception();
-			statsWords.get(index).addNewProposalAccept(nbs[0],nbs[1]);
+			
+			statsWords.get(index).addNewProposalServer();
+			
+			if(choose){
+				if(nbs.length!=2)
+					throw new Exception();
+				statsWords.get(index).addNewProposalAccept(nbs[0],nbs[1]);
+			}
 		} catch(Exception e) {
 			System.out.println("Erreur lors de la modification de statistiques (nombre de paramètres incorrect).");
 		}
 	}
-	
+
 	public int wordAlreadyInStats(String word) {
 		boolean found = false;
 		int index = 0;
@@ -50,7 +55,7 @@ public class Statistics {
 		}
 		return pos;
 	}
-	
+
 	public boolean saveStatistics() {
 		try {
 			String queries = "";
@@ -60,14 +65,15 @@ public class Statistics {
 					queries+=statsWords.get(i).returnSQLRequest(rs.getString(1));
 				}
 			}
+		
 			return dbLink.executeInsertQuery(queries);
 		} catch (SQLException e) {
 			return false;
 		}
 	}
-	
+
 	public void resetStatisticsAfterSave() {
 		statsWords.clear();
 	}
-	
+
 }

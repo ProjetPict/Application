@@ -38,7 +38,7 @@ public class StatsWordsRow {
 	}
 	
 	public String returnSQLRequest(String index) {
-		return "INSERT INTO words_statistiques VALUES ('null','"+index+"','"+proposalServer+"','"+proposalAccepted+"','"+proposalPlayed+"','"+proposalFound+"');";
+		return "INSERT INTO words_statistiques VALUES (null,'"+index+"','"+proposalServer+"','"+proposalAccepted+"','"+proposalPlayed+"','"+proposalFound+"');";
 	}
 	
 }

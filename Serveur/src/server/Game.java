@@ -132,7 +132,9 @@ public class Game extends Thread{
 							computeScores();
 							
 							sendCommand(new Command("endturn"));
-
+							
+							Server.getDB().getStatistics().addNewStatsToWord(word, true, nbAnswer, players.size()-1);
+							
 							drawingPlayer.setDrawing(false);
 
 							for(Player p: players){
@@ -402,6 +404,10 @@ public class Game extends Thread{
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], difficulty);
 		drawingPlayer.setChoices(choices);
 
+		Server.getDB().getStatistics().addNewStatsToWord(words[0], false);
+		Server.getDB().getStatistics().addNewStatsToWord(words[1], false);
+		Server.getDB().getStatistics().addNewStatsToWord(words[2], false);
+		
 		launchTimer(15);
 
 		if(word.equals(""))
@@ -599,7 +605,6 @@ public class Game extends Thread{
 
 	public void setWord(String word)
 	{
-		System.out.println("Test");
 		if(timer != null)
 			timer.cancel();
 		time = 0;

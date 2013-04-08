@@ -44,7 +44,17 @@ public class DbConnection extends Thread {
 	}
 	
 	public boolean executeInsertQuery(String query) {
-		return db_connection.executeUpdate(query);
+		boolean res = true;
+		try {
+			String[] queries = query.split(";");
+			
+			for(int i = 0; i < queries.length; i++)
+				db_connection.executeQuery(queries[i]+";");
+		} catch (SQLException e) {
+			res = false;
+			e.printStackTrace();
+		}
+		return res;
 	}
 	
 }

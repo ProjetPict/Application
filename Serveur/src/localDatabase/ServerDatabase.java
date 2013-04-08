@@ -13,25 +13,25 @@ import dbwConnection.ResultSet;
  *
  */
 public class ServerDatabase {
-	
+
 	private DbConnection dbLink;
 	private HashMap<String, String> servDbUsersLogs;
 	private ArrayList<ArrayList<String>> servDbWordsLogs;
 	private Statistics servDbStatsLogs;
-	
+
 	public ServerDatabase(DbConnection db) {
 		servDbUsersLogs = new HashMap<String, String>();
 		servDbWordsLogs = new ArrayList<ArrayList<String>>();
-		servDbStatsLogs = new Statistics(dbLink);
 		dbLink = db;
+		servDbStatsLogs = new Statistics(dbLink);
 	}
-	
+
 	public void reloadDatabase() {
 		servDbUsersLogs.clear();
 		servDbWordsLogs.clear();
 		loadDatabase();
 	}
-	
+
 	public boolean loadDatabase() {
 		try {
 			ResultSet rs = dbLink.executeQuery("SELECT login,password FROM users;");
@@ -42,7 +42,7 @@ public class ServerDatabase {
 				ResultSet rs2 = dbLink.executeQuery("SELECT mot FROM words WHERE difficulte='"+i+"';");
 				servDbWordsLogs.add(new ArrayList<String>());
 				while(rs2.next()) {
-					
+
 					servDbWordsLogs.get(i-1).add(rs2.getString(1));
 				}
 			}
@@ -51,25 +51,34 @@ public class ServerDatabase {
 			return false;
 		}
 	}
-	
+
 	public boolean saveDatabase() {
-		return servDbStatsLogs.saveStatistics();
+		if(servDbStatsLogs.saveStatistics()) {
+			servDbStatsLogs.resetStatisticsAfterSave();
+			return true;
+		}
+		return false; 
 	}
-	
+
 	public HashMap<String, String> getUsersList() {
 		return servDbUsersLogs;
 	}
-	
+
 	public ArrayList<String> getWordsList(int difficulty) {
 		if(difficulty<1 || difficulty>3)
 			return null;
 		return servDbWordsLogs.get(difficulty-1);
 	}
-	
+
+	public Statistics getStatistics()
+	{
+		return servDbStatsLogs;
+	}
+
 	public boolean testAuthentification(String login, String password){
-		
+
 		boolean res = false;
-		
+
 		if(servDbUsersLogs.containsKey(login))
 		{
 			try {
@@ -79,19 +88,19 @@ public class ServerDatabase {
 				StringBuilder hashString = new StringBuilder();
 				for (int i = 0; i < hash.length; i++)
 				{
-				    String hex = Integer.toHexString(hash[i]);
-				    if (hex.length() == 1)
-				    {
-				        hashString.append('0');
-				        hashString.append(hex.charAt(hex.length() - 1));
-				    }
-				    else
-				        hashString.append(hex.substring(hex.length() - 2));
+					String hex = Integer.toHexString(hash[i]);
+					if (hex.length() == 1)
+					{
+						hashString.append('0');
+						hashString.append(hex.charAt(hex.length() - 1));
+					}
+					else
+						hashString.append(hex.substring(hex.length() - 2));
 				}
-				
+
 				if(hashString.toString().equals(pass))
 					res = true;
-				
+
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -100,5 +109,5 @@ public class ServerDatabase {
 		//TODO renvoyer la vraie valeur
 		return true;
 	}
-	
+
 }
