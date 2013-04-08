@@ -376,15 +376,24 @@ public class Player extends Thread {
 		}
 		else if(message.command.equals("newline"))
 		{
-			game.sendCommand(message, this);
+			if(game!=null)
+			{
+				game.sendCommand(message, this);
+			}
 		}
 		else if(message.command.equals("getdrawing"))
 		{
-			game.sendDrawing(this);
+			if(game!=null)
+			{
+				game.sendDrawing(this);
+			}
 		}
 		else if(message.command.equals("getscores"))
 		{
-			game.sendScores(this, false);
+			if(game!=null)
+			{
+				game.sendScores(this, false);
+			}
 		}
 		else
 		{

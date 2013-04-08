@@ -20,7 +20,7 @@ public class DbConnection extends Thread {
 	public DbConnection() {
 	}
 	
-	/* 
+	/**
 	 * Tente la connexion à la base de données
 	 * @return True si la connexion est établie, false sinon
 	 */

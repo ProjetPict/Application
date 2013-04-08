@@ -41,7 +41,6 @@ public class GameScreen extends JPanel{
 		this.add(chatArea);
 		gameObs.start();
 		Main.getModel().sendCommand("getscores");
-		Main.getModel().sendCommand("getdrawing");
 	}
 	
 	@Override

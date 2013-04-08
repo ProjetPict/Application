@@ -90,7 +90,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			private static final long serialVersionUID = 1L;
 			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus) 
 
-{
+			{
 				if (value instanceof PlayerScore) {
 					PlayerScore player = (PlayerScore)value;
 					String pos;
@@ -108,9 +108,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 						pos = index+1+Main.texts.getString("no_podium");
 						break;
 					}
-					
+
 					setText(pos + " - " + player.toString());
-					
+
 					if(player.drawing)
 						setForeground(new Color(51, 51, 255));
 					else if(player.hasFound)
@@ -119,13 +119,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 						setForeground(Color.GRAY);
 					else
 						setForeground(Color.BLACK);
-					
+
 					setBackground(Color.WHITE);
 				}     
 				return this;
 			}
 		});
-		
+
 		scrollPaneScore = new JScrollPane(listScores);
 		add(scrollPaneScore);
 
@@ -177,7 +177,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 		createStartButton();
 	}
-	
+
 	public void createStartButton() {
 		if(creator && btnStartGame == null) {
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
@@ -260,8 +260,10 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 	public void cancelTimer() {
 		time = 0;
-		timer.cancel();
-		timer = null;
+		if(timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 		lblTimer.setText(Main.texts.getString("waiting_drawer"));
 	}
 
@@ -313,7 +315,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				enableAnswer(false);
 				running = false;
 				lblTurns.setText(Main.texts.getString("waiting_turns"));
-				
+
 				if(scores.length > 1)
 					enableStartButton(true);
 				else {

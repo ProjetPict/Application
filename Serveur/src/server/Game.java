@@ -42,6 +42,7 @@ public class Game extends Thread{
 	private String word;
 	private int difficulty;
 	private int nbAnswer;
+	private int newGhosts;
 
 	private Picture currentDrawing;
 
@@ -64,6 +65,7 @@ public class Game extends Thread{
 		currentDrawing = new Picture();
 		word = "";
 		nbAnswer = 0;
+		newGhosts = 0;
 
 		if(pMax > 1 && pMax <= 25)
 			this.pMax = pMax;
@@ -102,6 +104,7 @@ public class Game extends Thread{
 
 			while(started)
 			{
+				newGhosts = 0;
 				sendCommandTo(new Command("startgame"), players.get(0));
 				currentTurn = 0;
 				drawingPlayer = null;
@@ -151,6 +154,7 @@ public class Game extends Thread{
 						}
 						
 						i++;
+						newGhosts = 0;
 					}
 				}
 
@@ -239,8 +243,10 @@ public class Game extends Thread{
 	 */
 	public boolean addPlayer(Player p){
 		if(players.size() < pMax && !players.contains(p)){
-			if(started)
+			if(started){
 				p.setGhost(true);
+				newGhosts++;
+			}
 			players.add(p);
 			p.sendResult(true);
 			sendScores(p, true);
@@ -264,12 +270,13 @@ public class Game extends Thread{
 	 * @param player
 	 */
 	public void removePlayer(Player player){
-		sendCommandTo(new Command("quitgame"), player);
+		
 		int index = players.indexOf(player);		
 		players.remove(player);
 		podium.remove(player);
 		firstAnswers.remove(player);
 		
+		sendCommandTo(new Command("quitgame"), player);
 		if(drawingPlayer == player)
 		{
 			drawingPlayer = null;
@@ -527,7 +534,7 @@ public class Game extends Thread{
 			res = true;
 			nbAnswer++;
 
-			if(nbAnswer >= players.size()-1)
+			if(nbAnswer >= players.size()-1 - newGhosts)
 			{
 				time = 0;
 			}
