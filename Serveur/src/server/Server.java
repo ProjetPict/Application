@@ -44,14 +44,6 @@ public class Server extends Thread{
 	private static boolean importantProcess;
 
 	public Server(boolean state) throws Exception {
-		startServer(state,false);
-	}
-
-	public void startServer(boolean state, boolean restart) throws Exception {
-		if(restart) {
-			windowServer.dispose();
-			socket.close();
-		}
 		launchState = state;
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();

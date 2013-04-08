@@ -65,7 +65,8 @@ public class Statistics {
 					queries+=statsWords.get(i).returnSQLRequest(rs.getString(1));
 				}
 			}
-		
+			if(queries.equals(""))
+				return false;
 			return dbLink.executeInsertQuery(queries);
 		} catch (SQLException e) {
 			return false;

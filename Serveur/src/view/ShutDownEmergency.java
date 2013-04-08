@@ -14,11 +14,13 @@ public class ShutDownEmergency extends Thread {
 	private int max_count;
 	private Console console;
 	private Window window;
+	private Server server;
 
-	public ShutDownEmergency(int i, Console c, Window f) {
+	public ShutDownEmergency(int i, Console c, Window f, Server s) {
 		max_count = i;
 		console = c;
 		window = f;
+		server = s;
 	}
 	
 	public ShutDownEmergency(int i) {
@@ -33,9 +35,9 @@ public class ShutDownEmergency extends Thread {
 			window.setLockElements(false);
 		}
 		writeIn("\n> Préparation à l'extinction du serveur. Veuillez patienter...\n> Sauvegarde dans la base de données...");
-		Server.getDbInfos().saveDatabase();
+		server.getDbInfos().saveDatabase();
 		writeIn("Terminé !\n> Annonce aux joueurs de l'interruption serveur...");
-		writeIn("Terminé !\n> Arrêt du serveur dans 9 secondes...");
+		writeIn("Terminé !\n> Arrêt du serveur dans 10 secondes...");
 		while(count>0) {
 			try {
 				sleep(TIMER_PERIOD);

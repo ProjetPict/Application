@@ -26,8 +26,8 @@ public class Window extends JFrame implements WindowListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Console console;
+	private Server serverInfos;
 	private Monitor monitor = new Monitor();
-	private boolean isDown;
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
@@ -35,8 +35,6 @@ public class Window extends JFrame implements WindowListener {
 	private JMenuItem close = new JMenuItem("Fermer");
 	
 	private JSplitPane pan;
-	private JPanel servDown;
-	private JLabel servDownLbl;
 	
 	public final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 	public final int SCREEN_HEIGHT = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -48,12 +46,10 @@ public class Window extends JFrame implements WindowListener {
 		this.setResizable(false);
 		this.setSize(900, 700);
 		this.setJMenuBar(menuBar);
+		serverInfos = server;
 		console = new Console();
-		isDown = false;
 		
 		menuBar.add(fichier);
-		
-		fichier.addSeparator();
 		fichier.add(close);
 		
 		pan = new JSplitPane();
@@ -62,11 +58,6 @@ public class Window extends JFrame implements WindowListener {
 		pan.setDividerLocation(430);
 		pan.setTopComponent(monitor);
 		pan.setBottomComponent(console);
-		
-		servDown = new JPanel();
-		servDownLbl = new JLabel("Le serveur est actuellement éteint. Vous pouvez fermer la fenêtre ou le relancer.");
-		servDown.add(servDownLbl);
-		servDownLbl.setVisible(false);
 		
 		close.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
@@ -91,7 +82,7 @@ public class Window extends JFrame implements WindowListener {
 	}
 	
 	public void stopOrClose(boolean b) throws InterruptedException {
-		ShutDownEmergency cdTime = new ShutDownEmergency(10, console, this);
+		ShutDownEmergency cdTime = new ShutDownEmergency(10, console, this, serverInfos);
 		cdTime.start();
 	}
 	
@@ -138,10 +129,6 @@ public class Window extends JFrame implements WindowListener {
 	public void switchPanel(JPanel newPan) {
 		this.setContentPane(newPan);
 		this.validate();
-	}
-	
-	public void downComplete() {
-		servDownLbl.setVisible(true);
 	}
 	
 	public void setLockElements(boolean b) {
