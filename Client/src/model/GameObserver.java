@@ -17,86 +17,106 @@ import view.Main;
 
 /**
  * Cette classe est un thread qui boucle pour recevoir les informations du serveur pendant une partie.
+ * Sert également à envoyer des données de dessin au serveur, et contient une référence de l'image
+ * en cours d'utilisation
  *
  */
 
-public class GameObserver extends Thread{
+public class GameObserver extends Thread {
+
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private Picture pict;
 	private boolean running;
 
-	public GameObserver(ObjectInputStream in, ObjectOutputStream out){
+
+	/**
+	 * Constructeur de GameObserver
+	 * @param in
+	 * @param out
+	 */
+	public GameObserver(ObjectInputStream in, ObjectOutputStream out) {
 		this.in=in;
 		this.out=out;
 	}
-	
-	
+
+
+	/**
+	 * Surcharge de la fonction run() de Thread. Récupère les données envoyés par le serveur 
+	 * et agit en conséquence
+	 */
 	public void run() {
 		running = true;
-		
-		while(running){
+
+		while(running) {
 			try {
 				Object obj=in.readObject();
-				
-				if(obj instanceof Point){
+
+				if(obj instanceof Point) {
 					pict.addPoint((Point)obj);
 				}
-				else if(obj instanceof Line){
+				else if(obj instanceof Line) {
 					pict.addLine((Line) obj);
 				}
-				else if(obj instanceof Scores){
-					
+				else if(obj instanceof Scores) {
 					Main.getModel().processScores((Scores) obj);
 				}
-				else if(obj instanceof WordCommand){
+				else if(obj instanceof WordCommand) {
 					Main.getModel().processWordCommand((WordCommand) obj);
 				}
-				else if(obj instanceof ValueCommand){
+				else if(obj instanceof ValueCommand) {
 					Main.getModel().processValueCommand((ValueCommand) obj);
 				}
-				else if(obj instanceof ChatCommand){
+				else if(obj instanceof ChatCommand) {
 					Main.getModel().processChatMsg((ChatCommand) obj);
 				}
-				else if(obj instanceof Command){
-					
-					if(((Command) obj).command.equals("quitgame")){
+				else if(obj instanceof Command) {
+
+					if(((Command) obj).command.equals("quitgame")) {
 						running = false;
 					}
 					else
 						Main.getModel().processCommand((Command) obj);
 				}
-				else if(obj instanceof Picture)
-				{
+				else if(obj instanceof Picture) {
 					Main.getView().setPicture((Picture) obj);
 				}
 				else
 					obj = null;
-				
+
 			} catch (IOException e) {
 				running = false;
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				running = false;
 			}
-
 		}
-
-
 	}
 
-	public Boolean sendDrawingData(Point p){
+
+	/**
+	 * On envoie un point du dessin au serveur
+	 * @param p
+	 * @return
+	 */
+	public Boolean sendDrawingData(Point p) {
 		try {
 			out.writeObject(p);
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
-		}		
+		}	
+
 		return true;		
 	}
 
-	public Boolean sendNewLine(Line line){
+	/**
+	 * On envoie une nouvelle ligne au serveur
+	 * @param line
+	 * @return
+	 */
+	public Boolean sendNewLine(Line line) {
 		try {
 			out.writeObject(line);
 			out.flush();
@@ -104,21 +124,23 @@ public class GameObserver extends Thread{
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 
+		return true;
 	}
-	
-	public Picture getPicture()
-	{
+
+	/**
+	 * 
+	 * @return L'instance de Picture utilisée par ce GameObserver 
+	 */
+	public Picture getPicture() {
 		return pict;
 	}
-	
-	public void setPicture(Picture pict)
-	{
+
+	/**
+	 * 
+	 * @param pict
+	 */
+	public void setPicture(Picture pict) {
 		this.pict = pict;
-	}
-	
-	public boolean isRunning() {
-		return running;
 	}
 }
