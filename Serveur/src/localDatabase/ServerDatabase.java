@@ -21,7 +21,7 @@ public class ServerDatabase {
 
 	/**
 	 * Constructeur de la base de données locale au serveur
-	 * @param db
+	 * @param db Lien vers la connexion à la base de données
 	 */
 	public ServerDatabase(DbConnection db) {
 		servDbUsersLogs = new HashMap<String, String>();
@@ -86,7 +86,7 @@ public class ServerDatabase {
 
 	/**
 	 * Retourne la liste des mots d'une difficulté donnée
-	 * @param difficulty
+	 * @param difficulty Difficulté choisie
 	 * @return La liste (ArrayList) des mots de la difficulté voulue
 	 */
 	public ArrayList<String> getWordsList(int difficulty) {
@@ -106,8 +106,8 @@ public class ServerDatabase {
 
 	/**
 	 * Permet de tester le nom d'utilisateur/mot de passe pour connecter l'utilisateur
-	 * @param login
-	 * @param password
+	 * @param login Nom d'utilisateur a tester
+	 * @param password Mot de passe a tester
 	 * @return Retourne true si l'utilisateur a rentré les bons identifiants, faux sinon.
 	 */
 	public boolean testAuthentification(String login, String password){

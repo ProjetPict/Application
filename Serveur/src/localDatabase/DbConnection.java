@@ -35,7 +35,7 @@ public class DbConnection extends Thread {
 	
 	/**
 	 * Permet l'execution de la requete (SELECT uniquement) passée en paramètres
-	 * @param query
+	 * @param query Requete a effectuer
 	 * @return Le tableau de résultat
 	 */
 	public ResultSet executeQuery(String query) {
@@ -50,7 +50,7 @@ public class DbConnection extends Thread {
 
 	/**
 	 * Permet l'execution de la requete (INSERT et UPDATE uniquement) passée en paramètres
-	 * @param query
+	 * @param query Requete a effectuer
 	 * @return Retourne true si l'execution s'est bien déroulée, false sinon
 	 */
 	public boolean executeInsertQuery(String query) {

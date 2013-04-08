@@ -172,10 +172,10 @@ public class Server extends Thread{
 
 	/**
 	 * Instancie une nouvelle partie
-	 * @param creator
-	 * @param name
-	 * @param password
-	 * @param pMax
+	 * @param creator Joueur ayant créé la partie
+	 * @param name Nom de la partie
+	 * @param password Mot de passe de la partie
+	 * @param pMax Nombre de joueur max
 	 * @return La partie créée
 	 */
 	public static Game createGame(Player creator, String name, String password, int pMax, 
@@ -200,7 +200,7 @@ public class Server extends Thread{
 
 	/**
 	 * Instancie un nouveau joueur
-	 * @param login
+	 * @param login Nom d'utilisateur
 	 * @param socket
 	 * @param connec
 	 */
@@ -218,7 +218,7 @@ public class Server extends Thread{
 
 	/**
 	 * Supprime un joueur
-	 * @param player
+	 * @param player Joueur à supprimer
 	 */
 	public static void removePlayer(Player player)
 	{
@@ -235,7 +235,7 @@ public class Server extends Thread{
 
 	/**
 	 * Supprime une partie
-	 * @param game
+	 * @param game Partie à supprimer
 	 */
 	public static void removeGame(Game game)
 	{
@@ -270,8 +270,8 @@ public class Server extends Thread{
 
 	/**
 	 * Ajoute un joueur à une partie
-	 * @param player
-	 * @param name
+	 * @param player Joueur à ajouter
+	 * @param name Nom de la partie
 	 * @return True si l'opération est réussie, false sinon
 	 */
 	public static boolean joinGame(Player player, String name, String password)
@@ -315,7 +315,7 @@ public class Server extends Thread{
 
 	/**
 	 * Permet de définir si l'on écrit dans la console (mode fenetre) ou dans la console (mode console)
-	 * @param s
+	 * @param s String à écrire
 	 */
 	public static void writeIn(String s) {
 		if(launchState) {

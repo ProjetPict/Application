@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 import server.Server;
 
 public class ShutDownEmergency extends Thread {
+	
+	/**
+	 * Permet d'éteindre "proprement" le serveur
+	 */
 	private static final int TIMER_PERIOD = 1000;
 	private int max_count;
 	private Console console;

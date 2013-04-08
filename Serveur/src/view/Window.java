@@ -62,7 +62,7 @@ public class Window extends JFrame implements WindowListener {
 		close.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				try {
-					stopOrClose(true);
+					stopOrClose();
 				} catch (InterruptedException e1) {}
 			}
 		});
@@ -80,8 +80,11 @@ public class Window extends JFrame implements WindowListener {
 		console.writeAnnonce(s);
 		console.getConsole().selectAll();
 	}
-	
-	public void stopOrClose(boolean b) throws InterruptedException {
+
+    /**
+     * Permet de demander l'extinction du serveur "proprement"
+     */
+	public void stopOrClose() throws InterruptedException {
 		ShutDownEmergency cdTime = new ShutDownEmergency(10, console, this, serverInfos);
 		cdTime.start();
 	}

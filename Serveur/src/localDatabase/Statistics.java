@@ -21,6 +21,12 @@ public class Statistics {
 		dbLink = db;
 	}
 
+
+	/**
+	 * Permet d'ajouter une nouvelle entrée dans la base de données (nbs = 0 ou 2 paramètres)
+	 * @param word Mot a ajouter
+	 * @param nbs Paramètres facultatifs (0 ou 2 paramètres)
+ 	 */
 	public void addNewStatsToWord(String word, boolean choose, int ... nbs) {
 		try {
 			int index = wordAlreadyInStats(word);
@@ -41,6 +47,11 @@ public class Statistics {
 		}
 	}
 
+	/**
+	 * Permet de savoir si le mot a déjà été enregistré une fois pour mettre a jour ses stats plutot que l'insérer en doublon
+	 * @param word Mot a tester
+	 * @return La position du mot dans l'arraylist
+	 */
 	public int wordAlreadyInStats(String word) {
 		boolean found = false;
 		int index = 0;
@@ -56,6 +67,10 @@ public class Statistics {
 		return pos;
 	}
 
+	/**
+	 * Permet de sauvegarder les statistiques présentent en locale dans la base de données MySQL distante
+	 * @return Retourne true si les statistiques sont bien sauvegardées, faux sinon ou si il n'y a rien à enregistrer.
+	 */
 	public boolean saveStatistics() {
 		try {
 			String queries = "";

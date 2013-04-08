@@ -2,6 +2,16 @@ package localDatabase;
 
 public class StatsWordsRow {
 
+	/**
+	 * Permet de créer un tableau pour la base de données locale, identique à celle sur MySQL afin de juste avoir à la recopier
+	 * Cette classe gère l'ensemble des statistiques actuelles propres à un mot donné
+	 * Word = le mot
+	 * proposalServer = nombre de fois que le mot a été proposé par le serveur depuis la dernière sauvegarde
+	 * proposalAccepted = nombre de fois que le mot a été choisi par les dessinateurs depuis la dernière sauvegarde
+	 * proposalPlayed = nombre de joueurs qui ont du trouver le mot depuis la dernière sauvegarde
+	 * proposalFound = nombre de joueurs qui ont trouvé le mot depuis la dernière sauvegarde
+	 */
+	
 	private String word;
 	private int proposalServer;
 	private int proposalAccepted;
