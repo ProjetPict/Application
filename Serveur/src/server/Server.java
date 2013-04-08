@@ -312,7 +312,11 @@ public class Server extends Thread{
 	public static DbConnection getDbConnInfos() {
 		return servDbConnec;
 	}
-	
+
+	/**
+	 * Permet de définir si l'on écrit dans la console (mode fenetre) ou dans la console (mode console)
+	 * @param s
+	 */
 	public static void writeIn(String s) {
 		if(launchState) {
 			if(importantProcess)

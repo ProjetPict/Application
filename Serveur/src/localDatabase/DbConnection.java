@@ -21,7 +21,8 @@ public class DbConnection extends Thread {
 	}
 	
 	/* 
-	 * 
+	 * Tente la connexion à la base de données
+	 * @return True si la connexion est établie, false sinon
 	 */
 	public boolean connectDatabase() {
 		try {
@@ -32,10 +33,11 @@ public class DbConnection extends Thread {
 		}
 	}
 	
-	public boolean tryConnection(String username, String password) {
-		return true;
-	}
-	
+	/**
+	 * Permet l'execution de la requete (SELECT uniquement) passée en paramètres
+	 * @param query
+	 * @return Le tableau de résultat
+	 */
 	public ResultSet executeQuery(String query) {
 		ResultSet rs;
 		try {
@@ -45,7 +47,12 @@ public class DbConnection extends Thread {
 		}
 		return rs;
 	}
-	
+
+	/**
+	 * Permet l'execution de la requete (INSERT et UPDATE uniquement) passée en paramètres
+	 * @param query
+	 * @return Retourne true si l'execution s'est bien déroulée, false sinon
+	 */
 	public boolean executeInsertQuery(String query) {
 		boolean res = true;
 		try {
