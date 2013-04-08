@@ -18,7 +18,6 @@ public class DbConnection extends Thread {
 	private DbwConnection db_connection;
 	
 	public DbConnection() {
-		
 	}
 	
 	public boolean connectDatabase() {
@@ -42,6 +41,10 @@ public class DbConnection extends Thread {
 			rs = new ResultSet(null);
 		}
 		return rs;
+	}
+	
+	public boolean executeInsertQuery(String query) {
+		return db_connection.executeUpdate(query);
 	}
 	
 }

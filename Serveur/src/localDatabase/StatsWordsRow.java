@@ -7,8 +7,6 @@ public class StatsWordsRow {
 	private int proposalAccepted;
 	private int proposalPlayed;
 	private int proposalFound;
-	private double proposalAcceptedPercent;
-	private double proposalFoundPercent;
 	
 	public StatsWordsRow(String w) {
 		word = w;
@@ -16,24 +14,16 @@ public class StatsWordsRow {
 		proposalAccepted = 0;
 		proposalPlayed = 0;
 		proposalFound = 0;
-		proposalAcceptedPercent = 0.0;
-		proposalFoundPercent = 0.0;
 	}
 	
 	public void addNewProposalServer() {
 		proposalServer++;
-		proposalAcceptedPercent = proposalAccepted / proposalServer * 100;
 	}
 	
-	public void addNewProposalAccept() {
+	public void addNewProposalAccept(int nbPlayers, int nbFound) {
 		proposalAccepted++;
-		proposalAcceptedPercent = proposalAccepted / proposalServer * 100;
-	}
-	
-	public void addFoundPercent(int nbPlayers, int nbFound) {
 		proposalPlayed += nbPlayers;
 		proposalFound += nbFound;
-		proposalFoundPercent = proposalFound / proposalPlayed * 100;
 	}
 	
 	public String getWord() {
@@ -45,8 +35,10 @@ public class StatsWordsRow {
 		proposalAccepted = 0;
 		proposalPlayed = 0;
 		proposalFound = 0;
-		proposalAcceptedPercent = 0.0;
-		proposalFoundPercent = 0.0;
+	}
+	
+	public String returnSQLRequest(String index) {
+		return "INSERT INTO words_statistiques VALUES ('null','"+index+"','"+proposalServer+"','"+proposalAccepted+"','"+proposalPlayed+"','"+proposalFound+"');";
 	}
 	
 }

@@ -129,8 +129,10 @@ public class Server extends Thread{
 			public void run() {
 				importantProcess = true;
 				writeIn("\n# Sauvegarde automatique de l'historique dans la base de données...");
-				servDbLocale.saveDatabase();
-				writeIn("Terminé !");
+				if(servDbLocale.saveDatabase())
+					writeIn("Terminé !");
+				else
+					writeIn("Echec !");
 				importantProcess = false;
 			}
 		}, 600000, 600000);

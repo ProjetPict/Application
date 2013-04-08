@@ -17,12 +17,12 @@ public class ServerDatabase {
 	private DbConnection dbLink;
 	private HashMap<String, String> servDbUsersLogs;
 	private ArrayList<ArrayList<String>> servDbWordsLogs;
-	private Statistiques servDbStatsLogs;
+	private Statistics servDbStatsLogs;
 	
 	public ServerDatabase(DbConnection db) {
 		servDbUsersLogs = new HashMap<String, String>();
 		servDbWordsLogs = new ArrayList<ArrayList<String>>();
-		servDbStatsLogs = new Statistiques();
+		servDbStatsLogs = new Statistics(dbLink);
 		dbLink = db;
 	}
 	
@@ -52,8 +52,8 @@ public class ServerDatabase {
 		}
 	}
 	
-	public void saveDatabase() {
-		
+	public boolean saveDatabase() {
+		return servDbStatsLogs.saveStatistics();
 	}
 	
 	public HashMap<String, String> getUsersList() {
