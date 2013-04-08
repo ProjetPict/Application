@@ -86,19 +86,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 		listScores = new JList();
 
-		listScores.setCellRenderer(new DefaultListCellRenderer(){
-			
+		listScores.setCellRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
-
-			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus)
-			{
-				if (value instanceof PlayerScore) 
-				{
+			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus) {
+				if (value instanceof PlayerScore) {
 					PlayerScore player = (PlayerScore)value;
 					String pos;
-					
-					switch(index)
-					{
+					switch(index) {
 					case 0:
 						pos = index+1+Main.texts.getString("first");
 						break;
@@ -278,8 +272,7 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 				textAnswer.setText("");
 			}
 		}
-		else if(arg instanceof ValueCommand)
-		{
+		else if(arg instanceof ValueCommand) {
 			ValueCommand cmd = (ValueCommand) arg;
 
 			if(cmd.command.equals("turn"))

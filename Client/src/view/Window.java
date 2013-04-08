@@ -16,7 +16,7 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 
 	private static final long serialVersionUID = 5314555994004764198L;
 
-	public Window(){
+	public Window() {
 		//On initialise la JFrame		
 		addWindowListener(this);
 		addComponentListener(this);
@@ -96,19 +96,15 @@ public class Window extends JFrame implements WindowListener, ComponentListener{
 	@Override
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

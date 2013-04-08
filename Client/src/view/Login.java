@@ -44,7 +44,7 @@ public class Login extends JPanel implements ActionListener{
 	private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
 	private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
 
-	public Login(){
+	public Login() {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -69,8 +69,7 @@ public class Login extends JPanel implements ActionListener{
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(login.getText().equals(""))
-				{
+				if(login.getText().equals("")) {
 					login.setText(Main.texts.getString("login"));
 				}
 			}

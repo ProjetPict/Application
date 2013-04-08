@@ -17,8 +17,7 @@ public class GameTableModel extends AbstractTableModel{
 	private ArrayList<GameInfo> gl;
 	private String[] columns;
 
-	public GameTableModel(GameList gl)
-	{
+	public GameTableModel(GameList gl) {
 		this.gl = gl.games;
 		columns = new String[]{Main.texts.getString("name"), Main.texts.getString("players"), 
 				Main.texts.getString("difficulty"), Main.texts.getString("password"), 
@@ -44,37 +43,35 @@ public class GameTableModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-
 		switch (columnIndex) {
-		case 0:
-			return gl.get(rowIndex).name;
-		case 1:
-			return gl.get(rowIndex).nbPlayers +"/"+gl.get(rowIndex).maxPlayers;
-		case 2:
-			return gl.get(rowIndex).difficulty;
-		case 3:
-			return gl.get(rowIndex).password;
-		case 4:
-			return gl.get(rowIndex).started;
-		default:
-			throw new IllegalArgumentException();
+			case 0:
+				return gl.get(rowIndex).name;
+			case 1:
+				return gl.get(rowIndex).nbPlayers +"/"+gl.get(rowIndex).maxPlayers;
+			case 2:
+				return gl.get(rowIndex).difficulty;
+			case 3:
+				return gl.get(rowIndex).password;
+			case 4:
+				return gl.get(rowIndex).started;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		switch (columnIndex) {
-		case 0:
-		case 1:
-			return String.class;
-		case 2:
-			return Integer.class;
-		case 3:
-		case 4:
-			return Boolean.class;
-
-		default:
-			return Object.class;
+			case 0:
+			case 1:
+				return String.class;
+			case 2:
+				return Integer.class;
+			case 3:
+			case 4:
+				return Boolean.class;
+			default:
+				return Object.class;
 		}
 	}
 

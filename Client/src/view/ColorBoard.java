@@ -33,7 +33,7 @@ public class ColorBoard extends JPanel{
 	private JSeparator separator;
 	private JComboBox sizeBox;
 	
-	public ColorBoard(){
+	public ColorBoard() {
 		btnBlack = new JRadioButton(Main.texts.getString("black"));
 		btnBlue = new JRadioButton(Main.texts.getString("blue"));
 		btnGreen = new JRadioButton(Main.texts.getString("green"));
@@ -82,7 +82,7 @@ public class ColorBoard extends JPanel{
 		
 	}
 	
-	public Color getSelectedColor(){
+	public Color getSelectedColor() {
 		Color res = Color.black;
 		
 		if(btnBlue.isSelected())
@@ -102,9 +102,7 @@ public class ColorBoard extends JPanel{
 	public int getSelectedSize(){
 		int res = 3;
 		int index = sizeBox.getSelectedIndex();
-	
-		switch(index)
-		{
+		switch(index) {
 		default:
 		case 0:
 			res = 3;

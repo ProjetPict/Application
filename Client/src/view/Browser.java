@@ -271,24 +271,21 @@ public class Browser extends JPanel implements ActionListener{
 			toFade = false;
 			repaint();
 		}
-		else if(arg0.getSource() == cbShowActive)
-		{
+		else if(arg0.getSource() == cbShowActive) {
 			if(cbShowActive.isSelected())
 				displayActive = true;
 			else
 				displayActive = false;
 			applySearch(gl);
 		}
-		else if(arg0.getSource() == cbShowFull)
-		{
+		else if(arg0.getSource() == cbShowFull) {
 			if(cbShowFull.isSelected())
 				displayFull = true;
 			else
 				displayFull = false;
 			applySearch(gl);
 		}
-		else if(arg0.getSource() == cbShowPrivate)
-		{
+		else if(arg0.getSource() == cbShowPrivate) {
 			if(cbShowPrivate.isSelected())
 				displayPrivate = true;
 			else
@@ -296,41 +293,31 @@ public class Browser extends JPanel implements ActionListener{
 
 			applySearch(gl);
 		}
-		else if(arg0.getSource() == btnSearch || arg0.getSource() == txtSearch)
-		{	
+		else if(arg0.getSource() == btnSearch || arg0.getSource() == txtSearch) {	
 			applySearch(gl);
 		}
 	}
 
 	private void applySearch(GameList gl) {
-		if(gl != null)
-		{
+		if(gl != null) {
 			ArrayList<GameInfo> games = new ArrayList<GameInfo>();
-
-			for(GameInfo gi : gl.games)
-			{
+			for(GameInfo gi : gl.games) {
 				String name = gi.name.toLowerCase();
 				String search = txtSearch.getText().toLowerCase();
-
-				if(name.contains(search) || search.equals(""))
-				{
+				if(name.contains(search) || search.equals("")) {
 					games.add(gi);	
 				}
 			}
-
 			GameList tempgl = new GameList(games);
 			applyFilter(tempgl);
 		}
 	}
 
 	private void joinGame() {
-
-		if(table.getSelectedRow() >= 0)
-		{
+		if(table.getSelectedRow() >= 0) {
 			String name = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
 			String password = null;
-			if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 3)) == true)
-			{
+			if(((Boolean)table.getModel().getValueAt(table.getSelectedRow(), 3)) == true) {
 				password = JOptionPane.showInputDialog(this,
 						Main.texts.getString("enter_pass"),
 						Main.texts.getString("password"),
@@ -372,8 +359,7 @@ public class Browser extends JPanel implements ActionListener{
 			res = Main.getModel().createGame(name, password, pmax, turns, 
 					jcbDifficulty.getSelectedIndex()+1);
 
-			if(res.equals("success"))
-			{
+			if(res.equals("success")) {
 				Main.getView().setPanel("GameScreen", true);
 				toFade = false;
 				fadeEffect.setVisible(false);
@@ -381,52 +367,38 @@ public class Browser extends JPanel implements ActionListener{
 			}
 			else
 				JOptionPane.showMessageDialog(this, Main.texts.getString("fail"));
-		}
-		else {
+		} else {
 			JOptionPane.showMessageDialog(this, Main.texts.getString("name_short"));
 		}
 
 	}
 
 	private void refreshTable() {
-
 		gl = Main.getModel().getGameList();
 		applySearch(gl);
 	}
 
 
-	private void applyFilter(GameList gl)
-	{
-		if(gl != null)
-		{
+	private void applyFilter(GameList gl) {
+		if(gl != null) {
 			ArrayList<GameInfo> games = new ArrayList<GameInfo>();
-
-			for(GameInfo gi : gl.games)
-			{
+			for(GameInfo gi : gl.games) {
 				boolean full = (gi.nbPlayers == gi.maxPlayers);
 				boolean password = gi.password;
 				boolean started = gi.started;
 				boolean add = true;
-
-				if(!displayPrivate && password)
-				{
+				if(!displayPrivate && password) {
 					add = false;
 				}
-
-				if(!displayFull && full)
-				{
+				if(!displayFull && full) {
 					add = false;
 				}
-
-				if(!displayActive && started)
-				{
+				if(!displayActive && started) {
 					add = false;
 				}
-
 				if(add)
 					games.add(gi);
 			}
-
 			GameList tempgl = new GameList(games);
 			GameTableModel gm = new GameTableModel(tempgl);
 			table.setModel(gm);

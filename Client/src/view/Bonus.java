@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/*
+ * Bonus frame, ouverture lors du Konami Code
+ */
 public class Bonus implements KeyListener {
 	
 	private JFrame bonusFrame;
@@ -42,9 +45,7 @@ public class Bonus implements KeyListener {
             ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/bonus.gif")));
             JLabel iLbl = new JLabel();
             iLbl.setIcon(ii);
-            
             JLabel lblBonus = new JLabel(Main.texts.getString("konami"));
-           
             bonusPanel.setLayout(new FlowLayout());
             bonusPanel.add(lblBonus);
             bonusPanel.add(iLbl);

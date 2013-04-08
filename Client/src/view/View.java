@@ -27,10 +27,10 @@ public class View {
 		window.addKeyListener(bonus);
 	}
 
-	public void setPanel(String panelType, boolean gameCreator){
+	public void setPanel(String panelType, boolean gameCreator) {
 		window.setVisible(true);
 		
-		if(panelType.equals("Browser")){
+		if(panelType.equals("Browser")) {
 			browser = new Browser(window);
 			window.setPanel(browser);
 			if(Main.settingsProp.getProperty("firstLaunch").equals("0")) {
@@ -48,12 +48,12 @@ public class View {
 				}
 			}
 		}
-		else if (panelType.equals("Login")){
+		else if (panelType.equals("Login")) {
 			login = new Login();
 			login.addKeyListener(bonus);
 			window.setPanel(login);
 		}
-		else if (panelType.equals("GameScreen")){
+		else if (panelType.equals("GameScreen")) {
 			gmScreen = new GameScreen(gameCreator);
 			window.setPanel(gmScreen);
 		}
@@ -63,45 +63,37 @@ public class View {
 		
 	}
 	
-	public GameObserver getGameObserver()
-	{
+	public GameObserver getGameObserver() {
 		return go;
 	}
 	
-	public void setGameObserver(GameObserver go)
-	{
+	public void setGameObserver(GameObserver go) {
 		this.go = go;
 	}
 
-	public void startTurn() 
-	{
+	public void startTurn() {
 		gmScreen.startTurn();
 		
 	}
 
 	public void chooseWord(WordCommand command) {
 		gmScreen.chooseWord(command);
-		
 	}
 	
-	public Window getWindow()
-	{
+	public Window getWindow() {
 		return window;
 	}
 
 	public void closeDialog() {
 		gmScreen.closeDialog();
-		
 	}
 
 	public void setPicture(Picture pict) {
 		gmScreen.setPicture(pict);
-		
 	}
 
 	public void endTurn() {
 		gmScreen.endTurn();
-		
 	}
 
 	public void quitGame() {
