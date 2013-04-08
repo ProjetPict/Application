@@ -16,6 +16,7 @@ public class Main {
 		System.out.println("Initialisation preliminaire du serveur.");
 		String param = null;
 		boolean state = false;
+		// Choix du lancement en mode fenetre ou console
 		do {
 			try {
 				System.out.println("Voulez-vous le lancer en mode console ou fenetre ? [console/fenetre/quitter]");

@@ -31,18 +31,8 @@ public class Window extends JFrame implements WindowListener {
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
-	private JMenu maintenance = new JMenu("Maintenance");
-	private JMenu aide = new JMenu("Aide");
-	 
-	private JMenuItem start = new JMenuItem("Lancer le serveur");
-	private JMenuItem stop = new JMenuItem("Arrêter le serveur");
-	private JMenuItem close = new JMenuItem("Fermer");
 
-	private JMenuItem save = new JMenuItem("Sauvegarder vers MySQL");
-	private JMenuItem savelogs = new JMenuItem("Exporter le journal de logs");
-	private JMenuItem seelogs = new JMenuItem("Voir le journal de logs");
-	
-	private JMenuItem about = new JMenuItem("A propos");
+	private JMenuItem close = new JMenuItem("Fermer");
 	
 	private JSplitPane pan;
 	private JPanel servDown;
@@ -62,21 +52,9 @@ public class Window extends JFrame implements WindowListener {
 		isDown = false;
 		
 		menuBar.add(fichier);
-		menuBar.add(maintenance);
-		menuBar.add(aide);
 		
-		fichier.add(start);
-		fichier.add(stop);
 		fichier.addSeparator();
 		fichier.add(close);
-		start.setEnabled(false);
-
-		maintenance.add(save);
-		maintenance.add(savelogs);
-		maintenance.addSeparator();
-		maintenance.add(seelogs);
-		
-		aide.add(about);
 		
 		pan = new JSplitPane();
 		pan.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -90,41 +68,11 @@ public class Window extends JFrame implements WindowListener {
 		servDown.add(servDownLbl);
 		servDownLbl.setVisible(false);
 		
-		start.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				try {
-					server.startServer(true,true);
-				} catch (Exception e1) {}
-			}
-		});
-		stop.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				try {
-					switchPanel(servDown);
-					stopOrClose(false);
-					stop.setEnabled(false);
-					start.setEnabled(true);
-					isDown = true;
-				} catch (InterruptedException e1) {}
-			}
-		});
 		close.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) {
 				try {
 					stopOrClose(true);
 				} catch (InterruptedException e1) {}
-			}
-		});
-		seelogs.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				Logs l = new Logs();
-				l.setVisible(true);
-			}
-		});
-		about.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) {
-				About a = new About();
-				a.setVisible(true);
 			}
 		});
 	}
@@ -143,12 +91,8 @@ public class Window extends JFrame implements WindowListener {
 	}
 	
 	public void stopOrClose(boolean b) throws InterruptedException {
-		if(!isDown) {
-			ShutDownEmergency cdTime = new ShutDownEmergency(10, console, b, this);
-			cdTime.start();
-		} else {
-			System.exit(0);
-		}
+		ShutDownEmergency cdTime = new ShutDownEmergency(10, console, this);
+		cdTime.start();
 	}
 	
 	public void windowClosing(WindowEvent e) {
@@ -202,7 +146,5 @@ public class Window extends JFrame implements WindowListener {
 	
 	public void setLockElements(boolean b) {
 		fichier.setEnabled(b);
-		maintenance.setEnabled(b);
-		aide.setEnabled(b);
 	}
 }

@@ -20,6 +20,9 @@ public class DbConnection extends Thread {
 	public DbConnection() {
 	}
 	
+	/* 
+	 * 
+	 */
 	public boolean connectDatabase() {
 		try {
 			db_connection = new DbwConnection(db_link_url, db_username, db_password, db_hostname, db_basename);
