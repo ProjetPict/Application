@@ -274,7 +274,7 @@ public class Server extends Thread{
 	 * @param name Nom de la partie
 	 * @return True si l'opération est réussie, false sinon
 	 */
-	public static boolean joinGame(Player player, String name, String password)
+	public static void joinGame(Player player, String name, String password)
 	{
 		boolean result = false;
 
@@ -297,12 +297,11 @@ public class Server extends Thread{
 			}catch(Exception e)
 			{
 				player.sendResult("wrongpassword");
-				return false;
 			}
 
 		}
-
-		return result;
+		else
+			player.sendResult("fail");
 	}
 	
 	public static ServerDatabase getDbInfos() {

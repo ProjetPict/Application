@@ -88,7 +88,9 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 
 		listScores.setCellRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
-			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus) {
+			public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus) 
+
+{
 				if (value instanceof PlayerScore) {
 					PlayerScore player = (PlayerScore)value;
 					String pos;
@@ -173,12 +175,15 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		btnQuitGame.addActionListener(this);
 		add(btnQuitGame);
 
-		if(creator){
+		createStartButton();
+	}
+	
+	public void createStartButton() {
+		if(creator && btnStartGame == null) {
 			btnStartGame = new JButton(Main.texts.getString("startgame"));
 			btnStartGame.addActionListener(this);
 			add(btnStartGame);
 		}
-
 	}
 
 	public void enableStartButton(boolean enable) {
@@ -305,8 +310,16 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 		}
 		else if(arg instanceof String) {
 			if(((String) arg).equals("endgame")) {
+				enableAnswer(false);
 				running = false;
-				enableStartButton(true);
+				lblTurns.setText(Main.texts.getString("waiting_turns"));
+				
+				if(scores.length > 1)
+					enableStartButton(true);
+				else {
+					enableStartButton(false);
+					lblTimer.setText(Main.texts.getString("waiting_players"));
+				}
 			}
 			else if(((String) arg).equals("startgame")) {
 				running = true;
@@ -320,19 +333,13 @@ public class ChatArea extends JPanel implements ActionListener, Observer{
 			else if(((String) arg).equals("wrongword")) {
 				lblAnswer.setForeground(new Color(204, 0, 0));
 			}
+			else if(((String) arg).equals("gameowner")) {
+				creator = true;
+				createStartButton();
+				lblTimer.setText(Main.texts.getString("waiting_players"));
+			}
 		} else {
-			//TODO delete si plus besoin
-			//Collection<PlayerScore> temp = Main.getModel().getScores();
-			//scores = new PlayerScore[temp.size()];
 			scores = Main.getModel().getScores().toArray(new PlayerScore[Main.getModel().getScores().size()]);
-			//scores = Main.getModel().getScores().values().toArray(new PlayerScore[Main.getModel().getScores().values().size()+1]);
-			/*Iterator<PlayerScore> it = temp.iterator();
-			int i = 0;
-			while(it.hasNext()) {
-				PlayerScore ps = it.next();
-				scores[i] = ps;
-				i++;
-			}*/
 
 			if(scores.length > 0) {
 				listScores.setListData(scores);

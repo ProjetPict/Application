@@ -24,15 +24,16 @@ public class GameObserver extends Thread{
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private Picture pict;
+	private boolean running;
 
-	public GameObserver( ObjectInputStream in, ObjectOutputStream out){
+	public GameObserver(ObjectInputStream in, ObjectOutputStream out){
 		this.in=in;
 		this.out=out;
 	}
 	
 	
 	public void run() {
-		boolean running = true;
+		running = true;
 		
 		while(running){
 			try {
@@ -116,5 +117,8 @@ public class GameObserver extends Thread{
 	{
 		this.pict = pict;
 	}
-
+	
+	public boolean isRunning() {
+		return running;
+	}
 }

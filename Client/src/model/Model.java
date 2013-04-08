@@ -70,11 +70,6 @@ public class Model extends Observable{
 			setChanged();
 			this.notifyObservers("endgame");
 		}
-		else if(command.command.equals("startgame"))
-		{
-			setChanged();
-			this.notifyObservers("startgame");
-		}
 		else if(command.command.equals("startdraw"))
 		{
 			setChanged();
@@ -85,15 +80,11 @@ public class Model extends Observable{
 			setChanged();
 			this.notifyObservers(false);
 		}
-		else if(command.command.equals("goodword"))
+		else if(command.command.equals("goodword") || command.command.equals("wrongword") 
+				|| command.command.equals("startgame") || command.command.equals("gameowner"))
 		{
 			setChanged();
-			this.notifyObservers("goodword");
-		}
-		else if(command.command.equals("wrongword"))
-		{
-			setChanged();
-			this.notifyObservers("wrongword");
+			this.notifyObservers(command.command);
 		}
 	}
 
@@ -209,6 +200,13 @@ public class Model extends Observable{
 		scores = null;
 		word = "";
 		this.deleteObservers();
-		go = null;
+		if(go != null) {
+			try {
+				go.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			go = null;
+		}
 	}
 }

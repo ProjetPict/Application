@@ -146,7 +146,7 @@ public class ConnecToServer{
 	 */
 	public GameList getGameList(){
 		Command com = new Command("getlist");
-		Object res = null;
+		GameList res = null;
 		try {
 			out.writeObject(com);
 			out.flush();
@@ -156,7 +156,7 @@ public class ConnecToServer{
 		}
 
 		try {
-			res = in.readObject();
+			res = (GameList) in.readObject();
 		} catch (IOException e) {
 			//En cas de problème de connexion
 			e.printStackTrace();
@@ -166,8 +166,8 @@ public class ConnecToServer{
 			e.printStackTrace();
 			return null;
 		}
-
-		return (GameList)res;
+		
+		return res;
 
 	}
 

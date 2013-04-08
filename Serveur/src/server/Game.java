@@ -38,6 +38,7 @@ public class Game extends Thread{
 	private int currentTurn;
 	private boolean running;
 	private boolean started; //True si la partie a demarré
+	private boolean interrupted;
 	private String word;
 	private int difficulty;
 	private int nbAnswer;
@@ -83,6 +84,7 @@ public class Game extends Thread{
 
 		currentTurn = 0;
 		started = false;
+		interrupted = false;
 		podium = new ArrayList<Player>();
 		firstAnswers = new ArrayList<Player>();
 
@@ -108,13 +110,14 @@ public class Game extends Thread{
 				sendScores();
 				sendCommand(new ValueCommand("turns", turns));
 
-				while(currentTurn < turns)
+				while(currentTurn < turns && players.size() >= 2)
 				{
 					currentTurn++;
 
 					sendCommand(new ValueCommand("turn", currentTurn));
-
-					for(int i = 0; i < players.size(); i++)
+					
+					int i = 0;
+					while(i < players.size() && players.size() >= 2)
 					{
 						drawingPlayer = players.get(i);
 						if(!drawingPlayer.isGhost())
@@ -129,13 +132,15 @@ public class Game extends Thread{
 
 							launchTimer(60);
 
-							computeScores();
+							if(!interrupted)
+								computeScores();
 							
 							sendCommand(new Command("endturn"));
 							
 							Server.getDB().getStatistics().addNewStatsToWord(word, true, nbAnswer, players.size()-1);
 							
-							drawingPlayer.setDrawing(false);
+							if(drawingPlayer != null)
+								drawingPlayer.setDrawing(false);
 
 							for(Player p: players){
 								p.setFound(false);
@@ -144,6 +149,8 @@ public class Game extends Thread{
 							sendScores();
 
 						}
+						
+						i++;
 					}
 				}
 
@@ -257,21 +264,40 @@ public class Game extends Thread{
 	 * @param player
 	 */
 	public void removePlayer(Player player){
+		sendCommandTo(new Command("quitgame"), player);
+		int index = players.indexOf(player);		
 		players.remove(player);
 		podium.remove(player);
 		firstAnswers.remove(player);
+		
 		if(drawingPlayer == player)
+		{
 			drawingPlayer = null;
+			interrupted = true;
+			time = 0;
+		}else if(players.size() < 2)
+		{
+			interrupted = true;
+			time = 0;
+		}
+		
+		if(index == 0 && players.size() > 0)
+		{
+			sendCommandTo(new Command("gameowner"), players.get(0));
+		}
+		
+		if(player.hasFound())
+			nbAnswer--;
+		
 		System.out.println(player.getLogin() + " a quitté la partie " + name);
 
-		if(players.size() <= 0) //S'il n'y a plus de joueurs, on arrï¿½te la partie
+		if(players.size() < 1) //S'il n'y a plus de joueurs, on arrête la partie
 		{
 			running = false;
 			Server.removeGame(this);
 		}
 		else
 			sendCommand(new ChatCommand(player.getLogin() + " a quitté la partie.", null));
-		sendCommandTo(new Command("quitgame"), player);
 		sendScores();
 	}
 
@@ -399,6 +425,7 @@ public class Game extends Thread{
 		word = "";
 		nbAnswer = 0;
 		currentDrawing.clear();
+		interrupted = false;
 
 		String[] words = chooseNextWords();
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], difficulty);

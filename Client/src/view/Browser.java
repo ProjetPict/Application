@@ -328,6 +328,10 @@ public class Browser extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(this,Main.texts.getString("wrong_pass"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
 			else if(result.equals("gamefull"))
 				JOptionPane.showMessageDialog(this,Main.texts.getString("game_full"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
+			else if(result.equals("fail")) {
+				JOptionPane.showMessageDialog(this,Main.texts.getString("fail"), Main.texts.getString("error"), JOptionPane.ERROR_MESSAGE);
+				refreshTable();
+			}
 			else
 				Main.getView().setPanel("GameScreen", false);
 		}

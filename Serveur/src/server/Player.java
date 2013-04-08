@@ -345,6 +345,11 @@ public class Player extends Thread {
 			{
 				game.removePlayer(this);
 				game = null;
+				this.drawing = false;
+				this.ghost = false;
+				this.hasFound = false;
+				this.score = 0;
+				this.nbPixels = 0;
 			}
 		}
 		else if(message.command.equals("startgame"))
