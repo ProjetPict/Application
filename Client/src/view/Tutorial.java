@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -49,8 +50,14 @@ public class Tutorial extends JFrame {
 		stepImage = new ArrayList<Image>();
 		stepLbl = new ArrayList<JLabel>();
 
+		String language;
+		if(Locale.getDefault().getLanguage().equals("fr"))
+			language = "_fr.png";
+		else
+			language = "_en.png";
+		
 		for(int j=1; j<7; j++)
-			stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/rules/slide_"+j+"_fr.png")));
+			stepImage.add(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/rules/slide_"+j+ language)));
 
 		int size = stepImage.size();
 

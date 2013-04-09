@@ -16,10 +16,10 @@ import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -35,15 +35,13 @@ public class Login extends JPanel implements ActionListener {
 	private JButton btnConnec;
 	private JTextField login;
 	public JPasswordField password;
-	private JLabel newAccount;
-	private JLabel passwordForget;
 	private Image imgLogo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/logo.png"));
 	private Image imgBackground = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/login.jpg"));
 	private Image imgFieldUser = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_username.png"));
 	private Image imgFieldPass = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/field_login_password.png"));
 	private Font fontBasic = new Font("Arial", Font.PLAIN, 24);
-	private Font fontBasicLow = new Font("Arial", Font.PLAIN, 16);
-
+	
+	
 	/**
 	 * Constructeur de Login
 	 */
@@ -58,13 +56,20 @@ public class Login extends JPanel implements ActionListener {
 
 		this.setLayout(null);
 
-		btnConnec = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ressources/images/btn_login.png"))));
+		String location;
+		if(Locale.getDefault().getLanguage().equals("fr"))
+			location = "/ressources/images/btn_login_fr.png";
+		else
+			location = "/ressources/images/btn_login_en.png";
+		btnConnec = new JButton(new ImageIcon(Toolkit.getDefaultToolkit()
+				.getImage(getClass().getResource(location))));
 		String strLogin = Main.settingsProp.getProperty("username");
 
 		if(!strLogin.equals(""))
 			login = new JTextField(strLogin);
 		else
 			login = new JTextField(Main.texts.getString("login"));
+		
 		login.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -86,14 +91,10 @@ public class Login extends JPanel implements ActionListener {
 		else
 			password = new JPasswordField("**********");
 
-		newAccount = new JLabel(Main.texts.getString("new_account"));
-		passwordForget = new JLabel(Main.texts.getString("password_forget"));
 
 		this.add(login);
 		this.add(password);
 		this.add(btnConnec);
-		this.add(newAccount);
-		this.add(passwordForget);
 
 		int calcWidthUser = (int)(Main.gameWidth-330)/2;
 		btnConnec.setBounds(calcWidthUser+140,(int)(430*Main.ratioY),210,90);
@@ -112,12 +113,6 @@ public class Login extends JPanel implements ActionListener {
 		password.setForeground(Color.white);
 		password.setFont(fontBasic);
 		password.setBounds(calcWidthUser+35, (int)(390*Main.ratioY), 280, 25);
-		newAccount.setForeground(Color.white);
-		newAccount.setFont(fontBasicLow);
-		newAccount.setBounds((int)(Main.gameWidth-330)/2, (int)(540*Main.ratioY), 300, 30);
-		passwordForget.setForeground(Color.white);
-		passwordForget.setFont(fontBasicLow);
-		passwordForget.setBounds((int)(Main.gameWidth-330)/2, (int)(570*Main.ratioY), 300, 30);
 
 		btnConnec.addActionListener(this);
 		login.addActionListener(this);
@@ -129,8 +124,6 @@ public class Login extends JPanel implements ActionListener {
 		btnConnec.setLocation(calcWidthUser+140,(int)(430*Main.ratioY));
 		password.setLocation(calcWidthUser+35, (int)(390*Main.ratioY));
 		login.setLocation(calcWidthUser+35, (int)(320*Main.ratioY));
-		newAccount.setLocation((int)(Main.gameWidth-330)/2, (int)(540*Main.ratioY));
-		passwordForget.setLocation((int)(Main.gameWidth-330)/2, (int)(570*Main.ratioY));
 
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.drawImage(imgBackground, 0, 0, (int)Main.gameWidth, (int)Main.gameHeight, this);
