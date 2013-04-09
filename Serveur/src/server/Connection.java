@@ -18,7 +18,7 @@ public class Connection extends Thread {
 	private ObjectInputStream in;
 
 	/**
-	 * 
+	 * Constructeur de Connection
 	 * @param socket
 	 */
 	public Connection(Socket socket) {
@@ -45,7 +45,7 @@ public class Connection extends Thread {
 	 * 
 	 * @return L'output stream de la connexion.
 	 */
-	public ObjectOutputStream getOutput(){
+	public ObjectOutputStream getOutput() {
 		return out;
 	}
 
@@ -71,7 +71,7 @@ public class Connection extends Thread {
 						Server.createPlayer(((Command)login).command, socket, this);
 						out.writeObject(new Command("success"));
 						out.flush();
-						Server.writeIn(login +" vient de se connecter.");
+						Server.writeIn(((Command)login).command +" vient de se connecter.");
 					} else {
 						out.writeObject(new Command("fail"));
 						out.flush();

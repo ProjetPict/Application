@@ -3,7 +3,6 @@ package localDatabase;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import dbwConnection.ResultSet;
 
@@ -26,17 +25,18 @@ public class Statistics {
 	 * Permet d'ajouter une nouvelle entrée dans la base de données (nbs = 0 ou 2 paramètres)
 	 * @param word Mot a ajouter
 	 * @param nbs Paramètres facultatifs (0 ou 2 paramètres)
- 	 */
+	 */
 	public void addNewStatsToWord(String word, boolean choose, int ... nbs) {
 		try {
 			int index = wordAlreadyInStats(word);
+
 			if(index==-1) {
 				statsWords.add(new StatsWordsRow(word));
 				index = statsWords.size()-1;
 			}
-			
+
 			statsWords.get(index).addNewProposalServer();
-			
+
 			if(choose){
 				if(nbs.length!=2)
 					throw new Exception();
@@ -80,8 +80,10 @@ public class Statistics {
 					queries+=statsWords.get(i).returnSQLRequest(rs.getString(1));
 				}
 			}
+
 			if(queries.equals(""))
 				return false;
+
 			return dbLink.executeInsertQuery(queries);
 		} catch (SQLException e) {
 			return false;
@@ -91,5 +93,4 @@ public class Statistics {
 	public void resetStatisticsAfterSave() {
 		statsWords.clear();
 	}
-
 }

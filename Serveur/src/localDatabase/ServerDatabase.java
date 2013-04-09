@@ -49,6 +49,7 @@ public class ServerDatabase {
 			while(rs.next()) {
 				servDbUsersLogs.put(rs.getString(1), rs.getString(2));
 			}
+
 			for(int i=1;i<4;i++) {
 				ResultSet rs2 = dbLink.executeQuery("SELECT mot FROM words WHERE difficulte='"+i+"';");
 				servDbWordsLogs.add(new ArrayList<String>());
@@ -57,6 +58,7 @@ public class ServerDatabase {
 					servDbWordsLogs.get(i-1).add(rs2.getString(1));
 				}
 			}
+
 			return true;
 		} catch (SQLException e) {
 			return false;
@@ -110,31 +112,32 @@ public class ServerDatabase {
 	 * @param password Mot de passe a tester
 	 * @return Retourne true si l'utilisateur a rentré les bons identifiants, faux sinon.
 	 */
-	public boolean testAuthentification(String login, String password){
+	public boolean testAuthentification(String login, String password) {
+
 		boolean res = false;
+
 		if(servDbUsersLogs.containsKey(login)) {
 			try {
 				String pass = servDbUsersLogs.get(login);
 				byte[] hash = MessageDigest.getInstance("MD5").digest(password.getBytes());
 				StringBuilder hashString = new StringBuilder();
+
 				for (int i = 0; i < hash.length; i++) {
 					String hex = Integer.toHexString(hash[i]);
 					if (hex.length() == 1) {
 						hashString.append('0');
 						hashString.append(hex.charAt(hex.length() - 1));
-					}
-					else
+					} else
 						hashString.append(hex.substring(hex.length() - 2));
 				}
+
 				if(hashString.toString().equals(pass))
 					res = true;
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		//TODO renvoyer la vraie valeur
-		return true;
-	}
 
+		return res;
+	}
 }

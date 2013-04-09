@@ -1,13 +1,12 @@
 package view;
 
-import java.awt.Point; 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,9 +20,7 @@ import server.Server;
  *
  */
 public class Window extends JFrame implements WindowListener {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private Console console;
 	private Server serverInfos;
@@ -39,7 +36,8 @@ public class Window extends JFrame implements WindowListener {
 	public final int SCREEN_WIDTH = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
 	public final int SCREEN_HEIGHT = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
 
-	public Window(final Server server){
+	public Window(final Server server) {
+		
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.setTitle("DrawVS - Server app");
 		this.setLocation(new Point(SCREEN_WIDTH/2-450,SCREEN_HEIGHT/2-350));
@@ -89,45 +87,25 @@ public class Window extends JFrame implements WindowListener {
 		cdTime.start();
 	}
 	
-	public void windowClosing(WindowEvent e) {
-		//closeServer();
-	}
+	public void windowClosing(WindowEvent e) {}
 
 	@Override
-	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowActivated(WindowEvent arg0) {}
 
 	@Override
-	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowClosed(WindowEvent arg0) {}
 
 	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowDeactivated(WindowEvent arg0) {}
 
 	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowDeiconified(WindowEvent arg0) {}
 
 	@Override
-	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowIconified(WindowEvent arg0) {}
 
 	@Override
-	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowOpened(WindowEvent arg0) {}
 	
 	public void switchPanel(JPanel newPan) {
 		this.setContentPane(newPan);

@@ -35,14 +35,16 @@ public class Player extends Thread {
 	private long nbPixels;
 	private WordCommand choices;
 
+
 	/**
-	 * @param login
-	 * @param socket
-	 * @param ghost
+	 * Le constructeur de Player
+	 * @param login Le login du joueur
+	 * @param socket Le socket du joueur
+	 * @param ghost True si le joueur est "fantôme", false sinon
 	 * @param in
 	 * @param out
 	 */
-	public Player(String login, Socket socket, boolean ghost, ObjectInputStream in, ObjectOutputStream out){
+	public Player(String login, Socket socket, boolean ghost, ObjectInputStream in, ObjectOutputStream out) {
 		this.login = login;
 		this.socket = socket;
 		this.ghost = ghost;
@@ -58,9 +60,9 @@ public class Player extends Thread {
 
 	/**
 	 * 
-	 * @param game
+	 * @param game La partie dans laquelle le joueur se trouve
 	 */
-	public void setGame(Game game){
+	public void setGame(Game game) {
 		this.game = game;
 	}
 
@@ -69,7 +71,7 @@ public class Player extends Thread {
 	 * 
 	 * @return L'instance de Game contenue dans Player
 	 */
-	public Game getGame(){
+	public Game getGame() {
 		return game;
 	}
 
@@ -78,16 +80,16 @@ public class Player extends Thread {
 	 * 
 	 * @param ghost
 	 */
-	public void setGhost(boolean ghost){
+	public void setGhost(boolean ghost) {
 		this.ghost = ghost;
 	}
 
 
 	/**
 	 * 
-	 * @return La valeur de ghost. (true si le joueur est un joueur fantï¿½me, false sinon)
+	 * @return La valeur de ghost (true si le joueur est un joueur fantôme, false sinon)
 	 */
-	public boolean isGhost(){
+	public boolean isGhost() {
 		return ghost;
 	}
 
@@ -96,48 +98,71 @@ public class Player extends Thread {
 	 * 
 	 * @return Le login du joueur
 	 */
-	public String getLogin(){
+	public String getLogin() {
 		return login;
 	}
 
 
-	public long getNbPixels()
-	{
+	/**
+	 * 
+	 * @return Le nombre de pixels dans le dessin affiché sur l'écran du joueur
+	 */
+	public long getNbPixels() {
 		return nbPixels;
 	}
 
-	public void setNbPixels(long nbPixels)
-	{
+	/**
+	 * 
+	 * @param nbPixels
+	 */
+	public void setNbPixels(long nbPixels) {
 		this.nbPixels = nbPixels;
 	}
 
-	public int getScore()
-	{
+
+	/**
+	 * 
+	 * @return Le score du joueur
+	 */
+	public int getScore() {
 		return score;
 	}
 
-	public boolean hasFound(){
+	/**
+	 * 
+	 * @return True si le joueur a trouvé le mot, false sinon
+	 */
+	public boolean hasFound() {
 		return hasFound;
 	}
 
-	public void setFound(boolean found){
+	/**
+	 * 
+	 * @param found
+	 */
+	public void setFound(boolean found) {
 		hasFound = found;
 	}
 
-	public void setScore(int score)
-	{
+	/**
+	 * 
+	 * @param score
+	 */
+	public void setScore(int score) {
 		this.score = score;
 	}
 
-	public void setChoices(WordCommand choices)
-	{
+	/**
+	 * On envoie les mots à choisir au joueur
+	 * @param choices
+	 */
+	public void setChoices(WordCommand choices) {
 		this.choices = choices;
 
 		try {
 			out.writeObject(choices);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -146,7 +171,7 @@ public class Player extends Thread {
 	 * 
 	 * @return L'output stream du socket du joueur.
 	 */
-	public ObjectOutputStream getOutput(){
+	public ObjectOutputStream getOutput() {
 		return out;
 	}
 
@@ -155,7 +180,7 @@ public class Player extends Thread {
 	 * 
 	 * @return True si le joueur dessine, false sinon
 	 */
-	public boolean getDrawing(){
+	public boolean getDrawing() {
 		return drawing;
 	}
 
@@ -164,44 +189,37 @@ public class Player extends Thread {
 	 * On change la valeur de drawing, et on envoie une commande au client pour prendre ce changement en compte
 	 * @param drawing
 	 */
-	public void setDrawing(boolean drawing)
-	{
+	public void setDrawing(boolean drawing) {
 		this.drawing = drawing;
 		String result = "";
-		if(drawing){
+
+		if(drawing)
 			result = "startdraw";
-		}
 		else
-		{
 			result = "stopdraw";
-		}
 
 		try {
 			out.writeObject(new Command(result));
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 
 
-
 	/**
-	 * Surcharge de la fonction run() de Thread. On boucle ï¿½ l'infini tant
-	 * que la connexion n'est pas coupï¿½e, et on rï¿½cupï¿½re les donnï¿½es que le
+	 * Surcharge de la fonction run() de Thread. On boucle à l'infini tant
+	 * que la connexion n'est pas coupée, et on récupère les données que le
 	 * joueur envoie.
 	 */
-	public void run(){
+	public void run() {
 
 		Object message;
 
 		try {
 
-			while(connected && !socket.isClosed())
-			{
+			while(connected && !socket.isClosed()) {
 				message = in.readObject();
 				processTypeMessage(message);
 			}
@@ -214,7 +232,6 @@ public class Player extends Thread {
 			connected = false;
 			Server.removePlayer(this);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -222,37 +239,33 @@ public class Player extends Thread {
 
 
 	/**
-	 * Cette mï¿½thode envoie "success" ou "fail" au client.
+	 * Cette méthode envoie "success" ou "fail" au client.
 	 * @param result
 	 */
 	public void sendResult(boolean result)
 	{
-
 		try {
-			if(result)
-			{
+			if(result) {
 				out.writeObject(new Command("success"));
 				out.flush();
-			}
-			else
-			{
+			} else {
 				out.writeObject(new Command("fail"));
 				out.flush();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-
 		}
 	}
 
-	public void sendResult(String result)
-	{
-		try {
 
+	/**
+	 * On envoie un résultat sous forme de String
+	 * @param result Le résultat à envoyer
+	 */
+	public void sendResult(String result) {
+		try {
 			out.writeObject(new Command(result));
 			out.flush();
-
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -263,61 +276,46 @@ public class Player extends Thread {
 	/**
 	 * Cette méthode détermine le type du message passé en paramètre, et appelle la fonction
 	 * de traitement correspondante.
-	 * @param message
+	 * @param message Le message à traiter
 	 */
-	public void processTypeMessage(Object message)
-	{
-		if(message instanceof Point || message instanceof Line){
+	public void processTypeMessage(Object message) {
 
-			if(drawing){
+		if(message instanceof Point || message instanceof Line) {
+			if(drawing) {
 				game.sendData(message, this);
 				sendResult(message!=null);
-			}
-			else
+			} else
 				sendResult(false);
-		}
-		else if(message instanceof CreateJoinCommand)
-		{
+		} else if(message instanceof CreateJoinCommand)
 			processCreateJoinMessage((CreateJoinCommand) message);
-		}
 		else if(message instanceof AnswerCommand)
-		{
 			game.checkAnswer((AnswerCommand)message, this);
-		}
 		else if(message instanceof WordCommand)
-		{
 			processWordCommand((WordCommand) message);
-		}
 		else if(message instanceof ChatCommand)
-		{
 			game.sendChatMsg((ChatCommand) message);
-		}
 		else if(message instanceof Command)
-		{
 			processCommandMessage((Command) message);
-		}
-
-
 	}
 
 
+	/**
+	 * On traite un message de type WordCommand
+	 * @param message La commande à traiter
+	 */
 	private void processWordCommand(WordCommand message) {
-		if(game != null)
-		{
-			if(!message.command.equals("") && choices != null)
-			{
+		if(game != null) {
+			if(!message.command.equals("") && choices != null) {	
 				String choice = message.command;
+
 				if(choice.equals(choices.word1) || choice.equals(choices.word2) 
-						|| choice.equals(choices.word3))
-				{
+						|| choice.equals(choices.word3)) {
 					game.setWord(choice);
 					choices = null;
 				}
 			}
 		}
-
 	}
-
 
 
 
@@ -327,22 +325,17 @@ public class Player extends Thread {
 	 */
 	private void processCommandMessage(Command message) {
 
-		if(message.command.equals("quit"))
-		{
+		if(message.command.equals("quit")) {
 			connected = false;
 			Server.removePlayer(this);
 			try {
 				sendResult(true);
 				socket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		else if(message.command.equals("quitgame"))
-		{
-			if(game!=null)
-			{
+		} else if(message.command.equals("quitgame")) {
+			if(game!=null) {
 				game.removePlayer(this);
 				game = null;
 				this.drawing = false;
@@ -351,55 +344,27 @@ public class Player extends Thread {
 				this.score = 0;
 				this.nbPixels = 0;
 			}
-		}
-		else if(message.command.equals("startgame"))
-		{
+		} else if(message.command.equals("startgame")) {
 			if(game!=null)
-			{
 				sendResult(game.startGame());
-			}
 			else
-			{
 				sendResult(false);
-			}
-		}
-		else if(message.command.equals("getlist"))
-		{
+		} else if(message.command.equals("getlist")) {
 			try {
 				out.writeObject(Server.getGames());
 				out.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		}
-		else if(message.command.equals("newline"))
-		{
+		} else if(message.command.equals("newline")) {
 			if(game!=null)
-			{
 				game.sendCommand(message, this);
-			}
-		}
-		else if(message.command.equals("getdrawing"))
-		{
+		} else if(message.command.equals("getscores")) {
 			if(game!=null)
-			{
-				game.sendDrawing(this);
-			}
-		}
-		else if(message.command.equals("getscores"))
-		{
-			if(game!=null)
-			{
 				game.sendScores(this, false);
-			}
-		}
-		else
-		{
+		} else
 			sendResult(false);
-		}
-
 	}
 
 	/**
@@ -408,21 +373,14 @@ public class Player extends Thread {
 	 */
 	private void processCreateJoinMessage(CreateJoinCommand message) 
 	{
-		if(message.command.equals("creategame"))
-		{
+		if(message.command.equals("creategame")) {
 			game = Server.createGame(this, message.name, message.password, message.pMax, 
 					message.turns, message.difficulty);
 			sendResult(game != null);
 
 			if(game != null)
-			{
 				game.sendScores(this, false);
-			}
-		}
-		else if(message.command.equals("joingame"))
-		{
+		} else if(message.command.equals("joingame"))
 			Server.joinGame(this, message.name, message.password);
-		}
-
 	}
 }

@@ -16,6 +16,9 @@ public class Console extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextPane serverAnswer;
 	
+	/**
+	 * Constructeur de Console
+	 */
 	public Console() {
 		serverAnswer = new JTextPane();
 
@@ -30,6 +33,7 @@ public class Console extends JPanel {
 		this.setPreferredSize(new Dimension(890, 160));
 	}
 	
+	
 	/**
 	 * Ecrit les reponses fournies par le serveur
 	 * @param s Reponse a ecrire
@@ -37,6 +41,7 @@ public class Console extends JPanel {
 	public void writeAnswer(String s) {
 		serverAnswer.setText(serverAnswer.getText().concat("\nRéponse : "+s));
 	}
+	
 	
 	/**
 	 * Permet d'ecrire sans la mise en forme "Reponse"/"Commande"

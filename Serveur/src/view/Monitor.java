@@ -24,12 +24,8 @@ import org.jfree.data.time.TimeSeriesCollection;
  * Gère l'ensemble des graphes et du panel avec les onglets
  *
  */
-
 public class Monitor extends JPanel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private TimeSeries tsConnect = new TimeSeries("Nombre de joueurs connectés", Millisecond.class);
 	private TimeSeries tsGames = new TimeSeries("Nombre de parties en cours", Millisecond.class);
@@ -49,6 +45,10 @@ public class Monitor extends JPanel {
 	private JLabel lblMaxRam;
 	private long maxRam;
 	
+	
+	/**
+	 * Constructeur de Monitor
+	 */
     public Monitor() {
     	memory = getGraph(tsMemory, -1, 200000, axisM, "Heure", "Ko");
     	connected = getGraph(tsConnect, -1, 10, axisC, "Heure", "");
@@ -66,11 +66,13 @@ public class Monitor extends JPanel {
     	infos.add(new JLabel("Temps d'activité du serveur :"));
     	infos.add(timerLaunch);
     	infos.add(new JLabel("Adresse ip du serveur :"));
+    	
     	try {
     		infos.add(new JLabel(InetAddress.getLocalHost().getHostAddress()));
     	} catch(UnknownHostException e) {
     		infos.add(new JLabel("Impossible de récupérer l'adresse ip."));
     	}
+    	
     	infos.add(new JLabel("Intervalle de sauvegarde historique :"));
     	infos.add(new JLabel("Toutes les 10 minutes"));
     	infos.add(new JLabel(""));
@@ -114,6 +116,7 @@ public class Monitor extends JPanel {
             true,
             false
         );
+        
         final XYPlot plot = connectChart.getXYPlot();
         axe = plot.getDomainAxis();
         axe.setAutoRange(true);
@@ -151,12 +154,16 @@ public class Monitor extends JPanel {
 		h = String.valueOf(TimeUnit.SECONDS.toHours(l));
 		m = String.valueOf(TimeUnit.SECONDS.toMinutes(l));
 		s = String.valueOf(TimeUnit.SECONDS.toSeconds(l)-TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(l)));
+		
 		if(Integer.parseInt(h)<10)
 			h="0"+h;
+		
 		if(Integer.parseInt(m)<10)
 			m="0"+m;
+		
 		if(Integer.parseInt(s)<10)
 			s="0"+s;
+		
 		String time = String.format("%d jours et %s:%s:%s",
 				TimeUnit.SECONDS.toDays(l),
 				h,

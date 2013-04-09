@@ -16,10 +16,9 @@ public class DbConnection extends Thread {
 	private String db_password = "";
 	private String db_basename = "drawvs";
 	private DbwConnection db_connection;
-	
-	public DbConnection() {
-	}
-	
+
+	public DbConnection() {}
+
 	/**
 	 * Tente la connexion à la base de données
 	 * @return True si la connexion est établie, false sinon
@@ -32,7 +31,7 @@ public class DbConnection extends Thread {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Permet l'execution de la requete (SELECT uniquement) passée en paramètres
 	 * @param query Requete a effectuer
@@ -57,7 +56,7 @@ public class DbConnection extends Thread {
 		boolean res = true;
 		try {
 			String[] queries = query.split(";");
-			
+
 			for(int i = 0; i < queries.length; i++)
 				db_connection.executeQuery(queries[i]+";");
 		} catch (SQLException e) {
@@ -66,5 +65,4 @@ public class DbConnection extends Thread {
 		}
 		return res;
 	}
-	
 }

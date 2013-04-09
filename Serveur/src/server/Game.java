@@ -1,7 +1,6 @@
 package server;
 
 
-import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -11,10 +10,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import socketData.AnswerCommand;
-import socketData.Command;
 import socketData.ChatCommand;
-import socketData.Line;
-import socketData.Picture;
+import socketData.Command;
 import socketData.PlayerScore;
 import socketData.Scores;
 import socketData.ValueCommand;
@@ -24,10 +21,8 @@ import socketData.WordCommand;
  * Gère une partie et ses joueurs.
  *
  */
-public class Game extends Thread{
+public class Game extends Thread {
 
-
-	private ArrayList<Player> podium; //Les trois premiers joueurs en terme de score
 	private ArrayList<Player> firstAnswers; //Les trois premiers joueurs à avoir répondu
 	private ArrayList<Player> players;
 	private Player drawingPlayer;
@@ -44,25 +39,25 @@ public class Game extends Thread{
 	private int nbAnswer;
 	private int newGhosts;
 
-	private Picture currentDrawing;
-
 	private int time;
 	private Timer timer;
 
 
 	/**
-	 * 
-	 * @param creator
-	 * @param name
-	 * @param password
+	 * Constructeur de Game
+	 * @param creator Le Player qui a créé la partie
+	 * @param name Le nom de la partie
+	 * @param password Le mot de passe de la partie (peut être null)
+	 * @param pMax Le nombre de joueurs maximum (0 = par défaut)
+	 * @param turns Le nombre de tours (0 = par défaut)
+	 * @param difficulty La difficulté de la partie
 	 */
-	public Game(Player creator, String name, String password, int pMax, int turns, int difficulty){
+	public Game(Player creator, String name, String password, int pMax, int turns, int difficulty) {
 		this.name = name;
 		this.password = password; 	//vide si publique 
 		players = new ArrayList<Player>();
 		players.add(creator);
 		drawingPlayer = null;
-		currentDrawing = new Picture();
 		word = "";
 		nbAnswer = 0;
 		newGhosts = 0;
@@ -78,81 +73,69 @@ public class Game extends Thread{
 			this.turns = Server.TURNS;
 
 		if(difficulty >= 0 && difficulty <= 3)
-		{
 			this.difficulty = difficulty;
-		}
 		else
 			this.difficulty = 0;
 
 		currentTurn = 0;
 		started = false;
 		interrupted = false;
-		podium = new ArrayList<Player>();
 		firstAnswers = new ArrayList<Player>();
-
 	}
 
 
 	/**
 	 * Surcharge de la méthode run() de Thread. Elle sert à faire
 	 * "tourner" la partie (changement de joueurs, de tour, etc...)
+	 * 
 	 */
 	public void run() {
 		running = true;
 
 		while(running){
+			while(started) {
 
-			while(started)
-			{
 				newGhosts = 0;
-				sendCommandTo(new Command("startgame"), players.get(0));
 				currentTurn = 0;
 				drawingPlayer = null;
-				podium.clear();
 
+				sendCommandTo(new Command("startgame"), players.get(0));
 				sendScores();
 				sendCommand(new ValueCommand("turns", turns));
 
-				while(currentTurn < turns && players.size() >= 2)
-				{
-					currentTurn++;
+				while(currentTurn < turns && players.size() >= 2) {
 
+					currentTurn++;
 					sendCommand(new ValueCommand("turn", currentTurn));
-					
+
 					int i = 0;
-					while(i < players.size() && players.size() >= 2)
-					{
+
+					while(i < players.size() && players.size() >= 2) {
 						drawingPlayer = players.get(i);
-						if(!drawingPlayer.isGhost())
-						{
+
+						if(!drawingPlayer.isGhost()) {
 
 							setupNextPlayer();
-
 							sendCommand(new Command("startturn"));
-
 							drawingPlayer.setDrawing(true);
 							sendScores();
-
 							launchTimer(60);
 
 							if(!interrupted)
 								computeScores();
-							
+
 							sendCommand(new Command("endturn"));
-							
-							Server.getDB().getStatistics().addNewStatsToWord(word, true, nbAnswer, players.size()-1);
-							
+							Server.getDbInfos().getStatistics().addNewStatsToWord(word, true, nbAnswer, players.size()-1);
+
 							if(drawingPlayer != null)
 								drawingPlayer.setDrawing(false);
 
-							for(Player p: players){
+							for(Player p: players)
 								p.setFound(false);
-							}
-							
-							sendScores();
 
+							sendScores();
 						}
-						
+
 						i++;
 						newGhosts = 0;
 					}
@@ -160,8 +143,8 @@ public class Game extends Thread{
 
 				started = false;
 				Player player;
-				for(int i = 0; i < players.size(); i++)
-				{
+
+				for(int i = 0; i < players.size(); i++) {
 					player = players.get(i);
 					player.setScore(0);
 					if(player.isGhost())
@@ -172,9 +155,8 @@ public class Game extends Thread{
 			}
 
 			try {
-				sleep(16);
+				sleep(160);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block 
 				e.printStackTrace();
 			}
 		}
@@ -185,7 +167,7 @@ public class Game extends Thread{
 	 * 
 	 * @return True si la partie est privée, false sinon.
 	 */
-	public boolean isPrivate(){
+	public boolean isPrivate() {
 		if(password != null)
 			return true;
 		else
@@ -197,8 +179,7 @@ public class Game extends Thread{
 	 * 
 	 * @return True si la partie a demarré, false sinon
 	 */
-	public boolean isStarted()
-	{
+	public boolean isStarted() {
 		return started;
 	}
 
@@ -207,7 +188,7 @@ public class Game extends Thread{
 	 * 
 	 * @return Le mot de passe de la partie (peut être null).
 	 */
-	public String getPassword(){
+	public String getPassword() {
 		return password;
 	}
 
@@ -215,14 +196,16 @@ public class Game extends Thread{
 	 * 
 	 * @return Le nombre de joueurs dans la partie
 	 */
-	public int getNbPlayers()
-	{
+	public int getNbPlayers() {
 		return players.size();
 	}
 
 
-	public int getDifficulty()
-	{
+	/**
+	 * 
+	 * @return La difficulté de la partie
+	 */
+	public int getDifficulty() {
 		return difficulty;
 	}
 
@@ -231,7 +214,7 @@ public class Game extends Thread{
 	 * 
 	 * @return Retourne le nombre de joueurs maximum autorisés dans la partie.
 	 */
-	public int getJMax(){
+	public int getJMax() {
 		return pMax;
 	}
 
@@ -241,12 +224,14 @@ public class Game extends Thread{
 	 * @param p
 	 * @return True si l'ajout est un succès, false sinon
 	 */
-	public boolean addPlayer(Player p){
-		if(players.size() < pMax && !players.contains(p)){
-			if(started){
+	public boolean addPlayer(Player p) {
+
+		if(players.size() < pMax && !players.contains(p)) {
+			if(started) {
 				p.setGhost(true);
 				newGhosts++;
 			}
+
 			players.add(p);
 			p.sendResult(true);
 			sendScores(p, true);
@@ -256,8 +241,12 @@ public class Game extends Thread{
 		return false;
 	}
 
-	public void stopGame()
-	{
+
+	/**
+	 * On arrete la partie
+	 */
+	public void stopGame() {
+
 		if(timer != null)
 			timer.cancel();
 		running = false;
@@ -269,42 +258,37 @@ public class Game extends Thread{
 	 * Supprime un joueur de la partie
 	 * @param player
 	 */
-	public void removePlayer(Player player){
-		
+	public void removePlayer(Player player) {
+
 		int index = players.indexOf(player);		
 		players.remove(player);
-		podium.remove(player);
 		firstAnswers.remove(player);
-		
 		sendCommandTo(new Command("quitgame"), player);
-		if(drawingPlayer == player)
-		{
+
+		if(drawingPlayer == player) {
 			drawingPlayer = null;
 			interrupted = true;
 			time = 0;
-		}else if(players.size() < 2)
-		{
+		} else if(players.size() < 2) {
 			interrupted = true;
 			time = 0;
 		}
-		
+
 		if(index == 0 && players.size() > 0)
-		{
 			sendCommandTo(new Command("gameowner"), players.get(0));
-		}
-		
+
 		if(player.hasFound())
 			nbAnswer--;
-		
+
 		System.out.println(player.getLogin() + " a quitté la partie " + name);
 
-		if(players.size() < 1) //S'il n'y a plus de joueurs, on arrête la partie
-		{
+		//S'il n'y a plus de joueurs, on arrête la partie
+		if(players.size() < 1) {
 			running = false;
 			Server.removeGame(this);
-		}
-		else
+		} else
 			sendCommand(new ChatCommand(player.getLogin() + " a quitté la partie.", null));
+
 		sendScores();
 	}
 
@@ -313,8 +297,7 @@ public class Game extends Thread{
 	 * 
 	 * @return Le nom de la partie
 	 */
-	public String getGameName()
-	{
+	public String getGameName() {
 		return name;
 	}
 
@@ -324,85 +307,92 @@ public class Game extends Thread{
 	 * @param p
 	 * @param sender
 	 */
-	public void sendData(Object data, Player sender)
-	{
-		if(sender == drawingPlayer)
-		{
+	public void sendData(Object data, Player sender) {
 
-			if(data instanceof Point)
-				currentDrawing.addPoint((Point) data);
-			else
-				currentDrawing.addLine((Line) data);
+		if(sender == drawingPlayer) {
 
-			for(int i = 0; i < players.size(); i++){
-				if(sender != players.get(i)){
+			for(int i = 0; i < players.size(); i++) {
+				if(sender != players.get(i)) {
 					ObjectOutputStream out = players.get(i).getOutput();
 					try {
 						out.writeObject(data);
 						out.flush();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
 				}
 			}
 		}
 	}
 
 
-	public void sendChatMsg(ChatCommand msg)
-	{
-		if(!word.equals(""))
-		{
+	/**
+	 * Envoie un message de chat à tout les joueurs
+	 * @param msg
+	 */
+	public void sendChatMsg(ChatCommand msg) {
+
+		if(!word.equals("")) {
 			String temp = convertToAnswerStringFormat(msg.command);
 			int ind = temp.indexOf(word);
 
-			if(ind >= 0)
-			{
-				msg.command = msg.command.substring(0, ind) + "****" + msg.command.substring(ind+word.length(), msg.command.length());
+			if(ind >= 0) {
+				msg.command = msg.command.substring(0, ind) + "****" 
+						+ msg.command.substring(ind+word.length(), msg.command.length());
 			}
 		}
 
-		for(int i = 0; i < players.size(); i++){
+		for(int i = 0; i < players.size(); i++) {
 			sendCommandTo(msg, players.get(i));
 		}
 	}
 
-	public void sendCommand(Command cmd, Player sender)
-	{
-		for(int i = 0; i < players.size(); i++){
-			if(sender == null || sender != players.get(i)){
+	/**
+	 * Envoie une commande à tout le monde sauf à sender
+	 * @param cmd La commande
+	 * @param sender Le joueur qui envoie la commande
+	 */
+	public void sendCommand(Command cmd, Player sender) {
+
+		for(int i = 0; i < players.size(); i++) {
+
+			if(sender == null || sender != players.get(i)) {
 				sendCommandTo(cmd, players.get(i));
 			}
 		}
 	}
 
-	public void sendCommandTo(Command cmd, Player player)
-	{
+
+	/**
+	 * Envoie une commande à un joueur
+	 * @param cmd La commande
+	 * @param player Le destinataire
+	 */
+	public void sendCommandTo(Command cmd, Player player) {
+
 		ObjectOutputStream out = player.getOutput();
 		try {
 			out.writeObject(cmd);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 
-	public void sendCommand(Command cmd)
-	{
+	/**
+	 * Envoie une commande à tout le monde
+	 * @param cmd La commande à envoyer
+	 */
+	public void sendCommand(Command cmd) {
 		sendCommand(cmd, null);
 	}
 
 
-	private void launchTimer(int t)
-	{
-		if(timer == null)
-		{
-			this.time = t;
+	private void launchTimer(int t) {
 
+		if(timer == null) {
+			this.time = t;
 			timer = new Timer();
 
 			timer.schedule(new TimerTask() {
@@ -411,12 +401,10 @@ public class Game extends Thread{
 				}
 			}, 0, 1000);
 
-			while(time > 0)
-			{
+			while(time > 0) {
 				try {
 					sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -426,26 +414,26 @@ public class Game extends Thread{
 		}
 	}
 
-	private void setupNextPlayer()
-	{
+	/**
+	 * On prépare les différents paramètres pour changer de joueur dessinateur
+	 */
+	private void setupNextPlayer() {
 		firstAnswers.clear();
 		word = "";
 		nbAnswer = 0;
-		currentDrawing.clear();
 		interrupted = false;
 
 		String[] words = chooseNextWords();
 		WordCommand choices = new WordCommand(words[0], words[1], words[2], difficulty);
 		drawingPlayer.setChoices(choices);
 
-		Server.getDB().getStatistics().addNewStatsToWord(words[0], false);
-		Server.getDB().getStatistics().addNewStatsToWord(words[1], false);
-		Server.getDB().getStatistics().addNewStatsToWord(words[2], false);
-		
+		Server.getDbInfos().getStatistics().addNewStatsToWord(words[0], false);
+		Server.getDbInfos().getStatistics().addNewStatsToWord(words[1], false);
+		Server.getDbInfos().getStatistics().addNewStatsToWord(words[2], false);
+
 		launchTimer(15);
 
-		if(word.equals(""))
-		{
+		if(word.equals("")) {
 			ObjectOutputStream out = drawingPlayer.getOutput();
 			int random = (int)(Math.random() * 3);
 			choices = new WordCommand("", "", "", 1);
@@ -458,13 +446,16 @@ public class Game extends Thread{
 				out.writeObject(choices);
 				out.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 	}
 
+
+	/**
+	 * 
+	 * @return Trois mots pris au hasard dans la base de données
+	 */
 	private String[] chooseNextWords() {
 		ArrayList<String> words = Server.getDbInfos().getWordsList(difficulty);
 		String[] choices = new String[]{"", "", ""};
@@ -472,13 +463,13 @@ public class Game extends Thread{
 		String random;
 		int randomIndex;
 
-		for(int i = 0; i < 3; i++)
-		{
-			do{
+		for(int i = 0; i < 3; i++) {
+			do {
 				randomIndex = (int)(Math.random() * words.size());
 				random = words.get(randomIndex);
-			}while(choices[0].equals(random) || choices[1].equals(random) 
+			} while(choices[0].equals(random) || choices[1].equals(random) 
 					|| choices[2].equals(random));
+
 			choices[i] = random;
 		}
 
@@ -486,56 +477,59 @@ public class Game extends Thread{
 	}
 
 
-	private void computeScores()
-	{
-		//Set score for "finding players"
-		for(Player p: players){
-			if(p.hasFound() && p != drawingPlayer){
+	/**
+	 * On calcule les scores
+	 */
+	private void computeScores() {
 
-				if(firstAnswers.contains(p)){
+		for(Player p: players) {
+			if(p.hasFound() && p != drawingPlayer) {
+
+				if(firstAnswers.contains(p)) {
 					int rank = firstAnswers.indexOf(p);
-					switch(rank){
+
+					switch(rank) {
 					case 0 : p.setScore(p.getScore()+5); break;
 					case 1 : p.setScore(p.getScore()+4); break;
 					case 2 : p.setScore(p.getScore()+3); break;
 					}
-				}else{
+				} else {
 					p.setScore(p.getScore()+1);
 				}
 			}
 		}
 
-		//Set score for the "drawing player"
 		int findingRatio = (nbAnswer/(players.size()-1))*100;
 
-		if(findingRatio == 100){
+		if(findingRatio == 100) {
 			drawingPlayer.setScore(drawingPlayer.getScore()+7);
-		}else if(findingRatio > 75){
+		} else if(findingRatio > 75) {
 			drawingPlayer.setScore(drawingPlayer.getScore()+6);
-		}else if(findingRatio > 50){
+		} else if(findingRatio > 50) {
 			drawingPlayer.setScore(drawingPlayer.getScore()+5);
-		}else if(findingRatio > 25){
+		} else if(findingRatio > 25) {
 			drawingPlayer.setScore(drawingPlayer.getScore()+3);
-		}else if(nbAnswer > 0){
+		} else if(nbAnswer > 0) {
 			drawingPlayer.setScore(drawingPlayer.getScore()+2);
 		}
-
 	}
 
 
-	public boolean checkAnswer(AnswerCommand answer, Player player)
-	{
+	/**
+	 * On vérifie si la réponse est juste
+	 * @param answer La réponse
+	 * @param player Le joueur qui envoie la réponse
+	 * @return True si la réponse est bonne, false sinon
+	 */
+	public boolean checkAnswer(AnswerCommand answer, Player player) {
 		boolean res = false;
-
 		String ans = convertToAnswerStringFormat(answer.command);
 
-		if(ans.equals(word))
-		{
+		if(ans.equals(word)) {
 			res = true;
 			nbAnswer++;
 
-			if(nbAnswer >= players.size()-1 - newGhosts)
-			{
+			if(nbAnswer >= players.size()-1 - newGhosts) {
 				time = 0;
 			}
 
@@ -543,12 +537,11 @@ public class Game extends Thread{
 
 			Player p;
 			boolean inserted = false;
-			for(int i = 0; i < firstAnswers.size(); i++)
-			{
+
+			for(int i = 0; i < firstAnswers.size(); i++) {
 				p = firstAnswers.get(i);
 
-				if(p.getNbPixels() > player.getNbPixels())
-				{
+				if(p.getNbPixels() > player.getNbPixels()) {
 					inserted = true;
 					firstAnswers.add(i, player);
 					if(firstAnswers.size() > 3)
@@ -558,6 +551,7 @@ public class Game extends Thread{
 
 			if(!inserted)
 				firstAnswers.add(player);
+
 			player.setFound(true);
 			sendScores();
 		}
@@ -569,20 +563,23 @@ public class Game extends Thread{
 			command = "wrongword";
 
 		sendCommandTo(new Command(command), player);
-
 		return res;
 	}
 
-	public void sendScores(Player p, boolean except)
-	{
+
+	/**
+	 * On envoie les scores
+	 * @param p Un joueur particulier
+	 * @param except Selon la valeur de except, on envoie à tout le monde sauf p, ou bien on envoie qu'à p
+	 */
+	public void sendScores(Player p, boolean except) {
 		Scores scores = new Scores();
 
-		for(int i = 0; i < players.size(); i++)
-		{
+		for(int i = 0; i < players.size(); i++) {
 			scores.scores.add(new PlayerScore(players.get(i).getLogin(), players.get(i).getScore(), 
 					players.get(i).hasFound(), players.get(i).isGhost(), players.get(i).getDrawing()));
 		}
-		
+
 		Collections.sort(scores.scores, new Comparator<PlayerScore>() {
 			@Override
 			public int compare(PlayerScore p1, PlayerScore p2) {
@@ -590,8 +587,7 @@ public class Game extends Thread{
 			}
 		});
 
-		if(!except)
-		{
+		if(!except) {
 			ObjectOutputStream out = p.getOutput();
 
 			try {
@@ -600,13 +596,9 @@ public class Game extends Thread{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else
-		{
-			for(int i = 0; i < players.size(); i++)
-			{
-				if(p != players.get(i))
-				{
+		} else {
+			for(int i = 0; i < players.size(); i++) {
+				if(p != players.get(i)) {
 					ObjectOutputStream out = players.get(i).getOutput();
 
 					try {
@@ -620,25 +612,31 @@ public class Game extends Thread{
 		}
 	}
 
-	public void sendScores()
-	{
+	/**
+	 * On envoie les scores à tout le monde
+	 */
+	public void sendScores() {
 		sendScores(null, true);
 	}
 
-
+	/**
+	 * On lance la partie
+	 * @return True si la partie est lancée, false sinon
+	 */
 	public boolean startGame() {
-
-		if(players.size() >= 2)
-		{
+		if(players.size() >= 2) {
 			started = true;
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 
-	public void setWord(String word)
-	{
+
+	/**
+	 * On affecte le mot à faire deviner et on arrête le timer du choix des mots
+	 * @param word
+	 */
+	public void setWord(String word) {
 		if(timer != null)
 			timer.cancel();
 		time = 0;
@@ -646,20 +644,11 @@ public class Game extends Thread{
 	}
 
 
-	public void sendDrawing(Player player) {
-		if(player.isGhost())
-		{
-			ObjectOutputStream out = player.getOutput();
-			try {
-				out.writeObject(currentDrawing);
-				out.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
+	/**
+	 * On enlève les accents et on remplace les majuscules par des miniscules dans la String s
+	 * @param s La string à modifier
+	 * @return La string modifiée
+	 */
 	private String convertToAnswerStringFormat(String s) {
 
 		String withAccents = "âäàçéêëèîïôöûüù";
@@ -668,8 +657,8 @@ public class Game extends Thread{
 		for (int i = 0 ; i < withAccents.length () ; i++) {
 			s = s.replace(withAccents.charAt(i), withoutAccents.charAt(i));
 		}
+
 		s = s.toLowerCase();
 		return s;
 	}
-
 }

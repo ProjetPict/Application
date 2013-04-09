@@ -27,8 +27,8 @@ import view.Window;
  * les joueurs et les parties
  *
  */
-public class Server extends Thread{
-	
+public class Server extends Thread {
+
 	final static int MAX_PLAYER = 10;
 	final static int TURNS = 5;
 	private static ArrayList<Player> players;
@@ -43,23 +43,30 @@ public class Server extends Thread{
 	private static boolean launchState;
 	private static boolean importantProcess;
 
+	/**
+	 * Constructeur de Server
+	 * @param state
+	 * @throws Exception
+	 */
 	public Server(boolean state) throws Exception {
 		launchState = state;
 		players = new ArrayList<Player>();
 		games = new Hashtable<String, Game>();
 		servDbConnec = new DbConnection();
 		servDbLocale = new ServerDatabase(servDbConnec);
-		
+
 		int tentatives = 1;
 		boolean success = false;
-		
+
 		if(launchState) {
 			windowServer = new Window(this);
 			windowServer.setVisible(true);
 		}
+
 		importantProcess = true;
 		writeIn("--------------------------------------------------------------------------------------------\nSERVEUR DRAWVS\nChristopher CACCIATORE, Matthieu DOURIS, Jérôme PORT, Quentin POUSSIER, Nicolas SPAGNULO\n--------------------------------------------------------------------------------------------\n");
 		writeIn("> Connexion à la base de données...");
+
 		while(tentatives<5 && !success) {
 			if(servDbConnec.connectDatabase())
 				success=true;
@@ -67,6 +74,7 @@ public class Server extends Thread{
 				writeIn("Echec ("+tentatives+"/5)\n> Nouvelle tentative de connexion à la base de données...");
 			tentatives++;
 		}
+
 		if(!success) {
 			writeIn("Echec (5/5)\n> Veuillez vérifier les paramètres de connexion avant de relancer le serveur.\n");
 			throw new Exception("Echec lors de la connexion à la base de données");
@@ -81,18 +89,19 @@ public class Server extends Thread{
 					writeIn("Echec ("+tentatives+"/5)\n> Nouvelle tentative de récupération de la base de données...");
 				tentatives++;
 			}
+
 			if(success)
 				writeIn("Terminé !\n> Le serveur est maintenant fonctionnel.\n--------------------------------------------------------------------------------------------");
-			else {
+			else
 				writeIn("Echec (5/5)\n> Veuillez vérifier l'état de la base de données avant de relancer le serveur.\n");
-				//throw new Exception("Echec lors de la récupération de la base de données");
-			}
 		}
+
 		try {
 			serverSocket = new ServerSocket(8448);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		importantProcess = false;
 	}
 
@@ -108,6 +117,7 @@ public class Server extends Thread{
 		Timer autoLoad = new Timer();
 		Timer launchTime = new Timer();
 		launchTimeCalc = 0;
+
 		//On actualise toutes les 1 seconde les graphiques
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -116,6 +126,7 @@ public class Server extends Thread{
 					windowServer.updateGraph(players.size(),(runtime.totalMemory()-runtime.freeMemory())/1024, games.size());
 			}
 		}, 0, 1000);
+
 		// Sauvegarde automatique de l'historique dans la base de données toutes les 10 minutes
 		autoSave.schedule(new TimerTask() {
 			public void run() {
@@ -127,7 +138,8 @@ public class Server extends Thread{
 					writeIn("Echec !");
 				importantProcess = false;
 			}
-		}, 60000, 60000);
+		}, 600000, 600000);
+
 		// Chargement automatique de la base de données toutes les 5 minutes
 		autoLoad.schedule(new TimerTask() {
 			public void run() {
@@ -138,6 +150,7 @@ public class Server extends Thread{
 				importantProcess = false;
 			}
 		}, 300000, 300000);
+
 		launchTime.schedule(new TimerTask() {
 			Date current;
 			public void run() {
@@ -148,12 +161,11 @@ public class Server extends Thread{
 					windowServer.setTimes(launchTimeCalc,dateFormat.format(current));
 			}
 		},0,1000);
-		
-		while(true){
+
+		while(true) {
 			try {
 				socket = serverSocket.accept();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -163,7 +175,6 @@ public class Server extends Thread{
 			try {
 				sleep(16);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -179,17 +190,13 @@ public class Server extends Thread{
 	 * @return La partie créée
 	 */
 	public static Game createGame(Player creator, String name, String password, int pMax, 
-			int turns, int difficulty){
+			int turns, int difficulty) {
 
 		Game game = null;
 
-		if(creator.getGame() == null && name.length() > 3)
-		{
-			if(!games.containsKey(name))
-			{
-				
+		if(creator.getGame() == null && name.length() > 3) {
+			if(!games.containsKey(name)) {
 				game = new Game(creator, name, password, pMax, turns, difficulty);
-			
 				games.put(name, game);
 				game.start();
 			}
@@ -204,30 +211,23 @@ public class Server extends Thread{
 	 * @param socket
 	 * @param connec
 	 */
-	public static void createPlayer(String login, Socket socket, Connection connec)
-	{
+	public static void createPlayer(String login, Socket socket, Connection connec) {
 		Player player = new Player(login, socket, false, connec.getInput(), connec.getOutput());
 		players.add(player);
 		player.start();
 	}
 
-	
-	public static ServerDatabase getDB(){
-		return servDbLocale;
-	}
 
 	/**
 	 * Supprime un joueur
 	 * @param player Joueur à supprimer
 	 */
-	public static void removePlayer(Player player)
-	{
-		if(player.getGame() != null)
-		{
+	public static void removePlayer(Player player) {
+		if(player.getGame() != null) {
 			player.getGame().removePlayer(player);
 			player.setGame(null);
 		}
-		
+
 		players.remove(player);
 		writeIn(player.getLogin() + " s'est deconnecté.");
 	}
@@ -237,8 +237,7 @@ public class Server extends Thread{
 	 * Supprime une partie
 	 * @param game Partie à supprimer
 	 */
-	public static void removeGame(Game game)
-	{
+	public static void removeGame(Game game) {
 		writeIn(game.getGameName() + " a été stoppée.");
 		game.stopGame();
 		games.remove(game.getGameName());
@@ -248,18 +247,15 @@ public class Server extends Thread{
 	 * 
 	 * @return La liste des parties existantes
 	 */
-	public static GameList getGames()
-	{
+	public static GameList getGames() {
 		GameList gl = new GameList();
 		Iterator<Entry<String, Game>> it = games.entrySet().iterator();
 		Entry<String, Game> e;
 		Game g;
 
-		while(it.hasNext())
-		{
+		while(it.hasNext()) {
 			e = it.next();
 			g = e.getValue();
-
 			gl.games.add(new GameInfo(e.getKey().toString(), g.getNbPlayers(), 
 					g.getJMax(), g.isPrivate(), g.isStarted(), g.getDifficulty()));
 		}
@@ -274,40 +270,38 @@ public class Server extends Thread{
 	 * @param name Nom de la partie
 	 * @return True si l'opération est réussie, false sinon
 	 */
-	public static void joinGame(Player player, String name, String password)
-	{
+	public static void joinGame(Player player, String name, String password) {
 		boolean result = false;
 
-		if(games.containsKey(name) && player.getGame() == null)
-		{
+		if(games.containsKey(name) && player.getGame() == null) {
 			Game game = games.get(name);
 
-			try{
-				if(game.getPassword() == null || password.equals(game.getPassword()))
-				{
+			try {
+				if(game.getPassword() == null || password.equals(game.getPassword())) {
 					result = game.addPlayer(player);
 					writeIn(player.getLogin() + " a rejoint la partie " + game.getGameName());
+
 					if(result)
 						player.setGame(game);
 					else
-					    player.sendResult("gamefull");
-				}
-				else
+						player.sendResult("gamefull");
+				} else
 					player.sendResult("wrongpassword");
-			}catch(Exception e)
-			{
+			} catch(Exception e) {
 				player.sendResult("wrongpassword");
 			}
-
-		}
-		else
+		} else
 			player.sendResult("fail");
 	}
-	
+
+	/**
+	 * 
+	 * @return L'instance de ServerDatabase contenue dans Server
+	 */
 	public static ServerDatabase getDbInfos() {
 		return servDbLocale;
 	}
-	
+
 	public static DbConnection getDbConnInfos() {
 		return servDbConnec;
 	}
@@ -326,11 +320,11 @@ public class Server extends Thread{
 			System.out.println(s);
 		}
 	}	
-	
+
 	public boolean getLaunchState() {
 		return launchState;
 	}
-	
+
 	public Window getWindow() {
 		return windowServer;
 	}
